@@ -1,2 +1,12 @@
-<p>connexion works!</p>
-<h1>Hello</h1>
+<h2>Connexion</h2>
+
+<form>
+<input [(ngModel)]="username" name="username" placeholder="Entrez votre identifiant">
+
+<select [(ngModel)]="role" name="role" required>
+
+    <option>Formateur</option>
+    <option>Elève</option>
+</select>
+<button type="button">Se connecter</button>
+</form>

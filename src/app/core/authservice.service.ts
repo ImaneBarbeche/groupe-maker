@@ -3,6 +3,13 @@ import { Injectable } from '@angular/core';
 @Injectable({
   providedIn: 'root'
 })
+
+// stocker un utilisateur connecté avec _currentUser;
+// gérer l'état de connexion avec _userIsLoggedIn;
+// se connecter avec un utilisateur donné avec la méthode login();
+//  se déconnecter avec la méthode logout();
+//  lire les infos sans les modifier avec getters isLoggedIn, currentUser et userRole.
+
 export class AuthserviceService {
 
 private _userIsLoggedIn: boolean = false;
@@ -36,9 +43,3 @@ get userRole() {
 
 
 }
-
-// stocker un utilisateur connecté avec _currentUser;
-// gérer l'état de connexion avec _userIsLoggedIn;
-// se connecter avec un utilisateur donné avec la méthode login();
-//  se déconnecter avec la méthode logout();
-//  lire les infos sans les modifier avec getters isLoggedIn, currentUser et userRole.
