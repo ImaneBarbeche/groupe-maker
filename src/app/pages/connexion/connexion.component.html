@@ -1,12 +1,13 @@
 <h2>Connexion</h2>
 
-<form>
+<form (ngSubmit)="onSubmit()">
 <input [(ngModel)]="username" name="username" placeholder="Entrez votre identifiant">
 
-<select [(ngModel)]="role" name="role" required>
-
-    <option>Formateur</option>
-    <option>Elève</option>
+<select [(ngModel)]="role" name="role">
+  <option value="formateur">Formateur</option>
+  <option value="eleve">Élève</option>
 </select>
-<button type="button">Se connecter</button>
+
+
+<button type="submit">Se connecter</button>
 </form>

@@ -40,6 +40,8 @@ constructor(private authService: AuthserviceService, private router: Router) { }
 
 onSubmit() {
   this.authService.login({id: 1, username: this.username, role: this.role})
+  console.log('Redirection vers :', this.role === 'formateur' ? '/dashboard-formateur' : '/profil-eleve');
+
  if(this.role === 'formateur'){
   this.router.navigate(['/dashboard-formateur']);
 } else {
