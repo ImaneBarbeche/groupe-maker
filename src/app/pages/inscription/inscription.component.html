@@ -1,0 +1,94 @@
+<div class="role-choice">
+    <button type="button" (click)="setRole('eleve')" [class.selected]="userRole === 'eleve'">
+        Je suis élève
+    </button>
+
+    <button type="button" (click)="setRole('formateur')" [class.selected]="userRole === 'formateur'">
+        Je suis formateur
+    </button>
+</div>
+
+
+<form (ngSubmit)="onSubmit()">
+    @if (!userRole) {
+    <p style="text-align:center;">Veuillez choisir un rôle pour commencer l'inscription.</p>
+    }
+    @if (userRole === 'eleve') { <!-- Afficher les champs de l'élève -->
+    <!-- Champ prénom -->
+    <label>Prénom :</label>
+    <input type="text" [(ngModel)]="user.firstName" name="firstName" required />
+
+     <!-- Champ nom d'utilisateur -->
+    <label>Nom d'utilisateur :</label>
+    <input type="text" [(ngModel)]="user.username" name="username" required />
+
+
+    <!-- Champ âge -->
+    <label>Âge :</label>
+    <input type="number" [(ngModel)]="user.age" name="age" required />
+
+    <!-- Champ genre -->
+    <label>Genre :</label>
+    <select [(ngModel)]="user.gender" name="gender" required>
+        @for (gender of genders; track gender) {
+        <option [value]="gender">{{ gender }}</option>
+        }
+    </select>
+
+    <!-- Langue -->
+    <label>Aisance en français :</label>
+    <select [(ngModel)]="user.language" name="language" required>
+        @for (lang of languages; track lang) {
+        <option [value]="lang">{{ lang }}</option>
+        }
+    </select>
+
+    <!-- Niveau technique -->
+    <label>Niveau technique :</label>
+    <select [(ngModel)]="user.techLevel" name="techLevel" required>
+        @for (techLevel of techLevels; track techLevel) {
+        <option [value]="techLevel">{{ techLevel }}</option>
+        }
+    </select>
+    <!-- Profil -->
+    <label>Profil :</label>
+    <select [(ngModel)]="user.profil" name="profil" required>
+        @for (profil of profiles; track profil) {
+        <option [value]="profil">{{ profil }}</option>
+        }
+    </select>
+
+    <label>
+        <input type="checkbox" [(ngModel)]="user.dwwmStudent" name="dwwmStudent" />
+        Ancien·ne étudiant·e DWWM
+    </label>
+
+    <!-- Bouton d'inscription -->
+    <button type="submit">S'inscrire</button>
+
+    }@else if (userRole === 'formateur') { <!-- Afficher les champs du formateur -->
+    <label>Prénom :</label>
+    <input type="text" [(ngModel)]="user.firstName" name="firstName" required />
+
+    <!-- Champ nom d'utilisateur -->
+    <label>Nom d'utilisateur :</label>
+    <input type="text" [(ngModel)]="user.username" name="username" required />
+
+    <!-- Champ âge -->
+    <label>Âge :</label>
+    <input type="number" [(ngModel)]="user.age" name="age" required />
+
+    <label>Spécialité :</label>
+    <input type="text" [(ngModel)]="user.speciality" name="speciality" required />
+
+    <!-- Champ genre -->
+    <label>Genre :</label>
+    <select [(ngModel)]="user.gender" name="gender" required>
+        @for (gender of genders; track gender) {
+        <option [value]="gender">{{ gender }}</option>
+        }
+    </select>
+    <!-- Bouton d'inscription -->
+    <button type="submit">S'inscrire</button>
+    }
+</form>

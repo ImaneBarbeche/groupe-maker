@@ -1,4 +1,5 @@
 import { Component } from '@angular/core';
+import { Router } from '@angular/router';
 
 @Component({
   selector: 'app-dashboard-formateur',
@@ -8,8 +9,13 @@ import { Component } from '@angular/core';
   styleUrls: ['./dashboard-formateur.component.css']
 })
 export class DashboardFormateurComponent {
-  constructor() {
-  console.log('Composant FORMATEUR chargé');
-}
+  user: any;
+  
+  constructor(private router: Router) {
+this.user = JSON.parse(localStorage.getItem('utilisateurActif') || '{}');
 
+;}
+goTo(path: string) {
+  this.router.navigate([path]);
+}
 }

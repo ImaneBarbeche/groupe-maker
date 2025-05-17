@@ -1,7 +1,6 @@
 import { CommonModule } from '@angular/common';
 import { Component } from '@angular/core';
 import { FormsModule } from '@angular/forms';
-import { AuthserviceService } from '../../core/authservice.service';
 import { Router } from '@angular/router';
 
 @Component({
@@ -9,45 +8,50 @@ import { Router } from '@angular/router';
   standalone: true,
   imports: [CommonModule, FormsModule],
   templateUrl: './connexion.component.html',
-  styleUrl: './connexion.component.css'
+  styleUrl: './connexion.component.css',
 })
 
 /**
  * Composant de la page de connexion.
- * 
+ *
  * Permet à l'utilisateur (élève ou formateur) de :
  * - Saisir son nom d'utilisateur
  * - Sélectionner son rôle
  * - Se connecter en appelant le service d'authentification
  * - Être redirigé vers une interface différente selon son rôle
- * 
+ *
  * Utilise [(ngModel)] pour la liaison des champs,
  * et FormsModule pour la gestion du formulaire.
  */
-
 export class ConnexionComponent {
+  username: string = '';
 
-username: string = '';
-role = 'eleve';
+  constructor(private router: Router) {}
 
-constructor(private authService: AuthserviceService, private router: Router) { }
+  onSubmit() {
+    // On récupère la liste des utilisateurs stockés dans le navigateur.
+    // Si elle n'existe pas encore, on utilise un tableau vide par défaut '[]'
+    const utilisateurs = JSON.parse(
+      localStorage.getItem('utilisateurs') || '[]'
+    );
 
-/**
- * Appelée lors de la soumission du formulaire de connexion.
- * - Enregistre l'utilisateur via AuthserviceService
- * - Redirige vers la route correspondante selon le rôle
- */
+    // On cherche l'utilisateur dont le nom d'utilisateur correspond à celui saisi dans le champ "username"
+    const user = utilisateurs.find((u: any) => u.username === this.username);
 
-onSubmit() {
-  this.authService.login({id: 1, username: this.username, role: this.role})
-  console.log('Redirection vers :', this.role === 'formateur' ? '/dashboard-formateur' : '/profil-eleve');
+    // Si aucun utilisateur trouvé, on affiche un message et on arrête la connexion
+    if (!user) {
+      alert("Nom d'utilisateur introuvable !");
+      return;
+    }
 
- if(this.role === 'formateur'){
-  this.router.navigate(['/dashboard-formateur']);
-} else {
-  this.router.navigate(['/profil-eleve']);
- }  
-}  
+    // Sinon, on stocke cet utilisateur comme "utilisateur actif" pour la session
+    localStorage.setItem('utilisateurActif', JSON.stringify(user));
+
+    // On redirige vers la bonne interface selon son rôle
+    if (user.role === 'formateur') {
+      this.router.navigate(['/dashboard-formateur']);
+    } else {
+      this.router.navigate(['/profil-eleve']);
+    }
+  }
 }
-
-

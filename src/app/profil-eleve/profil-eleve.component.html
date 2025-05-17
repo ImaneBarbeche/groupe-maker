@@ -1,1 +1,41 @@
-<h2>Bienvenue, élève !</h2>
+<h1>Bienvenue, {{ user.username }} !</h1>
+
+<h2>Tu es connecté en tant qu'{{user.role}} </h2>
+
+<div class="profil-details">
+  <p><strong>Âge :</strong> {{ user.age }} ans</p>
+  <p><strong>Genre :</strong> {{ user.gender }}</p>
+  <p><strong>Aisance en français :</strong> {{ user.language }}/4</p>
+  <p><strong>Niveau technique :</strong> {{ user.techLevel }}/4</p>
+  <p><strong>Profil :</strong> {{ user.profile }}</p>
+  <p><strong>Ancien DWWM :</strong> {{ user.dwwmStudent ? 'Oui' : 'Non' }}</p>
+</div>
+
+<div class="dashboard-layout">
+  <div class="box groupes-box">
+    <h3>🧑‍🤝‍🧑 Tes groupes</h3>
+    <ul>
+      <li>Groupe A</li>
+      <li>Groupe B</li>
+    </ul>
+  </div>
+
+  <div class="box projets-box">
+    <h3>📘 Projets en cours</h3>
+    @for (p of projets; track p) {
+      @if (p.statut === 'en cours') {
+        <p>{{ p.titre }} – {{ p.groupe }}</p>
+      }
+    }
+
+    <h3>✅ Projets terminés</h3>
+    @for (p of projets; track p) {
+      @if (p.statut === 'terminé') {
+        <p>{{ p.titre }} – {{ p.groupe }}</p>
+      }
+    }
+  </div>
+</div>
+
+
+<p class="message">🎓 Continue comme ça {{ user.firstName }} !</p>

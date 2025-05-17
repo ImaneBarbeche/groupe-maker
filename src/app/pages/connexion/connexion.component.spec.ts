@@ -1,57 +1,78 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
-
 import { ConnexionComponent } from './connexion.component';
-import { AuthserviceService } from '../../core/authservice.service';
 import { Router } from '@angular/router';
 
 describe('ConnexionComponent', () => {
   let component: ConnexionComponent;
   let fixture: ComponentFixture<ConnexionComponent>;
 
-const mockAuthService = {
-  login: jasmine.createSpy('login'),
-};
-
-const mockRouter = {
-  navigate: jasmine.createSpy('navigate')
-};
+  const mockRouter = {
+    navigate: jasmine.createSpy('navigate'),
+  };
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
       imports: [ConnexionComponent],
-      providers: [
-  { provide: AuthserviceService, useValue: mockAuthService },
-  { provide: Router, useValue: mockRouter }
-]
-    })
-    .compileComponents();
+      providers: [{ provide: Router, useValue: mockRouter }],
+    }).compileComponents();
 
     fixture = TestBed.createComponent(ConnexionComponent);
     component = fixture.componentInstance;
     fixture.detectChanges();
   });
 
-  it('should create', () => {
-    expect(component).toBeTruthy();
+  it('should find the user and redirect to dashboard-formateur', () => {
+    const testUser = {
+      username: 'Jean',
+      role: 'formateur',
+    };
+
+    // Stocke un tableau contenant cet utilisateur
+    localStorage.setItem('utilisateurs', JSON.stringify([testUser]));
+
+    component.username = 'Jean'; // l'utilisateur entré dans le formulaire
+
+    component.onSubmit();
+
+    expect(mockRouter.navigate).toHaveBeenCalledWith(['/dashboard-formateur']);
   });
 
-  it('should call login method when form is submitted', () => {
+  it('should find the user and redirect to profil-eleve', () => {
+    const testUser = {
+      username: 'Marie',
+      role: 'eleve',
+    };
+    // Stocke un tableau contenant cet utilisateur
+    localStorage.setItem('utilisateurs', JSON.stringify([testUser]));
+    component.username = 'Marie'; // l'utilisateur entré dans le formulaire
+    component.onSubmit();
+    expect(mockRouter.navigate).toHaveBeenCalledWith(['/profil-eleve']);
+  });
 
-  // Étape 1 : donner des valeurs au composant 
-  component.username = 'Jean';
-  component.role = 'formateur';
-  
-  
-  // Étape 2 : appeler la méthode
-  component.onSubmit();
+  // On veut vérifier ce qui se passe si une personne entre un username qui n’existe pas dans la base (localStorage).
+  // Exemple : si personne ne s’est inscrit sous le nom Jacques, on ne doit pas pouvoir se connecter avec ce nom.
 
-  // Étape 3 : vérifier que login a été appelé avec l'utilisateur attendu
-  expect(mockAuthService.login).toHaveBeenCalledWith({
-  id: 1,
-  username: 'Jean',
-  role: 'formateur'
-});
-  // Étape 4 : vérifier que la redirection est correcte
-  expect(mockRouter.navigate).toHaveBeenCalledWith(['/dashboard-formateur']);
-});
+  it('should not find the user and show alert', () => {
+    spyOn(window, 'alert'); // ← on espionne alert()
+    // On prépare un faux environnement sans utilisateurs, on vide la "liste des inscrits" pour dire : personne n’est encore enregistré.
+    localStorage.setItem('utilisateurs', JSON.stringify([]));
+    component.username = 'Jacques';  // On simule un nom d’utilisateur dans le champ
+
+    component.onSubmit(); // On lance la fonction de connexion
+
+    expect(mockRouter.navigate).not.toHaveBeenCalled(); // Parce que la connexion doit échouer : donc pas de navigate().
+    expect(localStorage.getItem('utilisateurActif')).toBeNull();
+    expect(window.alert).toHaveBeenCalledWith("Nom d'utilisateur introuvable !"); // Angular appelle alert(...) pour prévenir l’utilisateur.
+  });
+
+  /**
+   * Cleans up the local storage after each test case.
+   * This function is called after each test case to ensure that the local storage is cleared,
+   * preventing any side effects from one test case to another.
+   *
+   * @returns {void} This function does not return any value.
+   */
+  afterEach(() => {
+    localStorage.clear();
+  });
 });

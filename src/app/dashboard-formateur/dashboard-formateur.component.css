@@ -1,0 +1,38 @@
+:host {
+  display: block;
+  max-width: 1000px;
+  margin: 60px auto;
+  padding: 2rem;
+  font-family: 'Poppins', sans-serif;
+}
+
+.dashboard-grid {
+  display: flex;
+  gap: 2rem;
+  justify-content: space-between;
+  flex-wrap: wrap;
+}
+
+.dashboard-card {
+  flex: 1 1 300px;
+  background-color: #f1f9ff;
+  border-radius: 12px;
+  padding: 1.5rem;
+  box-shadow: 0 4px 16px rgba(0,0,0,0.05);
+  text-align: center;
+}
+
+.dashboard-card h3 {
+  color: #3a86ff;
+  margin-top: 0;
+}
+
+.dashboard-card button {
+  margin-top: 1rem;
+  padding: 0.6rem 1.2rem;
+  background-color: #4c66f4;
+  color: white;
+  border: none;
+  border-radius: 8px;
+  cursor: pointer;
+}

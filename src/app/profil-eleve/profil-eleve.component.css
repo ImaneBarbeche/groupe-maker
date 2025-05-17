@@ -1,0 +1,76 @@
+:host {
+  display: block;
+  max-width: 1200px;
+  margin: 40px auto;
+  padding: 2rem;
+  background-color: #fefeff;
+  border-radius: 20px;
+  box-shadow: 0 12px 30px rgba(0, 0, 0, 0.07);
+  font-family: 'Poppins', sans-serif;
+}
+
+h1 {
+  color: #4c66f4;
+  font-size: 2.2rem;
+  margin-bottom: 0.5rem;
+  text-align: center;
+}
+
+h2 {
+  text-align: center;
+  font-weight: 500;
+  margin-bottom: 2rem;
+  color: #444;
+}
+
+
+
+.profil-details {
+  display: grid;
+  gap: 0.6rem;
+  padding: 1rem;
+  background-color: #f9fbff;
+  border-radius: 12px;
+  box-shadow: 0 2px 8px rgba(0,0,0,0.05);
+  margin-bottom: 1.5rem;
+}
+.profil-details p {
+  margin: 0;
+  font-size: 1rem;
+}
+
+.message {
+  text-align: center;
+  margin-top: 1rem;
+  font-style: italic;
+  color: #666;
+}
+
+.dashboard-layout {
+  display: flex;
+  gap: 2rem;
+  justify-content: center;
+  align-items: flex-start;
+  flex-wrap: wrap; /* important pour que ça passe en colonne sur mobile */
+}
+
+.box {
+  background-color: #f1f9ff;
+  border: 2px dashed #a1c4fd;
+  border-radius: 16px;
+  padding: 1rem 1.5rem;
+  flex: 1 1 300px;
+  max-width: 500px;
+  box-shadow: 0 4px 12px rgba(0,0,0,0.05);
+}
+
+.box h3 {
+  margin-top: 0;
+  font-weight: 600;
+  color: #3a86ff;
+}
+
+.box:hover {
+  transform: translateY(-2px);
+  transition: transform 0.2s ease;
+}
