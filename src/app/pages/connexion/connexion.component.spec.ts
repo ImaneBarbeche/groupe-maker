@@ -8,7 +8,7 @@ describe('ConnexionComponent', () => {
 
   const mockRouter = {
     navigate: jasmine.createSpy('navigate'),
-  };
+  }; //crées un espion sur la méthode navigate qui enregistre chaque appel avec les arguments et te permet de dire : “Cette méthode a-t-elle été appelée avec telle valeur ?”
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
@@ -54,6 +54,7 @@ describe('ConnexionComponent', () => {
 
   it('should not find the user and show alert', () => {
     spyOn(window, 'alert'); // ← on espionne alert()
+    mockRouter.navigate.calls.reset(); // On réinitialise les appels de navigate() pour vérifier si elle a été appelée ou non.
     // On prépare un faux environnement sans utilisateurs, on vide la "liste des inscrits" pour dire : personne n’est encore enregistré.
     localStorage.setItem('utilisateurs', JSON.stringify([]));
     component.username = 'Jacques';  // On simule un nom d’utilisateur dans le champ

@@ -1,1 +1,20 @@
-<p>groupes works!</p>
+<h1>Gestion des groupes</h1>
+
+<div class="ajout-groupe">
+    <input [(ngModel)]="nouveauNomGroupe" type="text" placeholder="Nom du groupe" />
+    <button (click)="creerGroupe()">Créer le groupe</button>
+</div>
+
+<div class="liste-groupes">
+    <h2>Groupes existants</h2>
+    @if (groupes.length === 0) {
+    <p>Aucun groupe pour le moment.</p>
+    } @else {
+    @for (groupe of groupes; let i = $index; track groupe.nom) {
+    <div class="groupe-item">
+        <strong>{{ groupe.nom }}</strong>
+        <button (click)="supprimerGroupe(i)">Supprimer</button>
+    </div>
+    }
+    }
+</div>

@@ -1,0 +1,54 @@
+:host {
+  display: block;
+  max-width: 800px;
+  margin: 60px auto;
+  padding: 2rem;
+  font-family: 'Poppins', sans-serif;
+}
+
+.ajout-groupe {
+  display: flex;
+  gap: 1rem;
+  margin-bottom: 2rem;
+}
+
+.ajout-groupe input {
+  flex: 1;
+  padding: 0.5rem;
+  border: 1px solid #ccc;
+  border-radius: 8px;
+}
+
+.ajout-groupe button {
+  padding: 0.5rem 1rem;
+  background-color: #4c66f4;
+  color: white;
+  border: none;
+  border-radius: 8px;
+  cursor: pointer;
+}
+
+.liste-groupes {
+  border-top: 1px solid #ccc;
+  padding-top: 1rem;
+}
+
+.groupe-item {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  background-color: #f1f9ff;
+  padding: 1rem;
+  border-radius: 10px;
+  margin-bottom: 0.8rem;
+  box-shadow: 0 2px 6px rgba(0,0,0,0.05);
+}
+
+.groupe-item button {
+  background-color: #ff4d4f;
+  color: white;
+  border: none;
+  border-radius: 6px;
+  padding: 0.4rem 0.8rem;
+  cursor: pointer;
+}
