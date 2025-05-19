@@ -1,4 +1,4 @@
-import { Component } from '@angular/core';
+import { Component, EventEmitter, Output } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 import { CommonModule } from '@angular/common';
 import { Router } from '@angular/router';
@@ -11,6 +11,10 @@ import { Router } from '@angular/router';
   styleUrls: ['./inscription.component.css'],
 })
 export class InscriptionComponent {
+  @Output() fermer = new EventEmitter<void>();
+   annuler() {
+  this.fermer.emit(); // fermeture manuelle
+}
   genders = ['Féminin', 'Masculin', 'Ne préfère pas répondre'];
   languages = [
     '0 - Ne parle pas français',
@@ -80,4 +84,5 @@ export class InscriptionComponent {
       this.router.navigate(['/dashboard-formateur']);
     }
   }
+ 
 }

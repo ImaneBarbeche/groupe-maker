@@ -3,74 +3,80 @@
   max-width: 1200px;
   margin: 40px auto;
   padding: 2rem;
-  background-color: #fefeff;
-  border-radius: 20px;
-  box-shadow: 0 12px 30px rgba(0, 0, 0, 0.07);
-  font-family: 'Poppins', sans-serif;
+  background-color: #fffef6;
+  border-radius: 16px;
+  box-shadow: 0 12px 30px rgba(0, 0, 0, 0.06);
+  font-family: 'Segoe UI', sans-serif;
 }
 
+/* TITRES */
 h1 {
-  color: #4c66f4;
+  color: #2f2f2f;
   font-size: 2.2rem;
   margin-bottom: 0.5rem;
   text-align: center;
+  font-weight: 600;
 }
 
 h2 {
   text-align: center;
   font-weight: 500;
   margin-bottom: 2rem;
-  color: #444;
+  color: #555;
 }
 
-
-
+/* INFOS PROFIL */
 .profil-details {
   display: grid;
   gap: 0.6rem;
   padding: 1rem;
-  background-color: #f9fbff;
+  background-color: #f8f7f3;
   border-radius: 12px;
-  box-shadow: 0 2px 8px rgba(0,0,0,0.05);
+  box-shadow: 0 2px 8px rgba(0,0,0,0.04);
   margin-bottom: 1.5rem;
 }
+
 .profil-details p {
   margin: 0;
   font-size: 1rem;
+  color: #333;
 }
 
+/* MESSAGE */
 .message {
   text-align: center;
   margin-top: 1rem;
   font-style: italic;
-  color: #666;
+  color: #777;
 }
 
+/* LAYOUT DASHBOARD */
 .dashboard-layout {
   display: flex;
   gap: 2rem;
   justify-content: center;
   align-items: flex-start;
-  flex-wrap: wrap; /* important pour que ça passe en colonne sur mobile */
+  flex-wrap: wrap;
 }
 
+/* BOX DE GROUPE / PROJET */
 .box {
-  background-color: #f1f9ff;
-  border: 2px dashed #a1c4fd;
-  border-radius: 16px;
+  background-color: #f7f5ef;
+  border: 2px dashed #bfae98;
+  border-radius: 14px;
   padding: 1rem 1.5rem;
   flex: 1 1 300px;
   max-width: 500px;
   box-shadow: 0 4px 12px rgba(0,0,0,0.05);
+  transition: transform 0.2s ease;
 }
 
 .box h3 {
   margin-top: 0;
   font-weight: 600;
-  color: #3a86ff;
+  color: #8a5e3b;
 }
 
 .box:hover {
   transform: translateY(-2px);
-  transition: transform 0.2s ease;
 }

@@ -1,84 +1,101 @@
 :host {
   display: block;
-  max-width: 600px;
+  max-width: 620px;
   margin: 60px auto;
   padding: 2rem;
-  background-color: #fefeff;
-  border-radius: 20px;
-  box-shadow: 0 8px 20px rgba(0, 0, 0, 0.08);
-  font-family: 'Poppins', sans-serif;
+  background-color: #fffef6;
+  border-radius: 16px;
+  box-shadow: 0 8px 20px rgba(0, 0, 0, 0.06);
+  font-family: 'Segoe UI', sans-serif;
 }
 
+/* Bloc rôle */
+.role-choice {
+  display: flex;
+  justify-content: center;
+  gap: 1.5rem;
+  margin-bottom: 2rem;
+}
+
+.role-choice button {
+  padding: 1rem 2rem;
+  border-radius: 10px;
+  font-size: 1rem;
+  border: 2px solid #cbb7a2;
+  background-color: #f8f6f1;
+  cursor: pointer;
+  transition: all 0.3s ease;
+}
+
+.role-choice button:hover {
+  background-color: #f1e8dd;
+  border-color: #b77b57;
+}
+
+.role-choice button.selected {
+  background-color: #b77b57;
+  color: white;
+  border-color: #b77b57;
+  font-weight: bold;
+  box-shadow: 0 0 10px rgba(183, 123, 87, 0.4);
+}
+
+/* Formulaire */
 form {
   display: grid;
-  gap: 1rem;
+  gap: 1.2rem;
 }
 
 label {
   font-weight: 600;
-  color: #444;
-  margin-bottom: 0.2rem;
+  color: #333;
   display: block;
+  margin-bottom: 0.4rem;
 }
 
 input[type="text"],
 input[type="number"],
 select {
   width: 100%;
-  padding: 0.5rem;
-  border-radius: 8px;
-  border: 1px solid #ccc;
-  background-color: #fff;
+  padding: 0.65rem 1rem;
+  border-radius: 10px;
+  border: 1.5px solid #d4cfc2;
+  background-color: #fdfdf9;
   font-size: 1rem;
+  transition: border-color 0.2s ease;
 }
 
-button {
-  background-color: #4c66f4;
+input:focus,
+select:focus {
+  border-color: #b77b57;
+  outline: none;
+  background-color: #fefdf7;
+}
+
+input[type="checkbox"] {
+  margin-right: 0.5rem;
+}
+
+/* Boutons */
+button[type="submit"],
+.form-footer button {
+  background-color: #b77b57;
   color: white;
-  padding: 0.75rem;
   border: none;
-  border-radius: 12px;
+  padding: 0.7rem 1.4rem;
+  border-radius: 8px;
   font-size: 1rem;
   cursor: pointer;
-  transition: background-color 0.2s ease;
+  transition: background-color 0.3s;
 }
 
-button:hover {
-  background-color: #354dd3;
+button[type="submit"]:hover,
+.form-footer button:hover {
+  background-color: #a56945;
 }
 
-button.selected {
-  background-color: #4c66f4;
-  color: white;
-  font-weight: bold;
-}
-.role-choice {
+.form-footer {
   display: flex;
   justify-content: center;
-  gap: 1.5rem;
-  margin: 2rem 0;
-}
-
-.role-choice button {
-  padding: 1rem 2rem;
-  font-size: 1rem;
-  border-radius: 8px;
-  border: 2px solid #ccc;
-  background-color: #f2f2f2;
-  cursor: pointer;
-  transition: all 0.3s ease;
-}
-
-.role-choice button:hover {
-  background-color: #e0e0e0;
-  border-color: #999;
-}
-
-.role-choice button.selected {
-  background-color: #1976d2;
-  color: white;
-  border-color: #1976d2;
-  font-weight: bold;
-  box-shadow: 0 0 10px rgba(25, 118, 210, 0.4);
-  transform: scale(1.03);
+  margin-top: 2rem;
 }

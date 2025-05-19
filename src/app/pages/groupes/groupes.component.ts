@@ -10,6 +10,18 @@ import { Component } from '@angular/core';
 export class GroupesComponent {
   nouveauNomGroupe: string = '';
   groupes: { nom: string; eleves: string[] }[] = [];
+  elevesDisponibles: string[] = [
+    'Alice',
+    'Bob',
+    'Charlie',
+    'Diana',
+    'Eliott',
+    'Fatima',
+    'Gaspard',
+    'Hiba',
+    'Isaac',
+    'Jade',
+  ];
   constructor() {
     this.groupes = JSON.parse(localStorage.getItem('groupes') || '[]');
   }
@@ -37,5 +49,24 @@ export class GroupesComponent {
     } else {
       localStorage.setItem('groupes', JSON.stringify(this.groupes));
     }
+  }
+  
+  genererRepartition() {
+    console.log('Répartition demandée');
+    this.groupes.forEach((groupe) => (groupe.eleves = []));
+
+    // Mélangez les élèves disponibles
+    const elevesMelanges = [...this.elevesDisponibles].sort(
+      () => Math.random() - 0.5
+    );
+
+    // Répartissez les élèves dans les groupes
+    for (let i = 0; i < elevesMelanges.length; i++) {
+      const eleve = elevesMelanges[i];
+      this.groupes[i % this.groupes.length].eleves.push(eleve);
+    }
+
+    // Sauvegarder la répartition dans le localStorage
+    localStorage.setItem('groupes', JSON.stringify(this.groupes));
   }
 }

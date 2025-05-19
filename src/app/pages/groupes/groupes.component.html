@@ -10,11 +10,24 @@
     @if (groupes.length === 0) {
     <p>Aucun groupe pour le moment.</p>
     } @else {
-    @for (groupe of groupes; let i = $index; track groupe.nom) {
-    <div class="groupe-item">
-        <strong>{{ groupe.nom }}</strong>
-        <button (click)="supprimerGroupe(i)">Supprimer</button>
+  @for (groupe of groupes; let i = $index; track i) {
+  <div class="groupe-item">
+    <div class="groupe-header">
+      <strong>{{ groupe.nom }}</strong>
+      <button (click)="supprimerGroupe(i)">Supprimer</button>
     </div>
-    }
-    }
+
+    <div class="groupe-eleves">
+      <ul>
+        @for (eleve of groupe.eleves; let i = $index; track i) {
+          <li>{{ eleve }}</li>
+        }
+      </ul>
+    </div>
 </div>
+}
+    }
+
+    <div class="generer-repartition">
+        <button (click)="genererRepartition()">Répartition aléatoire</button>
+    </div>

@@ -1,5 +1,5 @@
 import { CommonModule } from '@angular/common';
-import { Component } from '@angular/core';
+import { Component, EventEmitter, Output } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 import { Router } from '@angular/router';
 
@@ -24,6 +24,8 @@ import { Router } from '@angular/router';
  * et FormsModule pour la gestion du formulaire.
  */
 export class ConnexionComponent {
+  @Output() fermer = new EventEmitter<void>();
+
   username: string = '';
 
   constructor(private router: Router) {}
@@ -53,5 +55,10 @@ export class ConnexionComponent {
     } else {
       this.router.navigate(['/profil-eleve']);
     }
+    this.fermer.emit();
   }
+  annulerConnexion() {
+  this.fermer.emit();
+}
+
 }

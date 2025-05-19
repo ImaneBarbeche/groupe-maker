@@ -1,1 +1,44 @@
+<header class="header">
+  <h1>Group Maker</h1>
+
+  @if (!utilisateurActif) {
+    <div class="header-buttons">
+      <button (click)="afficherModaleConnexion = true">Se connecter</button>
+      <button (click)="afficherModaleInscription = true">S'inscrire</button>
+    </div>
+  } @else {
+    @if (utilisateurActif.role === 'formateur') {
+      <nav class="header-buttons">
+        <a routerLink="/dashboard-formateur">Dashboard</a>
+        <a routerLink="/listes">Listes</a>
+        <a routerLink="/groupes">Groupes</a>
+        <a routerLink="/projets">Projets</a>
+        <button (click)="seDeconnecter()">Déconnexion</button>
+      </nav>
+    } @else {
+      <nav class="header-buttons">
+        <a routerLink="/profil-eleve">Mon profil</a>
+        <button (click)="seDeconnecter()">Déconnexion</button>
+      </nav>
+    }
+  }
+</header>
+
+  @if (afficherModaleConnexion) {
+  <div class="modale-backdrop" (click)="fermerModale()">
+    <div class="modale" (click)="$event.stopPropagation()">
+      <app-connexion (fermer)="fermerModale()"></app-connexion>
+    </div>
+  </div>
+}
+
+@if (afficherModaleInscription) {
+  <div class="modale-backdrop" (click)="fermerModaleInscription()">
+    <div class="modale" (click)="$event.stopPropagation()">
+      <app-inscription (fermer)="fermerModaleInscription()"></app-inscription>
+    </div>
+  </div>
+}
+
+
 <router-outlet></router-outlet>

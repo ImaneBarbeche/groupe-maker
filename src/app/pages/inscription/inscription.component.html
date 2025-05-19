@@ -66,7 +66,7 @@
     <!-- Bouton d'inscription -->
     <button type="submit">S'inscrire</button>
 
-    }@else if (userRole === 'formateur') { <!-- Afficher les champs du formateur -->
+    } @else if (userRole === 'formateur') { <!-- Afficher les champs du formateur -->
     <label>Prénom :</label>
     <input type="text" [(ngModel)]="user.firstName" name="firstName" required />
 
@@ -92,3 +92,7 @@
     <button type="submit">S'inscrire</button>
     }
 </form>
+
+<div class="form-footer">
+   <button type="button" (click)="annuler()">Annuler</button>
+</div>

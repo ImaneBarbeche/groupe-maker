@@ -1,61 +1,39 @@
 :host {
   display: block;
   max-width: 700px;
-  margin: 80px auto;
+  margin: 60px auto;
   padding: 2rem;
   text-align: center;
-  font-family: 'Poppins', sans-serif;
+  font-family: 'Segoe UI', sans-serif;
+  background-color: #fffef6;
+  border-radius: 12px;
+  box-shadow: 0 8px 18px rgba(0, 0, 0, 0.05);
 }
 
 .logo {
-  width: 120px;
+  width: 90px;
   margin-bottom: 1.5rem;
+}
+
+h1 {
+  font-size: 2.4rem;
+  color: #2f2f2f;
+  margin-bottom: 1rem;
+  font-weight: 600;
+}
+
+.slogan {
+  font-size: 1.2rem;
+  color: #555;
+  margin-bottom: 2.5rem;
+  font-style: italic;
 }
 
 .home-illustration {
   width: 100%;
-  max-width: 400px;
-  margin: 2rem auto;
+  max-width: 350px;
+  margin: 0 auto;
   display: block;
-}
-
-
-h1 {
-  font-size: 2.5rem;
-  color: #4c66f4;
-  margin-bottom: 0.5rem;
-}
-
-p {
-  font-size: 1.1rem;
-  color: #444;
-  margin-bottom: 2rem;
-}
-
-.home-actions {
-  display: flex;
-  justify-content: center;
-  gap: 1rem;
-  flex-wrap: wrap;
-}
-
-button {
-  padding: 0.75rem 1.5rem;
   border-radius: 12px;
-  border: none;
-  font-size: 1rem;
-  background-color: #4c66f4;
-  color: white;
-  cursor: pointer;
-  transition: background-color 0.2s ease;
-}
-
-button:hover {
-  background-color: #354dd3;
-}
-
-.home-footer {
-  margin-top: 2rem;
-  font-style: italic;
-  color: #888;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
 }
