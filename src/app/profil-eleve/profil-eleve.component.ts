@@ -1,5 +1,6 @@
 import { Component } from '@angular/core';
 import { AuthserviceService } from '../core/authservice.service';
+import { Eleve } from '../models/utilisateur.interface';
 
 @Component({
   selector: 'app-profil-eleve',
@@ -9,27 +10,12 @@ import { AuthserviceService } from '../core/authservice.service';
   styleUrls: ['./profil-eleve.component.css'],
 })
 export class ProfilEleveComponent {
-  user: any;
-  username: string | undefined;
-  role: string | undefined;
+  user!: Eleve;
 
-  projets = [
-    {
-      titre: 'Développement Java',
-      statut: 'en cours',
-      groupe: 'Groupe 2',
-    },
-    {
-      titre: 'Landing page HTML/CSS',
-      statut: 'terminé',
-      groupe: 'Groupe 1',
-    },
-  ];
+ projets: { titre: string; statut: string; groupe: string }[] = []
+
 
   constructor(private authService: AuthserviceService) {
-    this.username = this.authService.currentUser?.username;
-    this.role = this.authService.userRole;
     this.user = JSON.parse(localStorage.getItem('utilisateurActif') || '{}');
-
   }
 }

@@ -1,33 +1,42 @@
 <h1>Gestion des groupes</h1>
 
-<div class="ajout-groupe">
-    <input [(ngModel)]="nouveauNomGroupe" type="text" placeholder="Nom du groupe" />
-    <button (click)="creerGroupe()">Créer le groupe</button>
+<!-- Choix de liste et nombre de groupes -->
+<div class="repartition-config">
+  <label for="liste-select">Choisir une liste :</label>
+  <select id="liste-select" [(ngModel)]="listeSelectionnee" (change)="onListeSelectionnee()">
+    <option [ngValue]="null">-- Sélectionner une liste --</option>
+    @for (liste of listes; track liste.id) {
+      <option [ngValue]="liste">{{ liste.nom }}</option>
+    }
+  </select>
+
+  <label for="nb-groupes">Nombre de groupes :</label>
+  <input id="nb-groupes" type="number" [(ngModel)]="nombreDeGroupes" min="1" />
+  <button (click)="genererGroupesVides()">Générer les groupes</button>
 </div>
 
-<div class="liste-groupes">
-    <h2>Groupes existants</h2>
-    @if (groupes.length === 0) {
-    <p>Aucun groupe pour le moment.</p>
-    } @else {
-  @for (groupe of groupes; let i = $index; track i) {
-  <div class="groupe-item">
-    <div class="groupe-header">
-      <strong>{{ groupe.nom }}</strong>
-      <button (click)="supprimerGroupe(i)">Supprimer</button>
-    </div>
+<!-- Bouton pour générer -->
+<div class="generer-repartition">
+  <button (click)="genererRepartition()">Répartition aléatoire</button>
+</div>
 
-    <div class="groupe-eleves">
+<!-- Groupes générés -->
+<h2>Groupes générés</h2>
+<div class="groupes-grid">
+  @for (groupe of groupes; track groupe.nom) {
+    <div class="groupe-card">
+      <input
+  [(ngModel)]="groupe.nom"
+  placeholder="Nom du groupe"
+  class="groupe-nom-input"
+/>
+
+
       <ul>
-        @for (eleve of groupe.eleves; let i = $index; track i) {
-          <li>{{ eleve }}</li>
+        @for (eleve of groupe.eleves; track eleve) {
+          <li>{{ eleve.firstName }}</li>
         }
       </ul>
     </div>
+  }
 </div>
-}
-    }
-
-    <div class="generer-repartition">
-        <button (click)="genererRepartition()">Répartition aléatoire</button>
-    </div>

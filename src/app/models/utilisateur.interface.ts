@@ -21,3 +21,10 @@ export interface Formateur {
   speciality: string;
   role: 'formateur';
 }
+
+export interface Liste {
+  id: string;
+  nom: string;
+  eleves: Eleve[];    // chaque liste contient une liste d'élèves
+  tirages: number;    // nombre de fois qu'on a généré des groupes
+}

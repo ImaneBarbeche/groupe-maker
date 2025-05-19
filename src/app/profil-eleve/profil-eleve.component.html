@@ -1,41 +1,27 @@
-<h1>Bienvenue, {{ user.username }} !</h1>
-
-<h2>Tu es connecté en tant qu'{{user.role}} </h2>
+<h1>Bienvenue, {{ user.firstName }} !</h1>
+<h2>Ton profil</h2>
 
 <div class="profil-details">
+  <p><strong>Nom d'utilisateur :</strong> {{ user.username }}</p>
   <p><strong>Âge :</strong> {{ user.age }} ans</p>
   <p><strong>Genre :</strong> {{ user.gender }}</p>
-  <p><strong>Aisance en français :</strong> {{ user.language }}/4</p>
-  <p><strong>Niveau technique :</strong> {{ user.techLevel }}/4</p>
-  <p><strong>Profil :</strong> {{ user.profile }}</p>
-  <p><strong>Ancien DWWM :</strong> {{ user.dwwmStudent ? 'Oui' : 'Non' }}</p>
+  <p><strong>Langue :</strong> {{ user.language }}</p>
+  <p><strong>Niveau technique :</strong> {{ user.techLevel }}</p>
+  <p><strong>Profil :</strong> {{ user.profil }}</p>
+  <p><strong>Étudiant·e DWWM :</strong> {{ user.dwwmStudent ? 'Oui' : 'Non' }}</p>
+  <p><strong>Groupe CDA :</strong> {{ user.cdaGroup }}</p>
 </div>
 
-<div class="dashboard-layout">
-  <div class="box groupes-box">
-    <h3>🧑‍🤝‍🧑 Tes groupes</h3>
-    <ul>
-      <li>Groupe A</li>
-      <li>Groupe B</li>
-    </ul>
-  </div>
-
-  <div class="box projets-box">
-    <h3>📘 Projets en cours</h3>
-    @for (p of projets; track p) {
-      @if (p.statut === 'en cours') {
-        <p>{{ p.titre }} – {{ p.groupe }}</p>
-      }
-    }
-
-    <h3>✅ Projets terminés</h3>
-    @for (p of projets; track p) {
-      @if (p.statut === 'terminé') {
-        <p>{{ p.titre }} – {{ p.groupe }}</p>
-      }
-    }
-  </div>
+<!-- 🔁 Groupes - à dynamiser plus tard -->
+<div class="box">
+  <h3>Mon groupe</h3>
+  <p>Tu fais partie du groupe : <strong>{{ projets[0].groupe }}</strong></p>
 </div>
 
-
-<p class="message">🎓 Continue comme ça {{ user.firstName }} !</p>
+<!-- 🗂 Projets -->
+<div class="box">
+  <h3>Mes projets</h3>
+  @for (projet of projets; track projet.titre) {
+    <p>📁 {{ projet.titre }} – <em>{{ projet.statut }}</em></p>
+  }
+</div>

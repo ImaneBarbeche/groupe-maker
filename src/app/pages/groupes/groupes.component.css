@@ -1,53 +1,91 @@
 :host {
   display: block;
-  max-width: 800px;
-  margin: 60px auto;
+  max-width: 1100px;
+  margin: 40px auto;
   padding: 2rem;
-  font-family: 'Poppins', sans-serif;
+  font-family: 'Segoe UI', sans-serif;
+  background-color: #fffef6;
 }
 
+/* TITRES */
+h1, h2 {
+  text-align: center;
+  color: #4c3b2e;
+  margin-bottom: 1rem;
+}
+
+/* INPUT + bouton création */
 .ajout-groupe {
   display: flex;
+  justify-content: center;
   gap: 1rem;
   margin-bottom: 2rem;
 }
 
 .ajout-groupe input {
-  flex: 1;
-  padding: 0.5rem;
+  padding: 0.6rem;
   border: 1px solid #ccc;
   border-radius: 8px;
+  width: 250px;
 }
 
 .ajout-groupe button {
-  padding: 0.5rem 1rem;
-  background-color: #4c66f4;
+  background-color: #b77b57;
   color: white;
   border: none;
+  padding: 0.6rem 1rem;
   border-radius: 8px;
   cursor: pointer;
 }
 
-.liste-groupes {
-  border-top: 1px solid #ccc;
-  padding-top: 1rem;
+.ajout-groupe button:hover {
+  background-color: #a46642;
 }
 
-.groupe-item button {
-  background-color: #ff4d4f;
-  color: white;
-  border: none;
-  border-radius: 6px;
-  padding: 0.4rem 0.8rem;
-  cursor: pointer;
+/* CARDS GROUPES */
+.groupes-grid {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 2rem;
+  justify-content: center;
+  margin-top: 2rem;
+}
+
+.groupe-card {
+  background-color: #f7f5ef;
+  padding: 1.5rem;
+  border-radius: 12px;
+  box-shadow: 0 2px 8px rgba(0,0,0,0.04);
+  width: 240px;
+}
+
+.groupe-card h3 {
+  margin-top: 0;
+  font-weight: 600;
+  color: #8a5e3b;
+}
+
+.groupe-card ul {
+  padding-left: 1rem;
+  list-style: disc;
+  margin: 0.5rem 0 0 0;
+}
+
+.groupe-card li {
+  margin-bottom: 0.3rem;
+}
+
+/* LISTE DES GROUPES EXISTANTS */
+.liste-groupes {
+  margin-top: 3rem;
 }
 
 .groupe-item {
-  background-color: #f1f9ff;
+  background-color: #f4f1e8;
+  border: 1px solid #d8c9b4;
   border-radius: 10px;
   padding: 1rem;
   margin-bottom: 1rem;
-  box-shadow: 0 2px 6px rgba(0,0,0,0.05);
 }
 
 .groupe-header {
@@ -56,25 +94,51 @@
   align-items: center;
 }
 
-.groupe-eleves ul {
-  list-style: none;
-  padding: 0;
-  margin: 1rem 0 0 0;
-}
-
-.groupe-eleves li {
-  background-color: #ffffff;
-  border: 1px dashed #a1c4fd;
-  padding: 0.4rem;
-  margin-bottom: 0.5rem;
-  border-radius: 6px;
-}
-
-.generer-repartition button {
-  padding: 0.5rem 1rem;
-  background-color: #4c66f4;
+.groupe-header button {
+  background: #d9534f;
   color: white;
   border: none;
-  border-radius: 8px;
+  padding: 0.4rem 0.8rem;
+  border-radius: 6px;
   cursor: pointer;
+}
+
+.groupe-header button:hover {
+  background-color: #c9302c;
+}
+
+.groupe-eleves ul {
+  margin-top: 0.5rem;
+  padding-left: 1.2rem;
+  list-style: square;
+}
+
+.repartition-config {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+  justify-content: center;
+  flex-wrap: wrap;
+  margin-bottom: 1.5rem;
+}
+
+.repartition-config label {
+  font-weight: 500;
+}
+
+.repartition-config select,
+.repartition-config input {
+  padding: 0.5rem;
+  border: 1px solid #ccc;
+  border-radius: 8px;
+}
+.groupe-nom-input {
+  width: 100%;
+  font-size: 1.1rem;
+  font-weight: bold;
+  border: 1px solid #ccc;
+  border-radius: 8px;
+  padding: 0.4rem;
+  margin-bottom: 0.5rem;
+  text-align: center;
 }
