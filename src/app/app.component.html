@@ -27,7 +27,10 @@
   @if (afficherModaleConnexion) {
   <div class="modale-backdrop" (click)="fermerModale()">
     <div class="modale" (click)="$event.stopPropagation()">
-      <app-connexion (fermer)="fermerModale()"></app-connexion>
+       <app-connexion
+        (fermer)="fermerModale()"
+        (connecte)="onUtilisateurConnecte()">
+      </app-connexion>
     </div>
   </div>
 }
@@ -35,7 +38,10 @@
 @if (afficherModaleInscription) {
   <div class="modale-backdrop" (click)="fermerModaleInscription()">
     <div class="modale" (click)="$event.stopPropagation()">
-      <app-inscription (fermer)="fermerModaleInscription()"></app-inscription>
+       <app-inscription
+        (fermer)="fermerModaleInscription()"
+        (connecte)="onUtilisateurConnecte()">
+      </app-inscription>
     </div>
   </div>
 }

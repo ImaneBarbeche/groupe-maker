@@ -1,25 +1,30 @@
-<h1>Bienvenue, {{ user.username }} !</h1>
-<h2>Tu es connecté en tant que : {{user.role}} </h2>
+<h1>Bienvenue {{ utilisateurActif.username }} !</h1>
+<h2>Tu es connecté en tant que {{ utilisateurActif.role }}</h2>
 
 <div class="dashboard-grid">
+  <!-- 🧑‍🎓 Liste des élèves -->
   <div class="dashboard-card">
-    <h3>👥 Liste des élèves</h3>
-    <p>Consulte et explore les profils élèves.</p>
-    <button (click)="goTo('/listes')">Accéder</button>
+    <h3>Liste des élèves</h3>
+    <p>👥 Nombre d'élèves : {{ totalEleves }}</p>
+    <p>🧮 Âge moyen : {{ moyenneAge }} ans</p>
+    <p>📊 Répartition : {{ statsTechnique }}</p>
   </div>
 
+  <!-- 👥 Groupes -->
   <div class="dashboard-card">
-    <h3>🧑‍🤝‍🧑 Groupes</h3>
-    <p>Crée et modifie les groupes d’élèves.</p>
-    <button (click)="goTo('/groupes')">Gérer</button>
+    <h3>Groupes</h3>
+    <p>📂 Groupes créés : {{ totalGroupes }}</p>
+    <p>🧬 Critères utilisés : {{ criteres }}</p>
+    <p>🕒 Dernier tirage : {{ dernierTirage }}</p>
   </div>
 
+  <!-- 🗂 Projets -->
   <div class="dashboard-card">
-    <h3>📂 Projets</h3>
-    <p>Assigne des projets aux groupes.</p>
-    <button (click)="goTo('/projets')">Voir</button>
+    <h3>Projets</h3>
+    <p>📁 Projets total : {{ totalProjets }}</p>
+    <p>✔️ Assignés : {{ projetsAssignes }}</p>
+    <p>⏳ En attente : {{ projetsEnAttente }}</p>
   </div>
 </div>
-    
 
 <p>Prêt·e à guider tes élèves ? 🎓</p>

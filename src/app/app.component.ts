@@ -1,5 +1,5 @@
 import { Component } from '@angular/core';
-import { RouterOutlet } from '@angular/router';
+import { RouterOutlet, RouterLink } from '@angular/router';
 import { ConnexionComponent } from './pages/connexion/connexion.component';
 import { InscriptionComponent } from './pages/inscription/inscription.component';
 
@@ -7,7 +7,7 @@ import { InscriptionComponent } from './pages/inscription/inscription.component'
 @Component({
   selector: 'app-root',
   standalone: true,
-  imports: [ConnexionComponent, InscriptionComponent, RouterOutlet],
+  imports: [ConnexionComponent, InscriptionComponent, RouterOutlet, RouterLink],
   templateUrl: './app.component.html',
   styleUrl: './app.component.css',
 })
@@ -34,4 +34,10 @@ export class AppComponent {
     this.utilisateurActif = null;
     window.location.href = '/'; // ou this.router.navigate(['/']);
   }
+  onUtilisateurConnecte() {
+  const user = localStorage.getItem('utilisateurActif');
+  if (user) {
+    this.utilisateurActif = JSON.parse(user);
+  }
+}
 }

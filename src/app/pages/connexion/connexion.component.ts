@@ -24,6 +24,7 @@ import { Router } from '@angular/router';
  * et FormsModule pour la gestion du formulaire.
  */
 export class ConnexionComponent {
+  @Output() connecte = new EventEmitter<void>();
   @Output() fermer = new EventEmitter<void>();
 
   username: string = '';
@@ -55,6 +56,7 @@ export class ConnexionComponent {
     } else {
       this.router.navigate(['/profil-eleve']);
     }
+    this.connecte.emit();
     this.fermer.emit();
   }
   annulerConnexion() {
