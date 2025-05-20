@@ -1,4 +1,4 @@
-import { Component } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
 import { AuthserviceService } from '../core/authservice.service';
 import { Eleve } from '../models/utilisateur.interface';
 
@@ -9,7 +9,7 @@ import { Eleve } from '../models/utilisateur.interface';
   templateUrl: './profil-eleve.component.html',
   styleUrls: ['./profil-eleve.component.css'],
 })
-export class ProfilEleveComponent {
+export class ProfilEleveComponent implements OnInit {
   user!: Eleve;
 
  projets: { titre: string; statut: string; groupe: string }[] = []
@@ -18,4 +18,9 @@ export class ProfilEleveComponent {
   constructor(private authService: AuthserviceService) {
     this.user = JSON.parse(localStorage.getItem('utilisateurActif') || '{}');
   }
+
+  ngOnInit() {
+  this.user = JSON.parse(localStorage.getItem('utilisateurActif') || '{}');
+  this.projets = this.user?.projets ?? [];
+}
 }

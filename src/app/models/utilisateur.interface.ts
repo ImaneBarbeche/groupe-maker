@@ -11,6 +11,8 @@ export interface Eleve {
   cdaGroup: string;
   role: 'eleve';
   formateurUsername: string;
+  groupe?: string; // le nom du groupe actuel
+  projets?: { titre: string; statut: string; groupe: string }[];
 }
 
 export interface Formateur {

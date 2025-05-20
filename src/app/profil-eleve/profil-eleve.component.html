@@ -16,7 +16,11 @@
 <div class="dashboard-layout">
   <div class="box">
     <h3>Mon groupe</h3>
-    <p>Tu fais partie du groupe : <strong>{{ projets[0].groupe }}</strong></p>
+@if (projets.length > 0 && projets[0]?.groupe) {
+  <p>Tu fais partie du groupe : <strong>{{ projets[0].groupe }}</strong></p>
+} @else {
+  <p>Tu ne fais partie d’aucun groupe pour l’instant.</p>
+}
   </div>
 
   <div class="box">

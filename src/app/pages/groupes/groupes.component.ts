@@ -30,6 +30,8 @@ export class GroupesComponent {
 
   historiqueTirages: HistoriqueTirages[] = [];
 
+  utilisateurActif: any = JSON.parse(localStorage.getItem('utilisateurActif') || 'null');
+
   constructor() {
     this.groupes = JSON.parse(localStorage.getItem('groupes') || '[]');
   }
@@ -74,11 +76,11 @@ Cela permet ensuite d'afficher toutes les listes dans ton HTML, et d'en choisir 
       console.error('Aucun utilisateur actif trouvé dans le localStorage.');
     }
 
-   
     this.groupes = JSON.parse(localStorage.getItem('groupes') || '[]'); //Enfin, on charge aussi les groupes déjà existants depuis le localStorage, pour les afficher ou les modifier.
-    this.historiqueTirages = JSON.parse(localStorage.getItem('historiqueTirages') || '[]');
+    this.historiqueTirages = JSON.parse(
+      localStorage.getItem('historiqueTirages') || '[]'
+    );
   }
-
 
   onListeSelectionnee() {
     if (this.listeSelectionnee) {
@@ -183,11 +185,29 @@ Cela permet ensuite d'afficher toutes les listes dans ton HTML, et d'en choisir 
         })),
       })),
     };
+    this.groupes.forEach((groupe) => {
+      groupe.eleves.forEach((eleve) => {
+        eleve.groupe = groupe.nom;
+      });
+    });
+    this.groupes.forEach((groupe) => {
+      groupe.eleves.forEach((eleve) => {
+        const eleveDansListe = this.listeSelectionnee.eleves.find(
+          (e) => e.id === eleve.id
+        );
+        if (eleveDansListe) {
+          eleveDansListe.groupe = groupe.nom;
+        }
+      });
+    });
+
     this.historiqueTirages.push(nouveauTirage);
     localStorage.setItem(
       'historiqueTirages',
       JSON.stringify(this.historiqueTirages)
     );
+    const key = `listes_${this.utilisateurActif.username}`;
+    console.log("Liste enregistrée :", this.listeSelectionnee);
+    localStorage.setItem(key, JSON.stringify(this.listes));
   }
 }
- 
