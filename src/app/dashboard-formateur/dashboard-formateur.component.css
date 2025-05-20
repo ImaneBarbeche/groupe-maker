@@ -9,43 +9,29 @@
   box-shadow: 0 8px 24px rgba(0, 0, 0, 0.05);
 }
 
-/* Grille de disposition */
-.dashboard-grid {
+.stats-section {
   display: flex;
-  gap: 2rem;
-  justify-content: space-between;
   flex-wrap: wrap;
+  gap: 2rem;
+  margin-top: 2rem;
+  justify-content: center;
 }
 
-/* Cartes */
-.dashboard-card {
-  flex: 1 1 300px;
-  background-color: #f8f7f3;
+.stat-box {
+  background-color: #f7f5ef;
+  border: 2px dashed #bfae98;
   border-radius: 14px;
-  padding: 1.5rem;
-  box-shadow: 0 4px 14px rgba(0,0,0,0.05);
-  text-align: left;
-  border: 1.5px solid #e2ddd6;
-  transition: transform 0.2s ease;
+  padding: 1rem 1.5rem;
+  width: 280px;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
 }
 
-.dashboard-card:hover {
-  transform: translateY(-3px);
-}
-
-/* Titres */
-.dashboard-card h3 {
+.stat-box h3 {
   margin-top: 0;
-  font-weight: 600;
   color: #8a5e3b;
   font-size: 1.2rem;
-  margin-bottom: 1rem;
 }
 
-/* Paragraphes */
-.dashboard-card p {
-  margin: 0.4rem 0;
-  font-size: 0.95rem;
-  color: #333;
-  line-height: 1.4;
+.stat-box p {
+  margin: 0.5rem 0;
 }

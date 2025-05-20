@@ -1,31 +1,60 @@
-import { Component } from '@angular/core';
-import { Router } from '@angular/router';
+import { Component, OnInit } from '@angular/core';
+import { ListesService } from '../services/listes.service';
+import { Eleve } from '../models/utilisateur.interface';
+
 
 @Component({
   selector: 'app-dashboard-formateur',
   standalone: true,
-  imports: [],
   templateUrl: './dashboard-formateur.component.html',
   styleUrls: ['./dashboard-formateur.component.css'],
 })
-export class DashboardFormateurComponent {
+export class DashboardFormateurComponent implements OnInit {
   // Données de l’utilisateur actif
-  utilisateurActif: any = JSON.parse(localStorage.getItem('utilisateurActif') || 'null');
+utilisateurActif: any = JSON.parse(localStorage.getItem('utilisateurActif') || 'null');
+mesEleves: Eleve[] = [];
 
-  // Liste des élèves
-  totalEleves = 24;
-  moyenneAge = 29;
-  statsTechnique = '40% débutants, 30% intermédiaires, 30% avancés';
+totalEleves: number = 0;
+moyenneAge: number = 0;
+statsTechnique: string = '';
 
-  // Groupes
-  totalGroupes = 6;
-  criteres = 'âge, DWWM, niveau technique';
-  dernierTirage = '14 mai 2025';
+totalGroupes: number = 0;
+criteres: string = '';
+dernierTirage: string = '';
 
-  // Projets
-  totalProjets = 5;
-  projetsAssignes = 3;
-  projetsEnAttente = 2;
+totalProjets: number = 0;
+projetsAssignes: number = 0;
+projetsEnAttente: number = 0;
 
-  constructor(private router: Router) {}
+ngOnInit() {
+  const toutesLesListes = this.listesService.getListes();
+
+  // On extrait les élèves liés à ce formateur
+  const tousLesEleves = toutesLesListes.flatMap(liste => liste.eleves || []);
+  this.mesEleves = tousLesEleves.filter(eleve =>
+    eleve.formateurUsername === this.utilisateurActif?.username
+  );
+
+  // Statistiques dynamiques
+  this.totalEleves = this.mesEleves.length;
+  this.moyenneAge = this.calculerMoyenne(this.mesEleves.map(e => e.age));
+  this.statsTechnique = this.calculerStatsTech(this.mesEleves);
+};
+
+calculerMoyenne(ages: number[]): number {
+  const total = ages.reduce((acc, val) => acc + val, 0);
+  return ages.length ? Math.round(total / ages.length) : 0;
+}
+
+calculerStatsTech(eleves: Eleve[]): string {
+  const counts = [0, 0, 0, 0]; // niveaux 1 à 4
+  eleves.forEach(e => counts[e.techLevel - 1]++);
+  const total = eleves.length;
+  return counts.map((c, i) => `${Math.round((c / total) * 100)}% Niv ${i + 1}`).join(', ');
+}
+
+
+
+  constructor(private listesService: ListesService) {}
+
 }

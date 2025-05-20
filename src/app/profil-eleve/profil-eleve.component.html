@@ -2,26 +2,28 @@
 <h2>Ton profil</h2>
 
 <div class="profil-details">
-  <p><strong>Nom d'utilisateur :</strong> {{ user.username }}</p>
-  <p><strong>Âge :</strong> {{ user.age }} ans</p>
-  <p><strong>Genre :</strong> {{ user.gender }}</p>
-  <p><strong>Langue :</strong> {{ user.language }}</p>
-  <p><strong>Niveau technique :</strong> {{ user.techLevel }}</p>
-  <p><strong>Profil :</strong> {{ user.profil }}</p>
-  <p><strong>Étudiant·e DWWM :</strong> {{ user.dwwmStudent ? 'Oui' : 'Non' }}</p>
-  <p><strong>Groupe CDA :</strong> {{ user.cdaGroup }}</p>
+<p><strong>👤 Nom d'utilisateur :</strong> {{ user.username }}</p>
+<p><strong>🎂 Âge :</strong> {{ user.age }} ans</p>
+<p><strong>⚧ Genre :</strong> {{ user.gender }}</p>
+<p><strong>🗣 Langue :</strong> {{ user.language }}</p>
+<p><strong>💻 Niveau technique :</strong> {{ user.techLevel }}</p>
+<p><strong>😶 Profil :</strong> {{ user.profil }}</p>
+<p><strong>🎓 Étudiant·e DWWM :</strong> {{ user.dwwmStudent ? 'Oui' : 'Non' }}</p>
+<p><strong>👥 Groupe CDA :</strong> {{ user.cdaGroup }}</p>
 </div>
 
-<!-- 🔁 Groupes - à dynamiser plus tard -->
-<div class="box">
-  <h3>Mon groupe</h3>
-  <p>Tu fais partie du groupe : <strong>{{ projets[0].groupe }}</strong></p>
+<!-- 🔁 Groupes  -->
+<div class="dashboard-layout">
+  <div class="box">
+    <h3>Mon groupe</h3>
+    <p>Tu fais partie du groupe : <strong>{{ projets[0].groupe }}</strong></p>
+  </div>
+
+  <div class="box">
+    <h3>Mes projets</h3>
+    @for (projet of projets; track projet.titre) {
+      <p>📁 {{ projet.titre }} – <em>{{ projet.statut }}</em></p>
+    }
+  </div>
 </div>
 
-<!-- 🗂 Projets -->
-<div class="box">
-  <h3>Mes projets</h3>
-  @for (projet of projets; track projet.titre) {
-    <p>📁 {{ projet.titre }} – <em>{{ projet.statut }}</em></p>
-  }
-</div>

@@ -1,30 +1,27 @@
-<h1>Bienvenue {{ utilisateurActif.username }} !</h1>
-<h2>Tu es connecté en tant que {{ utilisateurActif.role }}</h2>
+<h1>Bienvenue, {{ utilisateurActif.firstName }} !</h1>
+<h2>Votre tableau de bord formateur</h2>
 
-<div class="dashboard-grid">
-  <!-- 🧑‍🎓 Liste des élèves -->
-  <div class="dashboard-card">
-    <h3>Liste des élèves</h3>
-    <p>👥 Nombre d'élèves : {{ totalEleves }}</p>
-    <p>🧮 Âge moyen : {{ moyenneAge }} ans</p>
-    <p>📊 Répartition : {{ statsTechnique }}</p>
+<div class="stats-section">
+  <div class="stat-box">
+    <h3>👥 Élèves suivis</h3>
+    <p>Total : {{ totalEleves }}</p>
+    <p>Moyenne d'âge : {{ moyenneAge }} ans</p>
+    <p>Niveau technique : {{ statsTechnique }}</p>
   </div>
 
-  <!-- 👥 Groupes -->
-  <div class="dashboard-card">
-    <h3>Groupes</h3>
-    <p>📂 Groupes créés : {{ totalGroupes }}</p>
-    <p>🧬 Critères utilisés : {{ criteres }}</p>
-    <p>🕒 Dernier tirage : {{ dernierTirage }}</p>
+   <div class="stat-box">
+    <h3>📊 Groupes</h3>
+    <p>Total : {{ totalGroupes }}</p>
+    <p>Critères utilisés : {{ criteres }}</p>
+    <p>Dernier tirage : {{ dernierTirage }}</p>
   </div>
 
-  <!-- 🗂 Projets -->
-  <div class="dashboard-card">
-    <h3>Projets</h3>
-    <p>📁 Projets total : {{ totalProjets }}</p>
-    <p>✔️ Assignés : {{ projetsAssignes }}</p>
-    <p>⏳ En attente : {{ projetsEnAttente }}</p>
+   <div class="stat-box">
+    <h3>📁 Projets</h3>
+    <p>Total : {{ totalProjets }}</p>
+    <p>Assignés : {{ projetsAssignes }}</p>
+    <p>En attente : {{ projetsEnAttente }}</p>
   </div>
 </div>
 
-<p>Prêt·e à guider tes élèves ? 🎓</p>
+

@@ -1,7 +1,8 @@
 import { Component } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
-import { Liste, Eleve } from '../../models/utilisateur.interface';
+import { Liste} from '../../models/utilisateur.interface';
+import { ListesService } from '../../services/listes.service';
 @Component({
   selector: 'app-listes',
   imports: [CommonModule, FormsModule],
@@ -18,6 +19,8 @@ export class ListesComponent {
     const user = JSON.parse(localStorage.getItem('utilisateurActif') || 'null');
     const key = `listes_${user?.username}`;
     this.listes = JSON.parse(localStorage.getItem(key) || '[]');
+    console.log(this.listes);
+    this.listesService.setListes(this.listes);
   }
 
 
@@ -33,4 +36,5 @@ export class ListesComponent {
       this.listes = listes; // on met à jour l’affichage
     }
   }
+  constructor(private listesService: ListesService) {}
 }

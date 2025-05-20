@@ -29,20 +29,28 @@ h2 {
 
 /* INFOS PROFIL */
 .profil-details {
-  display: grid;
-  gap: 0.6rem;
-  padding: 1rem;
-  background-color: #f8f7f3;
-  border-radius: 12px;
-  box-shadow: 0 2px 8px rgba(0,0,0,0.04);
+  background-color: #f7f5ef;
+  border: 2px dashed #bfae98;
+  border-radius: 14px;
+  padding: 1.5rem;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
   margin-bottom: 1.5rem;
+  
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+  gap: 1rem;
+  transition: transform 0.2s ease;
 }
 
 .profil-details p {
   margin: 0;
   font-size: 1rem;
-  color: #333;
+  color: #3a3a3a;
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
 }
+
 
 /* MESSAGE */
 .message {
