@@ -17,11 +17,15 @@ export class AppComponent {
   afficherModaleConnexion = false;
   afficherModaleInscription = false;
 
+  afficherCGU: boolean = false;
+
+
   ngOnInit() {
     const user = localStorage.getItem('utilisateurActif');
     if (user) {
       this.utilisateurActif = JSON.parse(user);
     }
+    this.verifierAcceptationCGU();
   }
   fermerModale() {
     this.afficherModaleConnexion = false;
@@ -40,4 +44,23 @@ export class AppComponent {
     this.utilisateurActif = JSON.parse(user);
   }
 }
+
+verifierAcceptationCGU() {
+  const cguData = JSON.parse(localStorage.getItem('cguAccepted') || 'null');
+
+  if (!cguData || Date.now() - cguData.timestamp > 13 * 30 * 24 * 60 * 60 * 1000) {
+    this.afficherCGU = true;
+  } else {
+    this.afficherCGU = false;
+  }
+}
+
+accepterCGU() {
+  localStorage.setItem('cguAccepted', JSON.stringify({
+    timestamp: Date.now()
+  }));
+  this.afficherCGU = false;
+}
+
+
 }

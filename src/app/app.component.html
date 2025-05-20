@@ -46,5 +46,14 @@
   </div>
 }
 
+@if (afficherCGU) {
+  <div class="cgu-banner">
+    <p>
+      En utilisant ce site, vous acceptez nos CGU et l'utilisation de cookies.
+      <a href="/cgu" target="_blank">Lire les CGU</a>
+    </p>
+    <button (click)="accepterCGU()">J'accepte</button>
+  </div>
+}
 
 <router-outlet></router-outlet>

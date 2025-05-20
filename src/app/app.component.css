@@ -83,3 +83,24 @@
   background-color: #a56945;
 }
 
+.cgu-banner {
+  position: fixed;
+  bottom: 0;
+  width: 100%;
+  background: #fdfaf5;
+  border-top: 2px dashed #bfae98;
+  padding: 1rem;
+  text-align: center;
+  z-index: 1000;
+  box-shadow: 0 -2px 8px rgba(0,0,0,0.1);
+}
+
+.cgu-banner button {
+  margin-left: 1rem;
+  background-color: #8a5e3b;
+  color: white;
+  border: none;
+  padding: 0.4rem 1rem;
+  border-radius: 8px;
+  cursor: pointer;
+}
