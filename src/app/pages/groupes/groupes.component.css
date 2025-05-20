@@ -106,3 +106,37 @@ h2 {
 .btn-supprimer:hover {
   background-color: #c62828;
 }
+
+.drop-zone {
+  min-height: 100px;
+  border: 2px dashed #bfae98;
+  border-radius: 12px;
+  padding: 0.5rem;
+  background-color: #fdfaf5;
+  margin-top: 1rem;
+}
+
+.eleve-item {
+  background: #fff;
+  margin: 4px 0;
+  padding: 0.5rem;
+  border-radius: 6px;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
+  cursor: move;
+  transition: background-color 0.2s;
+}
+
+.eleve-item:hover {
+  background-color: #f2e9dc;
+}
+
+.message-validation {
+  margin-top: 1rem;
+  font-weight: 600;
+  color: #2e7d32;
+  background-color: #e6f4ea;
+  padding: 0.5rem 1rem;
+  border-radius: 8px;
+  border: 1px solid #c8e6c9;
+  display: inline-block;
+}

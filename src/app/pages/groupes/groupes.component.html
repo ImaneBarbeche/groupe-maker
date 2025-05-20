@@ -1,11 +1,15 @@
 <h2>Gestion des groupes</h2>
 
 <section class="groupes-config">
-  <label for="liste-select">Liste d’élèves :</label>
-  <select id="liste-select" [(ngModel)]="listeSelectionnee" (change)="onListeSelectionnee()">
+  <label for="liste-select">Liste d'élèves :</label>
+  <select
+    id="liste-select"
+    [(ngModel)]="listeSelectionnee"
+    (change)="onListeSelectionnee()"
+  >
     <option [ngValue]="null">-- Sélectionner une liste --</option>
     @for (liste of listes; track liste.id) {
-      <option [ngValue]="liste">{{ liste.nom }}</option>
+    <option [ngValue]="liste">{{ liste.nom }}</option>
     }
   </select>
 
@@ -14,27 +18,49 @@
 
   <button (click)="genererGroupesVides()">Générer les groupes</button>
   <button (click)="genererRepartition()">Répartition aléatoire</button>
-</section>
+  <button (click)="validerTirage()" [disabled]="tirageValide">Valider le tirage</button>
+  @if (tirageValide) {
+  <p class="message-validation">
+    Tirage validé ! Les groupes sont maintenant figés.
+  </p>
+}
 
+</section>
+<div class="criteres-generation">
+  <label>
+    <input type="checkbox" [(ngModel)]="mixDWWM" />
+    Mixer les anciens DWWM
+  </label>
+</div>
 <h3>Groupes générés</h3>
 
 <div class="groupes-grid">
   @for (groupe of groupes; let i = $index; track groupe.nom) {
-    <div class="groupe-card">
-      <div class="groupe-header">
-        <input
-          [(ngModel)]="groupe.nom"
-          class="groupe-nom-input"
-          placeholder="Nom du groupe"
-        />
-        <button class="btn-supprimer" (click)="supprimerGroupe(i)"> ✖ </button>
+  <div class="groupe-card">
+    <div class="groupe-header">
+      <input
+        [(ngModel)]="groupe.nom"
+        class="groupe-nom-input"
+        placeholder="Nom du groupe"
+      />
+      <button class="btn-supprimer" (click)="supprimerGroupe(i)">✖</button>
+    </div>
+    <div
+      cdkDropList
+      [cdkDropListDisabled]="tirageValide"
+      [cdkDropListData]="groupe.eleves"
+      [cdkDropListConnectedTo]="idsGroupes"
+      [id]="'groupe-' + i"
+      class="drop-zone"
+      (cdkDropListDropped)="deplacerEleve($event)"
+    >
+      @for (eleve of groupe.eleves; track eleve.id) {
+      <div class="eleve-item" cdkDrag [cdkDragDisabled]="tirageValide">
+        {{ eleve.firstName }} ({{ eleve.age }} ans)
       </div>
-      <ul>
-    @for (eleve of groupe.eleves; track eleve.id) {
-      <li>{{ eleve.firstName }} ({{ eleve.age }} ans)</li>
-    }
-  </ul>
-</div>
+      }
+    </div>
+  </div>
 
   }
 </div>

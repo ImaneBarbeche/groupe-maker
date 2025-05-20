@@ -2,21 +2,31 @@ import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { Component } from '@angular/core';
 import { Liste, Eleve } from '../../models/utilisateur.interface';
+import { DragDropModule } from '@angular/cdk/drag-drop';
+import { CdkDragDrop, transferArrayItem } from '@angular/cdk/drag-drop';
 @Component({
   selector: 'app-groupes',
   standalone: true,
-  imports: [CommonModule, FormsModule],
+  imports: [CommonModule, FormsModule, DragDropModule],
   templateUrl: './groupes.component.html',
   styleUrls: ['./groupes.component.css'],
 })
 export class GroupesComponent {
   nouveauNomGroupe: string = '';
   groupes: { nom: string; eleves: Eleve[] }[] = [];
-nombreDeGroupes: number | null = null;
+  nombreDeGroupes: number | null = null;
+  mixDWWM: boolean = false;
 
   listes: Liste[] = [];
   listeSelectionnee!: Liste;
   elevesDisponibles: Eleve[] = [];
+
+  get idsGroupes(): string[] {
+    return this.groupes.map((_, i) => `groupe-${i}`);
+  }
+
+  tirageValide: boolean = false;
+
 
   constructor() {
     this.groupes = JSON.parse(localStorage.getItem('groupes') || '[]');
@@ -75,50 +85,86 @@ Cela permet ensuite d'afficher toutes les listes dans ton HTML, et d'en choisir 
 
   genererRepartition() {
   if (!this.listeSelectionnee) {
-    alert("Aucune liste sélectionnée.");
-    return;
-  }
-
-  const elevesMelanges = [...this.elevesDisponibles].sort(() => Math.random() - 0.5);
-
-  if (elevesMelanges.length === 0) {
-    alert("Aucun élève dans la liste sélectionnée.");
+    alert('Aucune liste sélectionnée.');
     return;
   }
 
   if (!this.nombreDeGroupes || this.nombreDeGroupes < 1) {
-  alert("Veuillez saisir un nombre de groupes valide.");
-  return;
-}
-  // Génère les groupes automatiquement
+    alert('Veuillez saisir un nombre de groupes valide.');
+    return;
+  }
+
+  if (this.elevesDisponibles.length === 0) {
+    alert('Aucun élève dans la liste sélectionnée.');
+    return;
+  }
+
+  // Réinitialise les groupes
   this.groupes = [];
   for (let i = 1; i <= this.nombreDeGroupes; i++) {
     this.groupes.push({ nom: `Groupe ${i}`, eleves: [] });
   }
 
-  // Répartit les élèves
-  for (let i = 0; i < elevesMelanges.length; i++) {
-    const indexGroupe = i % this.nombreDeGroupes;
-    this.groupes[indexGroupe].eleves.push(elevesMelanges[i]);
+  // Si mixDWWM est activé → répartition par sous-groupes
+  if (this.mixDWWM) {
+    const anciensDWWM = this.elevesDisponibles.filter(e => e.dwwmStudent);
+    const nonDWWM = this.elevesDisponibles.filter(e => !e.dwwmStudent);
+
+    const dwwmMelanges = [...anciensDWWM].sort(() => Math.random() - 0.5);
+    const autresMelanges = [...nonDWWM].sort(() => Math.random() - 0.5);
+
+    // Répartit les anciens DWWM
+    for (let i = 0; i < dwwmMelanges.length; i++) {
+      const indexGroupe = i % this.groupes.length;
+      this.groupes[indexGroupe].eleves.push(dwwmMelanges[i]);
+    }
+
+    // Répartit les autres élèves
+    for (let i = 0; i < autresMelanges.length; i++) {
+      const indexGroupe = i % this.groupes.length;
+      this.groupes[indexGroupe].eleves.push(autresMelanges[i]);
+    }
+  } else {
+    // Répartition simple aléatoire
+    const elevesMelanges = [...this.elevesDisponibles].sort(() => Math.random() - 0.5);
+    for (let i = 0; i < elevesMelanges.length; i++) {
+      const indexGroupe = i % this.groupes.length;
+      this.groupes[indexGroupe].eleves.push(elevesMelanges[i]);
+    }
   }
 
   localStorage.setItem('groupes', JSON.stringify(this.groupes));
 }
-genererGroupesVides() {
-  if (!this.nombreDeGroupes || this.nombreDeGroupes < 1) {
-    alert("Veuillez saisir un nombre de groupes valide.");
-    return;
+
+  genererGroupesVides() {
+    if (!this.nombreDeGroupes || this.nombreDeGroupes < 1) {
+      alert('Veuillez saisir un nombre de groupes valide.');
+      return;
+    }
+
+    this.groupes = [];
+    for (let i = 1; i <= this.nombreDeGroupes; i++) {
+      this.groupes.push({
+        nom: `Groupe ${i}`,
+        eleves: [],
+      });
+    }
+
+    localStorage.setItem('groupes', JSON.stringify(this.groupes));
   }
 
-  this.groupes = [];
-  for (let i = 1; i <= this.nombreDeGroupes; i++) {
-    this.groupes.push({
-      nom: `Groupe ${i}`,
-      eleves: []
-    });
-  }
+deplacerEleve(event: CdkDragDrop<any[]>) {
+  if (event.previousContainer === event.container) return;
 
-  localStorage.setItem('groupes', JSON.stringify(this.groupes));
+  transferArrayItem(
+    event.previousContainer.data,
+    event.container.data,
+    event.previousIndex,
+    event.currentIndex
+  );
+}
+validerTirage() {
+  this.tirageValide = true;
 }
 
 }
