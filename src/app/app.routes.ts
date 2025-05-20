@@ -6,6 +6,7 @@ import { GroupesComponent } from './pages/groupes/groupes.component';
 import { DashboardFormateurComponent } from './dashboard-formateur/dashboard-formateur.component';
 import { ProfilEleveComponent } from './profil-eleve/profil-eleve.component';
 import { ProjetsComponent } from './pages/projets/projets.component';
+import { HistoriqueTiragesComponent } from './historique-tirages/historique-tirages.component';
 
 export const routes: Routes = [
   { path: '', component: AccueilComponent },
@@ -14,9 +15,10 @@ export const routes: Routes = [
   { path: 'dashboard-formateur', component: DashboardFormateurComponent },
   { path: 'profil-eleve', component: ProfilEleveComponent },
   { path: 'projets', component: ProjetsComponent },
+  { path: 'historique', component: HistoriqueTiragesComponent },
 
   // bonus : redirection si URL inconnue
-  { path: '**', redirectTo: '' }
+  { path: '**', redirectTo: '' },
 ];
 
 

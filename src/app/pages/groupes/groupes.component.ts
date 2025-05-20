@@ -4,6 +4,7 @@ import { Component } from '@angular/core';
 import { Liste, Eleve } from '../../models/utilisateur.interface';
 import { DragDropModule } from '@angular/cdk/drag-drop';
 import { CdkDragDrop, transferArrayItem } from '@angular/cdk/drag-drop';
+import { HistoriqueTirages } from '../../models/historique.interface';
 @Component({
   selector: 'app-groupes',
   standalone: true,
@@ -27,6 +28,7 @@ export class GroupesComponent {
 
   tirageValide: boolean = false;
 
+  historiqueTirages: HistoriqueTirages[] = [];
 
   constructor() {
     this.groupes = JSON.parse(localStorage.getItem('groupes') || '[]');
@@ -72,8 +74,11 @@ Cela permet ensuite d'afficher toutes les listes dans ton HTML, et d'en choisir 
       console.error('Aucun utilisateur actif trouvé dans le localStorage.');
     }
 
+   
     this.groupes = JSON.parse(localStorage.getItem('groupes') || '[]'); //Enfin, on charge aussi les groupes déjà existants depuis le localStorage, pour les afficher ou les modifier.
+    this.historiqueTirages = JSON.parse(localStorage.getItem('historiqueTirages') || '[]');
   }
+
 
   onListeSelectionnee() {
     if (this.listeSelectionnee) {
@@ -84,57 +89,59 @@ Cela permet ensuite d'afficher toutes les listes dans ton HTML, et d'en choisir 
   }
 
   genererRepartition() {
-  if (!this.listeSelectionnee) {
-    alert('Aucune liste sélectionnée.');
-    return;
-  }
-
-  if (!this.nombreDeGroupes || this.nombreDeGroupes < 1) {
-    alert('Veuillez saisir un nombre de groupes valide.');
-    return;
-  }
-
-  if (this.elevesDisponibles.length === 0) {
-    alert('Aucun élève dans la liste sélectionnée.');
-    return;
-  }
-
-  // Réinitialise les groupes
-  this.groupes = [];
-  for (let i = 1; i <= this.nombreDeGroupes; i++) {
-    this.groupes.push({ nom: `Groupe ${i}`, eleves: [] });
-  }
-
-  // Si mixDWWM est activé → répartition par sous-groupes
-  if (this.mixDWWM) {
-    const anciensDWWM = this.elevesDisponibles.filter(e => e.dwwmStudent);
-    const nonDWWM = this.elevesDisponibles.filter(e => !e.dwwmStudent);
-
-    const dwwmMelanges = [...anciensDWWM].sort(() => Math.random() - 0.5);
-    const autresMelanges = [...nonDWWM].sort(() => Math.random() - 0.5);
-
-    // Répartit les anciens DWWM
-    for (let i = 0; i < dwwmMelanges.length; i++) {
-      const indexGroupe = i % this.groupes.length;
-      this.groupes[indexGroupe].eleves.push(dwwmMelanges[i]);
+    if (!this.listeSelectionnee) {
+      alert('Aucune liste sélectionnée.');
+      return;
     }
 
-    // Répartit les autres élèves
-    for (let i = 0; i < autresMelanges.length; i++) {
-      const indexGroupe = i % this.groupes.length;
-      this.groupes[indexGroupe].eleves.push(autresMelanges[i]);
+    if (!this.nombreDeGroupes || this.nombreDeGroupes < 1) {
+      alert('Veuillez saisir un nombre de groupes valide.');
+      return;
     }
-  } else {
-    // Répartition simple aléatoire
-    const elevesMelanges = [...this.elevesDisponibles].sort(() => Math.random() - 0.5);
-    for (let i = 0; i < elevesMelanges.length; i++) {
-      const indexGroupe = i % this.groupes.length;
-      this.groupes[indexGroupe].eleves.push(elevesMelanges[i]);
-    }
-  }
 
-  localStorage.setItem('groupes', JSON.stringify(this.groupes));
-}
+    if (this.elevesDisponibles.length === 0) {
+      alert('Aucun élève dans la liste sélectionnée.');
+      return;
+    }
+
+    // Réinitialise les groupes
+    this.groupes = [];
+    for (let i = 1; i <= this.nombreDeGroupes; i++) {
+      this.groupes.push({ nom: `Groupe ${i}`, eleves: [] });
+    }
+
+    // Si mixDWWM est activé → répartition par sous-groupes
+    if (this.mixDWWM) {
+      const anciensDWWM = this.elevesDisponibles.filter((e) => e.dwwmStudent);
+      const nonDWWM = this.elevesDisponibles.filter((e) => !e.dwwmStudent);
+
+      const dwwmMelanges = [...anciensDWWM].sort(() => Math.random() - 0.5);
+      const autresMelanges = [...nonDWWM].sort(() => Math.random() - 0.5);
+
+      // Répartit les anciens DWWM
+      for (let i = 0; i < dwwmMelanges.length; i++) {
+        const indexGroupe = i % this.groupes.length;
+        this.groupes[indexGroupe].eleves.push(dwwmMelanges[i]);
+      }
+
+      // Répartit les autres élèves
+      for (let i = 0; i < autresMelanges.length; i++) {
+        const indexGroupe = i % this.groupes.length;
+        this.groupes[indexGroupe].eleves.push(autresMelanges[i]);
+      }
+    } else {
+      // Répartition simple aléatoire
+      const elevesMelanges = [...this.elevesDisponibles].sort(
+        () => Math.random() - 0.5
+      );
+      for (let i = 0; i < elevesMelanges.length; i++) {
+        const indexGroupe = i % this.groupes.length;
+        this.groupes[indexGroupe].eleves.push(elevesMelanges[i]);
+      }
+    }
+
+    localStorage.setItem('groupes', JSON.stringify(this.groupes));
+  }
 
   genererGroupesVides() {
     if (!this.nombreDeGroupes || this.nombreDeGroupes < 1) {
@@ -153,18 +160,34 @@ Cela permet ensuite d'afficher toutes les listes dans ton HTML, et d'en choisir 
     localStorage.setItem('groupes', JSON.stringify(this.groupes));
   }
 
-deplacerEleve(event: CdkDragDrop<any[]>) {
-  if (event.previousContainer === event.container) return;
+  deplacerEleve(event: CdkDragDrop<any[]>) {
+    if (event.previousContainer === event.container) return;
 
-  transferArrayItem(
-    event.previousContainer.data,
-    event.container.data,
-    event.previousIndex,
-    event.currentIndex
-  );
+    transferArrayItem(
+      event.previousContainer.data,
+      event.container.data,
+      event.previousIndex,
+      event.currentIndex
+    );
+  }
+  validerTirage() {
+    this.tirageValide = true;
+    const nouveauTirage: HistoriqueTirages = {
+      date: new Date().toLocaleString(),
+      listeNom: this.listeSelectionnee.nom,
+      groupes: this.groupes.map((groupe) => ({
+        nom: groupe.nom,
+        eleves: groupe.eleves.map((eleve) => ({
+          id: eleve.id,
+          firstName: eleve.firstName,
+        })),
+      })),
+    };
+    this.historiqueTirages.push(nouveauTirage);
+    localStorage.setItem(
+      'historiqueTirages',
+      JSON.stringify(this.historiqueTirages)
+    );
+  }
 }
-validerTirage() {
-  this.tirageValide = true;
-}
-
-}
+ 
