@@ -132,4 +132,14 @@ export class InscriptionComponent {
   annuler() {
     this.fermer.emit(); // fermeture manuelle
   }
+  sectionsOuvertes = {
+  infosPerso: true,
+  profilTech: false,
+  formateur: false
+};
+
+toggleSection(section: keyof typeof this.sectionsOuvertes) {
+  this.sectionsOuvertes[section] = !this.sectionsOuvertes[section];
+}
+
 }

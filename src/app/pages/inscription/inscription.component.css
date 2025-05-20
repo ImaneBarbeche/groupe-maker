@@ -99,3 +99,58 @@ button[type="submit"]:hover,
   justify-content: center;
   margin-top: 2rem;
 }
+
+/* TITRES DE BLOCS */
+h3 {
+  cursor: pointer;
+  background-color: #f4f1e8;
+  padding: 0.6rem 1rem;
+  border-radius: 8px;
+  margin-top: 1.5rem;
+  font-size: 1.1rem;
+  font-weight: 600;
+  color: #4c3a27;
+  transition: background-color 0.2s ease;
+}
+
+h3:hover {
+  background-color: #e8e2d7;
+}
+
+/* BLOCS DE CHAMPS */
+form label {
+  display: block;
+  margin-top: 1rem;
+  font-weight: 500;
+  color: #3a2f2f;
+}
+
+form input,
+form select {
+  width: 100%;
+  padding: 0.6rem;
+  margin-top: 0.3rem;
+  border: 1px solid #ccc;
+  border-radius: 8px;
+  background-color: #fcfcfa;
+  font-size: 1rem;
+}
+
+form input[type="checkbox"] {
+  width: auto;
+  margin-right: 0.5rem;
+}
+
+form button {
+  margin-top: 2rem;
+  background-color: #7c4b32;
+  color: white;
+  border: none;
+  padding: 0.7rem 1.4rem;
+  border-radius: 8px;
+  cursor: pointer;
+}
+
+form button:hover {
+  background-color: #693c25;
+}

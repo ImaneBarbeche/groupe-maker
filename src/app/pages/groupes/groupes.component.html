@@ -1,8 +1,7 @@
-<h1>Gestion des groupes</h1>
+<h2>Gestion des groupes</h2>
 
-<!-- Choix de liste et nombre de groupes -->
-<div class="repartition-config">
-  <label for="liste-select">Choisir une liste :</label>
+<section class="groupes-config">
+  <label for="liste-select">Liste d’élèves :</label>
   <select id="liste-select" [(ngModel)]="listeSelectionnee" (change)="onListeSelectionnee()">
     <option [ngValue]="null">-- Sélectionner une liste --</option>
     @for (liste of listes; track liste.id) {
@@ -12,31 +11,30 @@
 
   <label for="nb-groupes">Nombre de groupes :</label>
   <input id="nb-groupes" type="number" [(ngModel)]="nombreDeGroupes" min="1" />
+
   <button (click)="genererGroupesVides()">Générer les groupes</button>
-</div>
-
-<!-- Bouton pour générer -->
-<div class="generer-repartition">
   <button (click)="genererRepartition()">Répartition aléatoire</button>
+</section>
+
+<h3>Groupes générés</h3>
+
+<div class="groupes-grid">
+  @for (groupe of groupes; let i = $index; track groupe.nom) {
+    <div class="groupe-card">
+      <div class="groupe-header">
+        <input
+          [(ngModel)]="groupe.nom"
+          class="groupe-nom-input"
+          placeholder="Nom du groupe"
+        />
+        <button class="btn-supprimer" (click)="supprimerGroupe(i)"> ✖ </button>
+      </div>
+      <ul>
+    @for (eleve of groupe.eleves; track eleve.id) {
+      <li>{{ eleve.firstName }} ({{ eleve.age }} ans)</li>
+    }
+  </ul>
 </div>
 
-<!-- Groupes générés -->
-<h2>Groupes générés</h2>
-<div class="groupes-grid">
-  @for (groupe of groupes; track groupe.nom) {
-    <div class="groupe-card">
-      <input
-  [(ngModel)]="groupe.nom"
-  placeholder="Nom du groupe"
-  class="groupe-nom-input"
-/>
-
-
-      <ul>
-        @for (eleve of groupe.eleves; track eleve) {
-          <li>{{ eleve.firstName }}</li>
-        }
-      </ul>
-    </div>
   }
 </div>

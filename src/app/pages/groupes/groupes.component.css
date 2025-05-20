@@ -7,48 +7,56 @@
   background-color: #fffef6;
 }
 
-/* TITRES */
-h1, h2 {
+/* TITRE */
+h2 {
   text-align: center;
-  color: #4c3b2e;
-  margin-bottom: 1rem;
-}
-
-/* INPUT + bouton création */
-.ajout-groupe {
-  display: flex;
-  justify-content: center;
-  gap: 1rem;
+  font-size: 2rem;
+  color: #3a2f2f;
   margin-bottom: 2rem;
 }
 
-.ajout-groupe input {
-  padding: 0.6rem;
-  border: 1px solid #ccc;
-  border-radius: 8px;
-  width: 250px;
+/* CONFIGURATION */
+.groupes-config {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: 1rem;
+  background-color: #fdfaf3;
+  padding: 1rem 2rem;
+  border-radius: 12px;
+  margin-bottom: 2rem;
 }
 
-.ajout-groupe button {
+.groupes-config label {
+  font-weight: 500;
+}
+
+.groupes-config select,
+.groupes-config input {
+  padding: 0.5rem;
+  border: 1px solid #ccc;
+  border-radius: 8px;
+  min-width: 200px;
+}
+
+.groupes-config button {
   background-color: #b77b57;
   color: white;
   border: none;
-  padding: 0.6rem 1rem;
+  padding: 0.5rem 1rem;
   border-radius: 8px;
   cursor: pointer;
 }
 
-.ajout-groupe button:hover {
-  background-color: #a46642;
+.groupes-config button:hover {
+  background-color: #a45e3c;
 }
 
-/* CARDS GROUPES */
+/* GROUPES GÉNÉRÉS */
 .groupes-grid {
-  display: flex;
-  flex-wrap: wrap;
+  display: grid;
   gap: 2rem;
-  justify-content: center;
-  margin-top: 2rem;
+  grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
 }
 
 .groupe-card {
@@ -56,82 +64,8 @@ h1, h2 {
   padding: 1.5rem;
   border-radius: 12px;
   box-shadow: 0 2px 8px rgba(0,0,0,0.04);
-  width: 240px;
 }
 
-.groupe-card h3 {
-  margin-top: 0;
-  font-weight: 600;
-  color: #8a5e3b;
-}
-
-.groupe-card ul {
-  padding-left: 1rem;
-  list-style: disc;
-  margin: 0.5rem 0 0 0;
-}
-
-.groupe-card li {
-  margin-bottom: 0.3rem;
-}
-
-/* LISTE DES GROUPES EXISTANTS */
-.liste-groupes {
-  margin-top: 3rem;
-}
-
-.groupe-item {
-  background-color: #f4f1e8;
-  border: 1px solid #d8c9b4;
-  border-radius: 10px;
-  padding: 1rem;
-  margin-bottom: 1rem;
-}
-
-.groupe-header {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-}
-
-.groupe-header button {
-  background: #d9534f;
-  color: white;
-  border: none;
-  padding: 0.4rem 0.8rem;
-  border-radius: 6px;
-  cursor: pointer;
-}
-
-.groupe-header button:hover {
-  background-color: #c9302c;
-}
-
-.groupe-eleves ul {
-  margin-top: 0.5rem;
-  padding-left: 1.2rem;
-  list-style: square;
-}
-
-.repartition-config {
-  display: flex;
-  align-items: center;
-  gap: 1rem;
-  justify-content: center;
-  flex-wrap: wrap;
-  margin-bottom: 1.5rem;
-}
-
-.repartition-config label {
-  font-weight: 500;
-}
-
-.repartition-config select,
-.repartition-config input {
-  padding: 0.5rem;
-  border: 1px solid #ccc;
-  border-radius: 8px;
-}
 .groupe-nom-input {
   width: 100%;
   font-size: 1.1rem;
@@ -139,6 +73,36 @@ h1, h2 {
   border: 1px solid #ccc;
   border-radius: 8px;
   padding: 0.4rem;
-  margin-bottom: 0.5rem;
+  /* margin-bottom: 0.8rem; */
   text-align: center;
+  /* margin-top: 1rem; */
+}
+
+.groupe-card ul {
+  padding-left: 1.2rem;
+  list-style: circle;
+  font-size: 0.95rem;
+}
+
+.groupe-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 1rem;
+}
+
+.btn-supprimer {
+  background-color: #e57373;
+  color: white;
+  border: none;
+  border-radius: 20%;
+  width: 30px;
+  height: 30px;
+  font-weight: bold;
+  cursor: pointer;
+  line-height: 1;
+}
+
+.btn-supprimer:hover {
+  background-color: #c62828;
 }
