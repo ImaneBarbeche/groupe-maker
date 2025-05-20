@@ -10,6 +10,7 @@ export interface Eleve {
   dwwmStudent: boolean;
   cdaGroup: string;
   role: 'eleve';
+  formateurUsername: string;
 }
 
 export interface Formateur {

@@ -21,9 +21,7 @@
   <p style="text-align: center">
     Veuillez choisir un rôle pour commencer l'inscription.
   </p>
-  } 
-  
-  @if (userRole === 'eleve') {
+  } @if (userRole === 'eleve') {
   <!-- Afficher les champs de l'élève -->
   <!-- Champ prénom -->
   <label>Prénom :</label>
@@ -73,6 +71,15 @@
     <option value="CDA Java">CDA Java</option>
     <option value="CDA PHP">CDA PHP</option>
   </select>
+  <label for="formateur-select">Formateur référent :</label>
+  <select [(ngModel)]="eleve.formateurUsername" name="formateurUsername" id="formateur-select" required>
+    <option value="">-- Sélectionner un formateur --</option>
+    @for (formateur of formateurs; track formateur.id) {
+    <option [value]="formateur.username">
+      {{ formateur.firstName }} ({{ formateur.username }})
+    </option>
+    }
+  </select>
 
   <label>
     <input type="checkbox" [(ngModel)]="eleve.dwwmStudent" name="dwwmStudent" />
@@ -85,18 +92,33 @@
   } @else if (userRole === 'formateur') {
   <!-- Afficher les champs du formateur -->
   <label>Prénom :</label>
-  <input type="text" [(ngModel)]="formateur.firstName" name="firstName" required />
+  <input
+    type="text"
+    [(ngModel)]="formateur.firstName"
+    name="firstName"
+    required
+  />
 
   <!-- Champ nom d'utilisateur -->
   <label>Nom d'utilisateur :</label>
-  <input type="text" [(ngModel)]="formateur.username" name="username" required />
+  <input
+    type="text"
+    [(ngModel)]="formateur.username"
+    name="username"
+    required
+  />
 
   <!-- Champ âge -->
   <label>Âge :</label>
   <input type="number" [(ngModel)]="formateur.age" name="age" required />
 
   <label>Spécialité :</label>
-  <input type="text" [(ngModel)]="formateur.speciality" name="speciality" required />
+  <input
+    type="text"
+    [(ngModel)]="formateur.speciality"
+    name="speciality"
+    required
+  />
 
   <!-- Champ genre -->
   <label>Genre :</label>

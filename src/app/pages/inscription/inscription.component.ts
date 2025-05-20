@@ -35,6 +35,7 @@ export class InscriptionComponent {
   formateur!: Formateur;
 
   userRole: 'eleve' | 'formateur' | null = null;
+  formateurs: Formateur[] = [];
 
   constructor(private router: Router) {}
 
@@ -54,7 +55,11 @@ export class InscriptionComponent {
         dwwmStudent: false,
         cdaGroup: '',
         role: 'eleve',
+        formateurUsername: '',
       };
+        // 🔽 Charger la liste des formateurs
+    const utilisateurs = JSON.parse(localStorage.getItem('utilisateurs') || '[]');
+    this.formateurs = utilisateurs.filter((u: any) => u.role === 'formateur');
     } else {
       this.formateur = {
         id: '',
@@ -76,14 +81,12 @@ export class InscriptionComponent {
 
     // On vérifie si le nom d'utilisateur est déjà utilisé
     const user = this.userRole === 'eleve' ? this.eleve : this.formateur;
-    const existe = utilisateurs.some(
-      (u: any) => u.username === user.username
-    );
+    const existe = utilisateurs.some((u: any) => u.username === user.username);
     if (existe) {
       alert("Ce nom d'utilisateur existe déjà !");
       return;
     }
-    
+
     user.id = crypto.randomUUID();
 
     // On ajoute le nouvel utilisateur au tableau
@@ -94,6 +97,26 @@ export class InscriptionComponent {
 
     // Puis on enregistre cet utilisateur comme étant "actif"
     localStorage.setItem('utilisateurActif', JSON.stringify(user));
+    if (this.userRole === 'eleve') {
+      const key = `listes_${this.eleve.formateurUsername}`;
+      const listes = JSON.parse(localStorage.getItem(key) || '[]');
+
+      const nomListe = this.eleve.cdaGroup;
+      let liste = listes.find((l: any) => l.nom === nomListe);
+
+      if (!liste) {
+        liste = {
+          id: crypto.randomUUID(),
+          nom: nomListe,
+          eleves: [],
+          tirages: 0,
+        };
+        listes.push(liste);
+      }
+
+      liste.eleves.push(this.eleve);
+      localStorage.setItem(key, JSON.stringify(listes));
+    }
 
     // Redirection selon le rôle
     if (this.userRole === 'eleve') {

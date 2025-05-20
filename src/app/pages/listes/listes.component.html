@@ -1,19 +1,24 @@
 <h2>Mes listes d'élèves</h2>
 
 @if (listes.length === 0) {
-  <div class="message-vide">
-    Aucune liste pour le moment. Créez-en une pour commencer !
-  </div>
+<div class="message-vide">
+  Aucune liste pour le moment. Créez-en une pour commencer !
+</div>
 }
 
 <div class="listes-grid">
   @for (liste of listes; track liste.id) {
-    <div class="liste-card">
-      <h3>{{ liste.nom }}</h3>
-      <p>👥 Élèves : {{ liste.eleves.length }}</p>
-      <p>🎲 Tirages effectués : {{ liste.tirages }}</p>
-    </div>
-    <button (click)="supprimerListe(liste.id)">Supprimer</button>
+  <div class="liste-card">
+    <h3>{{ liste.nom }}</h3>
+    <p>👥 Élèves : {{ liste.eleves.length }}</p>
+    <p>🎲 Tirages effectués : {{ liste.tirages }}</p>
+    <ul>
+      @for (eleve of liste.eleves; track eleve.id) {
+      <li>{{ eleve.firstName }} ({{ eleve.age }} ans)</li>
+      }
+    </ul>
+  </div>
+  <button (click)="supprimerListe(liste.id)">Supprimer</button>
   }
 </div>
 
@@ -25,13 +30,13 @@
       id="nomListe"
       [(ngModel)]="nouvelleListeNom"
       name="nomListe"
-      required />
+      required
+    />
 
     @if (erreurNomExiste) {
-      <p class="erreur">Ce nom est déjà utilisé.</p>
+    <p class="erreur">Ce nom est déjà utilisé.</p>
     }
-<!-- bouton inactif tant qu'un nom de liste n'est pas entré -->
-    <button type="submit" [disabled]="!nouvelleListeNom.trim()">Créer</button> 
-    
+    <!-- bouton inactif tant qu'un nom de liste n'est pas entré -->
+    <button type="submit" [disabled]="!nouvelleListeNom.trim()">Créer</button>
   </form>
 </section>

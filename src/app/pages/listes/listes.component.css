@@ -89,3 +89,9 @@ h2 {
   margin-bottom: 1rem;
   font-size: 0.9rem;
 }
+.liste-card ul {
+  margin: 0.5rem 0 0 0;
+  padding-left: 1.2rem;
+  list-style: circle;
+  font-size: 0.95rem;
+}

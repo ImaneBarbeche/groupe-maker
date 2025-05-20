@@ -1,27 +1,7 @@
 import { Component } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
-
-interface Eleve {
-  id: string;                // identifiant unique
-  username: string;          // identifiant choisi à l'inscription
-  firstName: string;         // prénom
-  age: number;
-  gender: 'Féminin' | 'Masculin' | 'Ne préfère pas répondre';
-  language: number;          // 0 à 4 (niveau français)
-  techLevel: number;         // 0 à 3 (niveau technique)
-  profil: 'Timide' | 'Réservé' | "À l'aise" | 'Leader';       
-  dwwmStudent: boolean;
-  cdaGroup: 'CDA Java' | 'CDA PHP';
-}
-
-
-interface Liste {
-  id: string;
-  nom: string;
-  eleves: Eleve[];
-  tirages: number;
-}
+import { Liste, Eleve } from '../../models/utilisateur.interface';
 @Component({
   selector: 'app-listes',
   imports: [CommonModule, FormsModule],
