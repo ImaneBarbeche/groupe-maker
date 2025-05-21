@@ -173,41 +173,41 @@ Cela permet ensuite d'afficher toutes les listes dans ton HTML, et d'en choisir 
     );
   }
   validerTirage() {
-    this.tirageValide = true;
-    const nouveauTirage: HistoriqueTirages = {
-      date: new Date().toLocaleString(),
-      listeNom: this.listeSelectionnee.nom,
-      groupes: this.groupes.map((groupe) => ({
-        nom: groupe.nom,
-        eleves: groupe.eleves.map((eleve) => ({
-          id: eleve.id,
-          firstName: eleve.firstName,
-        })),
-      })),
-    };
-    this.groupes.forEach((groupe) => {
-      groupe.eleves.forEach((eleve) => {
-        eleve.groupe = groupe.nom;
-      });
-    });
-    this.groupes.forEach((groupe) => {
-      groupe.eleves.forEach((eleve) => {
-        const eleveDansListe = this.listeSelectionnee.eleves.find(
-          (e) => e.id === eleve.id
-        );
-        if (eleveDansListe) {
-          eleveDansListe.groupe = groupe.nom;
-        }
-      });
-    });
+  this.tirageValide = true;
 
-    this.historiqueTirages.push(nouveauTirage);
-    localStorage.setItem(
-      'historiqueTirages',
-      JSON.stringify(this.historiqueTirages)
-    );
-    const key = `listes_${this.utilisateurActif.username}`;
-    console.log("Liste enregistrée :", this.listeSelectionnee);
-    localStorage.setItem(key, JSON.stringify(this.listes));
-  }
+  const nouveauTirage: HistoriqueTirages = {
+    date: new Date().toLocaleString(),
+    listeNom: this.listeSelectionnee.nom,
+    groupes: this.groupes.map((groupe) => ({
+      nom: groupe.nom,
+      eleves: groupe.eleves.map((eleve) => ({
+        id: eleve.id,
+        firstName: eleve.firstName,
+      })),
+    })),
+  };
+
+  // Met à jour les élèves dans la liste sélectionnée
+  this.groupes.forEach((groupe) => {
+    groupe.eleves.forEach((eleve) => {
+      const eleveDansListe = this.listeSelectionnee.eleves.find(
+        (e) => e.id === eleve.id
+      );
+      if (eleveDansListe) {
+        eleveDansListe.groupe = groupe.nom;
+      }
+    });
+  });
+
+  this.historiqueTirages.push(nouveauTirage);
+
+  localStorage.setItem(
+    'historiqueTirages',
+    JSON.stringify(this.historiqueTirages)
+  );
+
+  const key = `listes_${this.utilisateurActif.username}`;
+  localStorage.setItem(key, JSON.stringify(this.listes));
+}
+
 }

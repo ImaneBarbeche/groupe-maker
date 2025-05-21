@@ -2,9 +2,34 @@
 <h2>Ton profil</h2>
 
 <div class="profil-details">
-<p><strong>👤 Nom d'utilisateur :</strong> {{ user.username }}</p>
-<p><strong>🎂 Âge :</strong> {{ user.age }} ans</p>
-<p><strong>⚧ Genre :</strong> {{ user.gender }}</p>
+@if (!modeEdition) {
+  <p><strong>👤 Nom d'utilisateur :</strong> {{ user.username }}</p> 
+} @else {
+  <label>
+    👤 Nom d'utilisateur :
+    <input type="text" [(ngModel)]="user.username" />
+  </label>
+}
+@if (!modeEdition) {
+  <p><strong>🎂 Âge :</strong> {{ user.age }} ans</p>
+} @else {
+  <label>
+    🎂 Âge :
+    <input type="number" [(ngModel)]="user.age" min="0" />
+  </label>
+}
+@if (!modeEdition) {
+  <p><strong>⚧ Genre :</strong> {{ user.gender }}</p>
+} @else {
+  <label>
+    ⚧ Genre :
+    <select [(ngModel)]="user.gender">
+      <option value="Masculin">Masculin</option>
+      <option value="Féminin">Féminin</option>
+      <option value="Autre">Autre</option>
+    </select>
+  </label>
+}
 <p><strong>🗣 Langue :</strong> {{ user.language }}</p>
 <p><strong>💻 Niveau technique :</strong> {{ user.techLevel }}</p>
 <p><strong>😶 Profil :</strong> {{ user.profil }}</p>
@@ -16,18 +41,27 @@
 <div class="dashboard-layout">
   <div class="box">
     <h3>Mon groupe</h3>
-@if (projets.length > 0 && projets[0]?.groupe) {
-  <p>Tu fais partie du groupe : <strong>{{ projets[0].groupe }}</strong></p>
+@if (groupeNom) {
+  <p>Tu fais partie du groupe : <strong>{{ groupeNom }}</strong></p>
 } @else {
-  <p>Tu ne fais partie d’aucun groupe pour l’instant.</p>
+  <p>Tu ne fais partie d'aucun groupe pour l'instant.</p>
 }
   </div>
 
-  <div class="box">
+  <!-- <div class="box">
     <h3>Mes projets</h3>
     @for (projet of projets; track projet.titre) {
       <p>📁 {{ projet.titre }} – <em>{{ projet.statut }}</em></p>
     }
+  </div> -->
+  @if (!modeEdition) {
+  <button (click)="modeEdition = true">✏️ Modifier mes infos</button>
+} @else {
+  <div class="edition-actions">
+    <button (click)="enregistrerModifications()">✅ Enregistrer</button>
+    <button (click)="modeEdition = false">❌ Annuler</button>
   </div>
+}
+
 </div>
 
