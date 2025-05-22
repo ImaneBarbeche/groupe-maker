@@ -4,20 +4,22 @@
   <p class="message-vide">Aucune liste pour le moment.</p>
 }
 
-<div class="listes-container">
+<section class="listes-container">
   @for (liste of listes; track liste.id) {
-    <div class="liste-card">
+    <article class="liste-card">
       <div class="liste-header">
         <h3>{{ liste.nom }}</h3>
-        <button class="btn-supprimer" (click)="supprimerListe(liste.id)">Supprimer</button>
+        <button class="btn-supprimer" (click)="confirmDelete(liste.id)">Supprimer</button>
       </div>
-      <p>👥 Élèves : {{ liste.eleves.length }}</p>
-      <p>🎲 Tirages effectués : {{ liste.tirages }}</p>
+
+      <p class="stat-line">👥 Élèves : {{ liste.eleves.length }}</p>
+      <p class="stat-line">🎲 Tirages effectués : {{ liste.tirages }}</p>
+
       <ul>
         @for (eleve of liste.eleves; track eleve.id) {
           <li>{{ eleve.firstName }} ({{ eleve.age }} ans)</li>
         }
       </ul>
-    </div>
+    </article>
   }
-</div>
+</section>

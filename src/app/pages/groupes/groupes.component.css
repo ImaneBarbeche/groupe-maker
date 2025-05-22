@@ -163,6 +163,7 @@ button:focus {
   display: inline-block;
 }
 
+
 @media screen and (max-width: 600px) {
   .groupes-grid {
     flex-direction: column;

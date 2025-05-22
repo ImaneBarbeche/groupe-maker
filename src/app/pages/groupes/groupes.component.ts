@@ -6,6 +6,7 @@ import { DragDropModule } from '@angular/cdk/drag-drop';
 import { CdkDragDrop, transferArrayItem } from '@angular/cdk/drag-drop';
 import { HistoriqueTirages } from '../../models/historique.interface';
 import { LocalStorageService } from '../../core/local-storage.service';
+
 @Component({
   selector: 'app-groupes',
   standalone: true,
@@ -15,57 +16,73 @@ import { LocalStorageService } from '../../core/local-storage.service';
 })
 export class GroupesComponent {
   utilisateurActif: any;
-
-  groupes: { nom: string; eleves: Eleve[] }[] = [];
   nombreDeGroupes: number | null = null;
-  mixDWWM: boolean = false;
+  mixDWWM = false;
 
   listes: Liste[] = [];
   listeSelectionnee?: Liste;
   elevesDisponibles: Eleve[] = [];
-
-  tirageValide: boolean = false;
   historiqueTirages: HistoriqueTirages[] = [];
+
   get idsGroupes(): string[] {
-    return this.groupes.map((_, i) => `groupe-${i}`);
+    return this.listeSelectionnee?.groupes?.map((_, i) => `groupe-${i}`) || [];
   }
-
-
 
   constructor(private localStorageService: LocalStorageService) {}
 
-  supprimerGroupe(index: number) {
-    if (index < 0 || index >= this.groupes.length) return; // ✅ garde-fou
-    this.groupes.splice(index, 1);
-    if (this.groupes.length === 0) {
-      this.localStorageService.removeGroupes();
-    } else {
-      this.localStorageService.setGroupes(this.groupes);
-    }
-  }
-
   ngOnInit() {
-    // On récupère l'utilisateur actif depuis le localStorage
     this.utilisateurActif = this.localStorageService.getUtilisateurActif();
     if (this.utilisateurActif) {
-      // Charge les listes liées à l'utilisateur connecté
-      this.listes = this.localStorageService.getListes(
-        this.utilisateurActif.username
-      );
+      this.listes = this.localStorageService.getListes(this.utilisateurActif.username);
     } else {
       console.error('Aucun utilisateur actif trouvé dans le localStorage.');
     }
-    // Charge les groupes existants
-    this.groupes = this.localStorageService.getGroupes();
     this.historiqueTirages = this.localStorageService.getHistorique();
   }
 
-  onListeSelectionnee() {
-    if (this.listeSelectionnee) {
-      this.elevesDisponibles = [...this.listeSelectionnee.eleves];
-    } else {
-      this.elevesDisponibles = [];
+onListeSelectionnee() {
+  if (this.listeSelectionnee) {
+    this.elevesDisponibles = [...this.listeSelectionnee.eleves];
+
+    // Réinitialise tout
+    this.listeSelectionnee.tirageValide = false;
+    this.listeSelectionnee.groupes = [];
+    this.nombreDeGroupes = null;
+
+    this.localStorageService.setListes(this.utilisateurActif.username, this.listes);
+  } else {
+    this.elevesDisponibles = [];
+  }
+}
+
+
+
+  supprimerGroupeParNom(nom: string) {
+    const groupes = this.listeSelectionnee?.groupes;
+    if (!groupes) return;
+
+    const index = groupes.findIndex(g => g.nom === nom);
+    if (index !== -1) {
+      groupes.splice(index, 1);
+      this.localStorageService.setListes(this.utilisateurActif.username, this.listes);
     }
+  }
+
+  genererGroupesVides() {
+    if (!this.nombreDeGroupes || this.nombreDeGroupes < 1 || !this.listeSelectionnee) {
+      alert('Veuillez saisir un nombre de groupes valide.');
+      return;
+    }
+
+    this.listeSelectionnee.groupes = [];
+    for (let i = 1; i <= this.nombreDeGroupes; i++) {
+      this.listeSelectionnee.groupes.push({
+        nom: `Groupe ${i}`,
+        eleves: [],
+      });
+    }
+
+    this.localStorageService.setListes(this.utilisateurActif.username, this.listes);
   }
 
   genererRepartition() {
@@ -84,66 +101,40 @@ export class GroupesComponent {
       return;
     }
 
-    // Réinitialise les groupes
-    this.groupes = [];
+    this.listeSelectionnee.groupes = [];
     for (let i = 1; i <= this.nombreDeGroupes; i++) {
-      this.groupes.push({ nom: `Groupe ${i}`, eleves: [] });
+      this.listeSelectionnee.groupes.push({ nom: `Groupe ${i}`, eleves: [] });
     }
 
-    // Si mixDWWM est activé → répartition par sous-groupes
     if (this.mixDWWM) {
       const anciensDWWM = this.elevesDisponibles.filter((e) => e.dwwmStudent);
       const nonDWWM = this.elevesDisponibles.filter((e) => !e.dwwmStudent);
-
       const dwwmMelanges = [...anciensDWWM].sort(() => Math.random() - 0.5);
       const autresMelanges = [...nonDWWM].sort(() => Math.random() - 0.5);
 
-      // Répartit les anciens DWWM
       for (let i = 0; i < dwwmMelanges.length; i++) {
-        const indexGroupe = i % this.groupes.length;
-        this.groupes[indexGroupe].eleves.push(dwwmMelanges[i]);
+        const index = i % this.listeSelectionnee.groupes.length;
+        this.listeSelectionnee.groupes[index].eleves.push(dwwmMelanges[i]);
       }
-
-      // Répartit les autres élèves
       for (let i = 0; i < autresMelanges.length; i++) {
-        const indexGroupe = i % this.groupes.length;
-        this.groupes[indexGroupe].eleves.push(autresMelanges[i]);
+        const index = i % this.listeSelectionnee.groupes.length;
+        this.listeSelectionnee.groupes[index].eleves.push(autresMelanges[i]);
       }
     } else {
-      // Répartition simple aléatoire
-      const elevesMelanges = [...this.elevesDisponibles].sort(
-        () => Math.random() - 0.5
-      );
+      const elevesMelanges = [...this.elevesDisponibles].sort(() => Math.random() - 0.5);
       for (let i = 0; i < elevesMelanges.length; i++) {
-        const indexGroupe = i % this.groupes.length;
-        this.groupes[indexGroupe].eleves.push(elevesMelanges[i]);
+        const index = i % this.listeSelectionnee.groupes.length;
+        this.listeSelectionnee.groupes[index].eleves.push(elevesMelanges[i]);
       }
     }
 
-    this.localStorageService.setGroupes(this.groupes);
+    this.listeSelectionnee.tirageValide = false;
+    this.localStorageService.setListes(this.utilisateurActif.username, this.listes);
 
-  }
-
-  genererGroupesVides() {
-    if (!this.nombreDeGroupes || this.nombreDeGroupes < 1) {
-      alert('Veuillez saisir un nombre de groupes valide.');
-      return;
-    }
-
-    this.groupes = [];
-    for (let i = 1; i <= this.nombreDeGroupes; i++) {
-      this.groupes.push({
-        nom: `Groupe ${i}`,
-        eleves: [],
-      });
-    }
-
-    this.localStorageService.setGroupes(this.groupes);
   }
 
   deplacerEleve(event: CdkDragDrop<any[]>) {
     if (event.previousContainer === event.container) return;
-
     transferArrayItem(
       event.previousContainer.data,
       event.container.data,
@@ -151,38 +142,47 @@ export class GroupesComponent {
       event.currentIndex
     );
   }
+
   validerTirage() {
-  if (!this.listeSelectionnee) return; // ✅ sécurité obligatoire
+    if (!this.listeSelectionnee || this.listeSelectionnee.tirageValide || !this.listeSelectionnee.groupes?.length) return;
+    if (!this.listeSelectionnee || this.listeSelectionnee.tirageValide) return;
+    this.listeSelectionnee.tirageValide = true;
 
-  this.tirageValide = true;
+    const nouveauTirage: HistoriqueTirages = {
+      date: new Date().toLocaleString(),
+      listeNom: this.listeSelectionnee.nom,
+      groupes: this.listeSelectionnee.groupes.map(groupe => ({
+        nom: groupe.nom,
+        eleves: groupe.eleves.map(e => ({ id: e.id, firstName: e.firstName }))
+      }))
+    };
 
-  const nouveauTirage: HistoriqueTirages = {
-    date: new Date().toLocaleString(),
-    listeNom: this.listeSelectionnee.nom,
-    groupes: this.groupes.map((groupe) => ({
-      nom: groupe.nom,
-      eleves: groupe.eleves.map((eleve) => ({
-        id: eleve.id,
-        firstName: eleve.firstName,
-      })),
-    })),
-  };
-
-  // Mise à jour des groupes dans la liste sélectionnée
-  this.groupes.forEach((groupe) => {
-    groupe.eleves.forEach((eleve) => {
-      const eleveDansListe = this.listeSelectionnee!.eleves.find(
-        (e) => e.id === eleve.id
-      );
-      if (eleveDansListe) {
-        eleveDansListe.groupe = groupe.nom;
-      }
+    this.listeSelectionnee.groupes.forEach(groupe => {
+      groupe.eleves.forEach(eleve => {
+        const e = this.listeSelectionnee!.eleves.find(el => el.id === eleve.id);
+        if (e) e.groupe = groupe.nom;
+      });
     });
-  });
 
-  this.historiqueTirages.push(nouveauTirage);
-  this.localStorageService.setHistorique(this.historiqueTirages);
-  this.localStorageService.setListes(this.utilisateurActif.username, this.listes);
-}
+    this.historiqueTirages.push(nouveauTirage);
+    this.localStorageService.setHistorique(this.historiqueTirages);
+    this.localStorageService.setListes(this.utilisateurActif.username, this.listes);
+  }
 
+  annulerTirage() {
+    if (!this.listeSelectionnee || !this.listeSelectionnee.tirageValide) return;
+
+    const indexDernier = [...this.historiqueTirages]
+      .reverse()
+      .findIndex(t => t.listeNom === this.listeSelectionnee!.nom);
+
+    if (indexDernier !== -1) {
+      const indexRéel = this.historiqueTirages.length - 1 - indexDernier;
+      this.historiqueTirages.splice(indexRéel, 1);
+    }
+
+    this.listeSelectionnee.tirageValide = false;
+    this.localStorageService.setHistorique(this.historiqueTirages);
+    this.localStorageService.setListes(this.utilisateurActif.username, this.listes);
+  }
 }

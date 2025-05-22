@@ -8,20 +8,28 @@
     <p>Moyenne d'âge : {{ moyenneAge }} ans</p>
     <p>Niveau technique : {{ statsTechnique }}</p>
   </div>
-
-   <div class="stat-box">
-    <h3>📊 Groupes</h3>
-    <p>Total : {{ totalGroupes }}</p>
-    <p>Critères utilisés : {{ criteres }}</p>
-    <p>Dernier tirage : {{ dernierTirage }}</p>
-  </div>
-
-   <div class="stat-box">
-    <h3>📁 Projets</h3>
-    <p>Total : {{ totalProjets }}</p>
-    <p>Assignés : {{ projetsAssignes }}</p>
-    <p>En attente : {{ projetsEnAttente }}</p>
-  </div>
 </div>
 
+<section class="dernier-tirage">
+  <h3>📌 Dernier tirage validé</h3>
 
+  @if (dernierTirageValide) {
+    <p><strong>Liste :</strong> {{ dernierTirageValide.listeNom }}</p>
+    <p><strong>Date :</strong> {{ dernierTirageValide.date }}</p>
+
+    <div class="groupes-grid">
+      @for (groupe of dernierTirageValide.groupes; track groupe.nom) {
+        <div class="groupe-card">
+          <h4>{{ groupe.nom }}</h4>
+          <ul>
+            @for (eleve of groupe.eleves; track eleve.id) {
+              <li>{{ eleve.firstName }}</li>
+            }
+          </ul>
+        </div>
+      }
+    </div>
+  } @else {
+    <p>Aucun tirage validé pour le moment.</p>
+  }
+</section>

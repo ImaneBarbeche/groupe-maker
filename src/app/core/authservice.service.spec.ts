@@ -14,6 +14,12 @@ describe('AuthserviceService', () => {
     expect(service).toBeTruthy();
   });
 
+  it('should not be logged in by default', () => {
+    expect(service.isLoggedIn).toBeFalse();
+    expect(service.currentUser).toBeNull();
+    expect(service.userRole).toBeUndefined();
+  });
+  
   it('should return the correct role after login', () => {
     const utilisateurTest = {
       id: 1,

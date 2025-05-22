@@ -2,11 +2,11 @@
 
 @if (historique.length > 0) {
   <div class="historique-grid">
-    @for (tirage of historique; track tirage.date) {
+    @for (tirage of historique; let i = $index; track tirage.date) {
       <div class="tirage-card">
         <h3>{{ tirage.listeNom }}</h3>
         <p>📅 {{ tirage.date }}</p>
-
+        <button (click)="supprimerTirage(i)">Supprimer</button>
         @for (groupe of tirage.groupes; track groupe.nom) {
           <div class="groupe-box">
             <h4>{{ groupe.nom }}</h4>

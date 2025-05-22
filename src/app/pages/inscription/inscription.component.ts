@@ -3,6 +3,7 @@ import { FormsModule } from '@angular/forms';
 import { CommonModule } from '@angular/common';
 import { Router } from '@angular/router';
 import { Eleve, Formateur } from '../../models/utilisateur.interface';
+import { LocalStorageService } from '../../core/local-storage.service';
 
 @Component({
   selector: 'app-inscription',
@@ -37,7 +38,10 @@ export class InscriptionComponent {
   userRole: 'eleve' | 'formateur' | null = null;
   formateurs: Formateur[] = [];
 
-  constructor(private router: Router) {}
+  constructor(
+    private router: Router,
+    private localStorageService: LocalStorageService
+  ) {}
 
   setRole(role: 'eleve' | 'formateur') {
     this.userRole = role;
@@ -57,9 +61,9 @@ export class InscriptionComponent {
         role: 'eleve',
         formateurUsername: '',
       };
-        // 🔽 Charger la liste des formateurs
-    const utilisateurs = JSON.parse(localStorage.getItem('utilisateurs') || '[]');
-    this.formateurs = utilisateurs.filter((u: any) => u.role === 'formateur');
+      // 🔽 Charger la liste des formateurs
+      const utilisateurs = this.localStorageService.getUtilisateurs();
+      this.formateurs = utilisateurs.filter((u: any) => u.role === 'formateur');
     } else {
       this.formateur = {
         id: '',
@@ -75,9 +79,8 @@ export class InscriptionComponent {
 
   onSubmit() {
     // On récupère les utilisateurs déjà inscrits (ou un tableau vide)
-    const utilisateurs = JSON.parse(
-      localStorage.getItem('utilisateurs') || '[]'
-    );
+      const utilisateurs = this.localStorageService.getUtilisateurs();
+
 
     // On vérifie si le nom d'utilisateur est déjà utilisé
     const user = this.userRole === 'eleve' ? this.eleve : this.formateur;
@@ -93,13 +96,13 @@ export class InscriptionComponent {
     utilisateurs.push(user);
 
     // Et on ré-enregistre le tableau complet dans le localStorage
-    localStorage.setItem('utilisateurs', JSON.stringify(utilisateurs));
+    this.localStorageService.setUtilisateurs(utilisateurs);
 
     // Puis on enregistre cet utilisateur comme étant "actif"
-    localStorage.setItem('utilisateurActif', JSON.stringify(user));
+    this.localStorageService.setUtilisateurActif(user);
     if (this.userRole === 'eleve') {
       const key = `listes_${this.eleve.formateurUsername}`;
-      const listes = JSON.parse(localStorage.getItem(key) || '[]');
+      const listes = this.localStorageService.getListes(this.eleve.formateurUsername);
 
       const nomListe = this.eleve.cdaGroup;
       let liste = listes.find((l: any) => l.nom === nomListe);
@@ -115,7 +118,8 @@ export class InscriptionComponent {
       }
 
       liste.eleves.push(this.eleve);
-      localStorage.setItem(key, JSON.stringify(listes));
+      this.localStorageService.setListes(this.eleve.formateurUsername, listes);
+
     }
 
     // Redirection selon le rôle
@@ -133,13 +137,12 @@ export class InscriptionComponent {
     this.fermer.emit(); // fermeture manuelle
   }
   sectionsOuvertes = {
-  infosPerso: true,
-  profilTech: false,
-  formateur: false
-};
+    infosPerso: true,
+    profilTech: false,
+    formateur: false,
+  };
 
-toggleSection(section: keyof typeof this.sectionsOuvertes) {
-  this.sectionsOuvertes[section] = !this.sectionsOuvertes[section];
-}
-
+  toggleSection(section: keyof typeof this.sectionsOuvertes) {
+    this.sectionsOuvertes[section] = !this.sectionsOuvertes[section];
+  }
 }

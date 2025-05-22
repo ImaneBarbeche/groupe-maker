@@ -42,15 +42,15 @@ h2 {
   transition: transform 0.2s ease;
 }
 
-.profil-details p {
-  margin: 0;
+
+.profil-info {
   font-size: 1rem;
   color: #3a3a3a;
+  margin: 0;
   display: flex;
   align-items: center;
   gap: 0.5rem;
 }
-
 
 /* MESSAGE */
 .message {
@@ -93,4 +93,35 @@ h2 {
 
 .box p {
   margin: 0.5rem 0;
+}
+
+
+.form-group {
+  display: flex;
+  flex-direction: column;
+  gap: 0.4rem;
+  margin-bottom: 1rem;
+}
+
+.edition-actions {
+  display: flex;
+  gap: 1rem;
+  justify-content: center;
+  margin-top: 1rem;
+}
+
+input,
+select {
+  padding: 0.6rem 1rem;
+  border-radius: 8px;
+  border: 1px solid #ccc;
+  background-color: #fcfcfa;
+  font-size: 1rem;
+  transition: border-color 0.2s ease;
+}
+
+input:focus,
+select:focus {
+  border-color: #b77b57;
+  outline: none;
 }

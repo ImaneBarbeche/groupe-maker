@@ -66,3 +66,17 @@ h2 {
   list-style: circle;
   font-size: 0.95rem;
 }
+
+.stat-line {
+  margin: 0.3rem 0;
+  font-weight: 500;
+  color: #4a3a2f;
+}
+
+.liste-card {
+  transition: transform 0.2s ease;
+}
+
+.liste-card:hover {
+  transform: translateY(-4px);
+}

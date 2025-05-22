@@ -1,10 +1,20 @@
 <h2>Connexion</h2>
 
-<form (ngSubmit)="onSubmit()">  
-<input type="text" [(ngModel)]="username" name="username" placeholder="Nom d'utilisateur" required />
+<form (ngSubmit)="onSubmit()">
+  <div class="form-group">
+    <label for="username" class="sr-only">Nom d'utilisateur</label>
+    <input
+      id="username"
+      type="text"
+      [(ngModel)]="username"
+      name="username"
+      placeholder="Nom d'utilisateur"
+      required
+    />
+  </div>
 
-
-<button type="submit">Se connecter</button>
-<button type="button" (click)="annulerConnexion()">Annuler</button>
-
+  <div class="button-group">
+    <button type="submit">Se connecter</button>
+    <button type="button" (click)="annulerConnexion()">Annuler</button>
+  </div>
 </form>

@@ -1,15 +1,28 @@
-/* FORMULAIRE CONTAINER */
+/* FOND DU FORMULAIRE */
 form {
   max-width: 420px;
   margin: 60px auto;
   padding: 2.5rem 2rem;
-  background-color: #fffef6; /* fond ivoire léger */
+  background-color: #fffef6; 
   border-radius: 12px;
   box-shadow: 0 10px 28px rgba(0, 0, 0, 0.15);
+}
+
+/* TYPOGRAPHIE GLOBALE */
+body {
   font-family: 'Segoe UI', sans-serif;
 }
 
-/* CHAMPS DE SAISIE ET SELECTEURS */
+/* TITRE */
+h2 {
+  text-align: center;
+  margin-bottom: 1.5rem;
+  font-weight: 600;
+  color: #2f2f2f;
+  font-size: 1.6rem;
+}
+
+/* CHAMPS TEXTE + SELECT */
 input,
 select {
   width: 100%;
@@ -20,7 +33,6 @@ select {
   background-color: #f4f4ed;
   font-size: 1rem;
   transition: border-color 0.2s ease, background-color 0.2s ease;
-  font-family: 'Segoe UI', sans-serif;
 }
 
 input:focus,
@@ -38,22 +50,31 @@ button {
   padding: 0.65rem 1.2rem;
   border-radius: 8px;
   font-size: 1rem;
-  margin-top: 0.5rem;
   cursor: pointer;
-  width: 100%;
   transition: background-color 0.3s;
 }
 
+/* BOUTONS AU SURVOL */
 button:hover {
   background-color: #a56945;
 }
 
-/* TITRE DE LA MODALE */
-h2 {
-  text-align: center;
-  margin-bottom: 1.5rem;
-  font-family: 'Segoe UI', sans-serif;
-  font-weight: 600;
-  color: #2f2f2f;
-  font-size: 1.6rem;
+/* GROUPE DE BOUTONS */
+.button-group {
+  display: flex;
+  gap: 0.75rem;
+  justify-content: space-between;
+  margin-top: 1rem;
+}
+
+/* ACCESSIBILITÉ  */
+.sr-only {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  padding: 0;
+  overflow: hidden;
+  clip: rect(0, 0, 0, 0);
+  white-space: nowrap;
+  border: 0;
 }

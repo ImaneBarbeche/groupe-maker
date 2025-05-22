@@ -10,6 +10,9 @@ export class LocalStorageService {
   getUtilisateurActif(): any {
     return JSON.parse(localStorage.getItem('utilisateurActif') || 'null');
   }
+  getUtilisateurs(): any[] {
+    return JSON.parse(localStorage.getItem('utilisateurs') || '[]');
+  }
 
   setUtilisateurActif(user: any): void {
     localStorage.setItem('utilisateurActif', JSON.stringify(user));
@@ -17,6 +20,9 @@ export class LocalStorageService {
 
   removeUtilisateurActif(): void {
     localStorage.removeItem('utilisateurActif');
+  }
+  setUtilisateurs(utilisateurs: any[]): void {
+    localStorage.setItem('utilisateurs', JSON.stringify(utilisateurs));
   }
 
   // Listes par utilisateur
@@ -58,6 +64,9 @@ export class LocalStorageService {
   }
 
   setCguAccepted(): void {
-    localStorage.setItem('cguAccepted', JSON.stringify({ timestamp: Date.now() }));
+    localStorage.setItem(
+      'cguAccepted',
+      JSON.stringify({ timestamp: Date.now() })
+    );
   }
 }

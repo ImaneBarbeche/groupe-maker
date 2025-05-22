@@ -9,7 +9,7 @@
   font-family: 'Segoe UI', sans-serif;
 }
 
-/* Bloc rôle */
+/* Choix du rôle */
 .role-choice {
   display: flex;
   justify-content: center;
@@ -40,67 +40,7 @@
   box-shadow: 0 0 10px rgba(183, 123, 87, 0.4);
 }
 
-/* Formulaire */
-form {
-  display: grid;
-  gap: 1.2rem;
-}
-
-label {
-  font-weight: 600;
-  color: #333;
-  display: block;
-  margin-bottom: 0.4rem;
-}
-
-input[type="text"],
-input[type="number"],
-select {
-  width: 100%;
-  padding: 0.65rem 1rem;
-  border-radius: 10px;
-  border: 1.5px solid #d4cfc2;
-  background-color: #fdfdf9;
-  font-size: 1rem;
-  transition: border-color 0.2s ease;
-}
-
-input:focus,
-select:focus {
-  border-color: #b77b57;
-  outline: none;
-  background-color: #fefdf7;
-}
-
-input[type="checkbox"] {
-  margin-right: 0.5rem;
-}
-
-/* Boutons */
-button[type="submit"],
-.form-footer button {
-  background-color: #b77b57;
-  color: white;
-  border: none;
-  padding: 0.7rem 1.4rem;
-  border-radius: 8px;
-  font-size: 1rem;
-  cursor: pointer;
-  transition: background-color 0.3s;
-}
-
-button[type="submit"]:hover,
-.form-footer button:hover {
-  background-color: #a56945;
-}
-
-.form-footer {
-  display: flex;
-  justify-content: center;
-  margin-top: 2rem;
-}
-
-/* TITRES DE BLOCS */
+/* Sections repliables */
 h3 {
   cursor: pointer;
   background-color: #f4f1e8;
@@ -117,40 +57,71 @@ h3:hover {
   background-color: #e8e2d7;
 }
 
-/* BLOCS DE CHAMPS */
-form label {
+/* Champs de formulaire */
+form {
+  display: grid;
+  gap: 1.2rem;
+}
+
+/* Groupes de champs */
+.form-group {
+  margin-bottom: 1.2rem;
+}
+
+.form-group label {
   display: block;
-  margin-top: 1rem;
-  font-weight: 500;
+  margin-bottom: 0.4rem;
+  font-weight: 600;
   color: #3a2f2f;
 }
 
-form input,
+form input[type="text"],
+form input[type="number"],
 form select {
   width: 100%;
-  padding: 0.6rem;
-  margin-top: 0.3rem;
-  border: 1px solid #ccc;
-  border-radius: 8px;
-  background-color: #fcfcfa;
+  padding: 0.65rem 1rem;
+  border-radius: 10px;
+  border: 1.5px solid #d4cfc2;
+  background-color: #fdfdf9;
   font-size: 1rem;
+  transition: border-color 0.2s ease;
+  margin-top: 0.3rem;
 }
 
-form input[type="checkbox"] {
-  width: auto;
+form input:focus,
+form select:focus {
+  border-color: #b77b57;
+  outline: none;
+  background-color: #fefdf7;
+}
+
+/* Case à cocher */
+input[type="checkbox"] {
   margin-right: 0.5rem;
+  width: auto;
 }
 
+/* Boutons généraux */
+button[type="submit"],
+.form-footer button,
 form button {
-  margin-top: 2rem;
-  background-color: #7c4b32;
+  background-color: #b77b57;
   color: white;
   border: none;
   padding: 0.7rem 1.4rem;
   border-radius: 8px;
+  font-size: 1rem;
   cursor: pointer;
+  transition: background-color 0.3s;
+  margin-top: 1rem;
 }
 
-form button:hover {
-  background-color: #693c25;
+button:hover {
+  background-color: #a56945;
+}
+
+.form-footer {
+  display: flex;
+  justify-content: center;
+  margin-top: 2rem;
 }

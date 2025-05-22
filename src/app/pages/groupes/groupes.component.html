@@ -9,60 +9,78 @@
   >
     <option [ngValue]="null">-- Sélectionner une liste --</option>
     @for (liste of listes; track liste.id) {
-    <option [ngValue]="liste">{{ liste.nom }}</option>
+      <option [ngValue]="liste">{{ liste.nom }}</option>
     }
   </select>
 
   <label for="nb-groupes">Nombre de groupes :</label>
-  <input id="nb-groupes" type="number" [(ngModel)]="nombreDeGroupes" min="1" />
+  <input
+    id="nb-groupes"
+    type="number"
+    [(ngModel)]="nombreDeGroupes"
+    min="1"
+  />
 
   <button (click)="genererGroupesVides()">Générer les groupes</button>
   <button (click)="genererRepartition()">Répartition aléatoire</button>
-  
 </section>
+
 <div class="criteres-generation">
   <label>
     <input type="checkbox" [(ngModel)]="mixDWWM" />
     Mixer les anciens DWWM
   </label>
 </div>
+
 <h2>Groupes générés</h2>
 
 <div class="groupes-grid">
-  @for (groupe of groupes; let i = $index; track i) {
-    <div class="groupe-card">
-      <div class="groupe-header">
-        <input
-        [(ngModel)]="groupe.nom"
-        class="groupe-nom"
-        placeholder="Nom du groupe"
-        />
-        <button class="btn-supprimer" aria-label="Supprimer le groupe" (click)="supprimerGroupe(i)">✖</button>
-      </div>
-      <button class="bouton-valider" (click)="validerTirage()" [disabled]="tirageValide">
-  Valider le tirage
-</button>
-      @if (tirageValide) {
-      <p class="message-validation">
-        Tirage validé ! Les groupes sont maintenant figés.
-      </p>
-      }
-    <div
-      cdkDropList
-      [cdkDropListDisabled]="tirageValide"
-      [cdkDropListData]="groupe.eleves"
-      [cdkDropListConnectedTo]="idsGroupes"
-      [id]="'groupe-' + i"
-      class="drop-zone"
-      (cdkDropListDropped)="deplacerEleve($event)"
-    >
-      @for (eleve of groupe.eleves; track eleve.id) {
-      <div class="eleve-item" cdkDrag [cdkDragDisabled]="tirageValide">
-        {{ eleve.firstName }} ({{ eleve.age }} ans)
-      </div>
-      }
-    </div>
-  </div>
+  @if ((listeSelectionnee?.groupes ?? []).length > 0) {
+    @for (groupe of listeSelectionnee?.groupes ?? []; track groupe.nom) {
+      @let i = (listeSelectionnee?.groupes ?? []).indexOf(groupe);
 
+      <div class="groupe-card">
+        <div class="groupe-header">
+          <input
+            [(ngModel)]="groupe.nom"
+            class="groupe-nom"
+            placeholder="Nom du groupe"
+          />
+          <button class="btn-supprimer" (click)="supprimerGroupeParNom(groupe.nom)">✖</button>
+        </div>
+
+        @if (!listeSelectionnee?.tirageValide && (listeSelectionnee?.groupes ?? []).length > 0) {
+          <button (click)="validerTirage()">✅ Valider le tirage</button>
+        } @else {
+          <button (click)="annulerTirage()">❌ Annuler le tirage</button>
+        }
+
+        @if (listeSelectionnee?.tirageValide) {
+          <p class="message-valide">✅ Tirage validé pour cette liste.</p>
+        }
+
+        <div
+          cdkDropList
+          [cdkDropListDisabled]="listeSelectionnee?.tirageValide"
+          [cdkDropListData]="groupe.eleves"
+          [cdkDropListConnectedTo]="idsGroupes"
+          [id]="'groupe-' + i"
+          class="drop-zone"
+          (cdkDropListDropped)="deplacerEleve($event)"
+        >
+          @for (eleve of groupe?.eleves ?? []; track eleve.id) {
+            <div
+              class="eleve-item"
+              cdkDrag
+              [cdkDragDisabled]="listeSelectionnee?.tirageValide"
+            >
+              {{ eleve.firstName }} ({{ eleve.age }} ans)
+            </div>
+          }
+        </div>
+      </div>
+    }
+  } @else {
+    <p>Aucun groupe généré pour le moment.</p>
   }
 </div>
