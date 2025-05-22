@@ -18,13 +18,7 @@
 
   <button (click)="genererGroupesVides()">Générer les groupes</button>
   <button (click)="genererRepartition()">Répartition aléatoire</button>
-  <button (click)="validerTirage()" [disabled]="tirageValide">Valider le tirage</button>
-  @if (tirageValide) {
-  <p class="message-validation">
-    Tirage validé ! Les groupes sont maintenant figés.
-  </p>
-}
-
+  
 </section>
 <div class="criteres-generation">
   <label>
@@ -32,19 +26,27 @@
     Mixer les anciens DWWM
   </label>
 </div>
-<h3>Groupes générés</h3>
+<h2>Groupes générés</h2>
 
 <div class="groupes-grid">
-  @for (groupe of groupes; let i = $index; track groupe.nom) {
-  <div class="groupe-card">
-    <div class="groupe-header">
-      <input
+  @for (groupe of groupes; let i = $index; track i) {
+    <div class="groupe-card">
+      <div class="groupe-header">
+        <input
         [(ngModel)]="groupe.nom"
-        class="groupe-nom-input"
+        class="groupe-nom"
         placeholder="Nom du groupe"
-      />
-      <button class="btn-supprimer" (click)="supprimerGroupe(i)">✖</button>
-    </div>
+        />
+        <button class="btn-supprimer" aria-label="Supprimer le groupe" (click)="supprimerGroupe(i)">✖</button>
+      </div>
+      <button class="bouton-valider" (click)="validerTirage()" [disabled]="tirageValide">
+  Valider le tirage
+</button>
+      @if (tirageValide) {
+      <p class="message-validation">
+        Tirage validé ! Les groupes sont maintenant figés.
+      </p>
+      }
     <div
       cdkDropList
       [cdkDropListDisabled]="tirageValide"

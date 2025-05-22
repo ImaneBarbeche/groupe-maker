@@ -1,6 +1,6 @@
 import { Component, OnInit } from '@angular/core';
-import { ListesService } from '../services/listes.service';
-import { Eleve } from '../models/utilisateur.interface';
+import { ListesService } from '../../services/listes.service';
+import { Eleve } from '../../models/utilisateur.interface';
 
 
 @Component({

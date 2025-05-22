@@ -3,7 +3,7 @@
   max-width: 1100px;
   margin: 40px auto;
   padding: 2rem;
-  font-family: 'Segoe UI', sans-serif;
+  font-family: "Segoe UI", sans-serif;
   background-color: #fffef6;
 }
 
@@ -64,21 +64,19 @@ h2 {
   background-color: #f7f5ef;
   padding: 1.5rem;
   border-radius: 12px;
-  box-shadow: 0 2px 8px rgba(0,0,0,0.04);
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.04);
   flex: 1 1 300px;
   max-width: 400px;
 }
 
-.groupe-nom-input {
+.groupe-nom {
   width: 100%;
   font-size: 1.1rem;
   font-weight: bold;
   border: 1px solid #ccc;
   border-radius: 8px;
   padding: 0.4rem;
-  /* margin-bottom: 0.8rem; */
   text-align: center;
-  /* margin-top: 1rem; */
 }
 
 .groupe-card ul {
@@ -108,6 +106,27 @@ h2 {
 
 .btn-supprimer:hover {
   background-color: #c62828;
+}
+
+button:focus {
+  outline: 2px solid #b77b57;
+  outline-offset: 2px;
+}
+
+.bouton-valider {
+  margin-top: 1rem;
+  background-color: #4caf50; /* vert */
+  color: white;
+  font-weight: 600;
+  border: none;
+  padding: 0.2rem;
+  border-radius: 8px;
+  cursor: pointer;
+  transition: background-color 0.2s ease;
+}
+
+.bouton-valider:hover {
+  background-color: #388e3c;
 }
 
 .drop-zone {
@@ -160,5 +179,14 @@ h2 {
 
   .btn-supprimer {
     font-size: 1.2rem;
+  }
+  .groupes-config {
+    flex-direction: column;
+    align-items: stretch;
+  }
+
+  .groupes-config button {
+    width: 100%;
+    text-align: center;
   }
 }

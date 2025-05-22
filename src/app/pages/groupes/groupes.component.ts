@@ -5,6 +5,7 @@ import { Liste, Eleve } from '../../models/utilisateur.interface';
 import { DragDropModule } from '@angular/cdk/drag-drop';
 import { CdkDragDrop, transferArrayItem } from '@angular/cdk/drag-drop';
 import { HistoriqueTirages } from '../../models/historique.interface';
+import { LocalStorageService } from '../../core/local-storage.service';
 @Component({
   selector: 'app-groupes',
   standalone: true,
@@ -13,7 +14,8 @@ import { HistoriqueTirages } from '../../models/historique.interface';
   styleUrls: ['./groupes.component.css'],
 })
 export class GroupesComponent {
-  nouveauNomGroupe: string = '';
+  utilisateurActif: any;
+
   groupes: { nom: string; eleves: Eleve[] }[] = [];
   nombreDeGroupes: number | null = null;
   mixDWWM: boolean = false;
@@ -22,64 +24,40 @@ export class GroupesComponent {
   listeSelectionnee!: Liste;
   elevesDisponibles: Eleve[] = [];
 
+  tirageValide: boolean = false;
+  historiqueTirages: HistoriqueTirages[] = [];
   get idsGroupes(): string[] {
     return this.groupes.map((_, i) => `groupe-${i}`);
   }
 
-  tirageValide: boolean = false;
 
-  historiqueTirages: HistoriqueTirages[] = [];
 
-  utilisateurActif: any = JSON.parse(localStorage.getItem('utilisateurActif') || 'null');
-
-  constructor() {
-    this.groupes = JSON.parse(localStorage.getItem('groupes') || '[]');
-  }
-
-  creerGroupe() {
-    if (!this.nouveauNomGroupe.trim()) {
-      alert('Le nom du groupe ne peut pas être vide.');
-      return;
-    }
-
-    const nouveauGroupe = { nom: this.nouveauNomGroupe.trim(), eleves: [] };
-    this.groupes.push(nouveauGroupe);
-    this.nouveauNomGroupe = '';
-
-    localStorage.setItem('groupes', JSON.stringify(this.groupes));
-  }
+  constructor(private localStorageService: LocalStorageService) {}
 
   supprimerGroupe(index: number) {
     this.groupes.splice(index, 1);
 
     if (this.groupes.length === 0) {
-      localStorage.removeItem('groupes');
+      this.localStorageService.removeGroupes();
     } else {
-      localStorage.setItem('groupes', JSON.stringify(this.groupes));
+      this.localStorageService.setGroupes(this.groupes);
     }
   }
 
   ngOnInit() {
-    // On récupère depuis le localStorage l’utilisateur actuellement connecté (normalement un formateur ici).
-    //localStorage.getItem(...) donne une chaîne de caractères JSON
-    //JSON.parse(...) la transforme en objet utilisable en TypeScript
-    // Si aucun utilisateur n’est connecté, on obtient null.
-    const user = JSON.parse(localStorage.getItem('utilisateurActif') || 'null');
-    if (user) {
-      const key = `listes_${user.username}`; // On construit une clé dynamique pour récupérer ses listes. Par exemple : si user.username vaut "julie", alors la clé devient "listes_julie". Cette clé est celle qu’on a utilisée pour stocker les listes dans localStorage.
-      /**On récupère les listes correspondant à cet utilisateur (formateur) :
-Si elles existent → on les parse et on les stocke dans this.listes
-Sinon → on stocke un tableau vide []
-Cela permet ensuite d'afficher toutes les listes dans ton HTML, et d'en choisir une pour créer des groupes à partir de ses élèves. */
-      this.listes = JSON.parse(localStorage.getItem(key) || '[]');
+    // On récupère l'utilisateur actif depuis le localStorage
+    this.utilisateurActif = this.localStorageService.getUtilisateurActif();
+    if (this.utilisateurActif) {
+      // Charge les listes liées à l'utilisateur connecté
+      this.listes = this.localStorageService.getListes(
+        this.utilisateurActif.username
+      );
     } else {
       console.error('Aucun utilisateur actif trouvé dans le localStorage.');
     }
-
-    this.groupes = JSON.parse(localStorage.getItem('groupes') || '[]'); //Enfin, on charge aussi les groupes déjà existants depuis le localStorage, pour les afficher ou les modifier.
-    this.historiqueTirages = JSON.parse(
-      localStorage.getItem('historiqueTirages') || '[]'
-    );
+    // Charge les groupes existants
+    this.groupes = this.localStorageService.getGroupes();
+    this.historiqueTirages = this.localStorageService.getHistorique();
   }
 
   onListeSelectionnee() {
@@ -142,7 +120,8 @@ Cela permet ensuite d'afficher toutes les listes dans ton HTML, et d'en choisir 
       }
     }
 
-    localStorage.setItem('groupes', JSON.stringify(this.groupes));
+    this.localStorageService.setGroupes(this.groupes);
+
   }
 
   genererGroupesVides() {
@@ -159,7 +138,7 @@ Cela permet ensuite d'afficher toutes les listes dans ton HTML, et d'en choisir 
       });
     }
 
-    localStorage.setItem('groupes', JSON.stringify(this.groupes));
+    this.localStorageService.setGroupes(this.groupes);
   }
 
   deplacerEleve(event: CdkDragDrop<any[]>) {
@@ -173,41 +152,36 @@ Cela permet ensuite d'afficher toutes les listes dans ton HTML, et d'en choisir 
     );
   }
   validerTirage() {
-  this.tirageValide = true;
+    this.tirageValide = true;
 
-  const nouveauTirage: HistoriqueTirages = {
-    date: new Date().toLocaleString(),
-    listeNom: this.listeSelectionnee.nom,
-    groupes: this.groupes.map((groupe) => ({
-      nom: groupe.nom,
-      eleves: groupe.eleves.map((eleve) => ({
-        id: eleve.id,
-        firstName: eleve.firstName,
+    const nouveauTirage: HistoriqueTirages = {
+      date: new Date().toLocaleString(),
+      listeNom: this.listeSelectionnee.nom,
+      groupes: this.groupes.map((groupe) => ({
+        nom: groupe.nom,
+        eleves: groupe.eleves.map((eleve) => ({
+          id: eleve.id,
+          firstName: eleve.firstName,
+        })),
       })),
-    })),
-  };
+    };
 
-  // Met à jour les élèves dans la liste sélectionnée
-  this.groupes.forEach((groupe) => {
-    groupe.eleves.forEach((eleve) => {
-      const eleveDansListe = this.listeSelectionnee.eleves.find(
-        (e) => e.id === eleve.id
-      );
-      if (eleveDansListe) {
-        eleveDansListe.groupe = groupe.nom;
-      }
+    // Met à jour les élèves dans la liste sélectionnée
+    this.groupes.forEach((groupe) => {
+      groupe.eleves.forEach((eleve) => {
+        const eleveDansListe = this.listeSelectionnee.eleves.find(
+          (e) => e.id === eleve.id
+        );
+        if (eleveDansListe) {
+          eleveDansListe.groupe = groupe.nom;
+        }
+      });
     });
-  });
 
-  this.historiqueTirages.push(nouveauTirage);
+    this.historiqueTirages.push(nouveauTirage);
 
-  localStorage.setItem(
-    'historiqueTirages',
-    JSON.stringify(this.historiqueTirages)
-  );
+    this.localStorageService.setHistorique(this.historiqueTirages);
 
-  const key = `listes_${this.utilisateurActif.username}`;
-  localStorage.setItem(key, JSON.stringify(this.listes));
-}
-
+    this.localStorageService.setListes(this.utilisateurActif.username, this.listes);
+  }
 }

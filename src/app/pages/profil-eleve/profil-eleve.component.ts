@@ -1,5 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-import { Eleve } from '../models/utilisateur.interface';
+import { Eleve } from '../../models/utilisateur.interface';
 import { FormsModule } from '@angular/forms';
 
 @Component({
