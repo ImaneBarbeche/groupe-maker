@@ -8,10 +8,20 @@ describe('DashboardFormateurComponent', () => {
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      imports: [DashboardFormateurComponent]
-    })
-    .compileComponents();
-
+      imports: [DashboardFormateurComponent],
+    }).compileComponents();
+    localStorage.setItem(
+      'utilisateurActif',
+      JSON.stringify({
+        id: '1',
+        username: 'Marie',
+        firstName: 'Marie',
+        age: 35,
+        gender: 'féminin',
+        speciality: 'Angular',
+        role: 'formateur',
+      })
+    );
     fixture = TestBed.createComponent(DashboardFormateurComponent);
     component = fixture.componentInstance;
     fixture.detectChanges();

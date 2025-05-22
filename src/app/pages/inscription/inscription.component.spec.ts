@@ -25,38 +25,65 @@ describe('InscriptionComponent', () => {
     expect(component).toBeTruthy();
   });
 
-  it('should prevent inscription if username already exist', () => {
-    spyOn(window, 'alert');
-    const testUser = {
-      username: 'Jean',
-      userRole: 'eleve',
-    };
-    localStorage.setItem('utilisateurs', JSON.stringify([testUser]));
-    component.user.username = 'Jean';
-    component.userRole = 'eleve';
-    component.onSubmit();
+  it('should prevent inscription if username already exists', () => {
+  spyOn(window, 'alert');
 
-    expect(mockRouter.navigate).not.toHaveBeenCalled();
-    expect(window.alert).toHaveBeenCalledWith(
-      "Ce nom d'utilisateur existe déjà !"
-    );
-  });
+  // ARRANGE – créer un formateur déjà inscrit dans le localStorage
+  const existingUser = {
+    id: '1',
+    username: 'Jean',
+    firstName: 'Jean',
+    age: 30,
+    gender: 'masculin',
+    language: 2,
+    techLevel: 2,
+    profil: 'Réservé',
+    dwwmStudent: true,
+    cdaGroup: 'CDA-1',
+    formateurUsername: 'ProfX',
+    role: 'eleve',
+  };
+  localStorage.setItem('utilisateurs', JSON.stringify([existingUser]));
+
+  // Préparer le composant avec le même nom d'utilisateur
+  component.setRole('eleve');
+  component.eleve.username = 'Jean';
+  component.eleve.firstName = 'Jean';
+  component.eleve.age = 30;
+  component.eleve.gender = 'masculin';
+  component.eleve.language = 2;
+  component.eleve.techLevel = 2;
+  component.eleve.profil = 'Réservé';
+  component.eleve.dwwmStudent = true;
+  component.eleve.cdaGroup = 'CDA-1';
+  component.eleve.formateurUsername = 'ProfX';
+  component.userRole = 'eleve';
+
+  // ACT
+  component.onSubmit();
+
+  // ASSERT
+  expect(window.alert).toHaveBeenCalledWith("Ce nom d'utilisateur existe déjà !");
+  expect(mockRouter.navigate).not.toHaveBeenCalled();
+});
+
 
   it('should navigate to dashboard if inscription succeed', () => {
     spyOn(window, 'alert');
+
+    //Arrange
+    component.setRole('formateur'); // initialise component.formateur
     component.userRole = 'formateur';
-    component.user = {
-      username: 'Marie',
-      firstName: 'Marie',
-      age: 32,
-      gender: 'féminin',
-      language: '3 - Bon',
-      techLevel: '2 - Intermédiaire',
-      profil: 'à l’aise',
-      dwwmStudent: false,
-      speciality: 'Angular',
-    };
+    component.formateur.username = 'Marie';
+    component.formateur.firstName = 'Marie';
+    component.formateur.age = 32;
+    component.formateur.gender = 'féminin';
+    component.formateur.speciality = 'Angular';
+
+    //Act
     component.onSubmit();
+
+    //Assert
     const savedUsers = JSON.parse(localStorage.getItem('utilisateurs') || '[]');
     expect(savedUsers.some((u: any) => u.username === 'Marie')).toBeTrue();
     expect(mockRouter.navigate).toHaveBeenCalledWith(['/dashboard-formateur']);
@@ -65,20 +92,28 @@ describe('InscriptionComponent', () => {
     );
     expect(activeUser.username).toBe('Marie');
   });
+
   it('should navigate to profil if inscription succeed for eleve', () => {
     spyOn(window, 'alert');
+
+    //Arrange
+    component.setRole('eleve');
     component.userRole = 'eleve';
-    component.user = {
-      username: 'Paul',
-      firstName: 'Paul',
-      age: 32,
-      gender: 'masculin',
-      language: '3 - Bon',
-      techLevel: '2 - Intermédiaire',
-      profil: 'à l’aise',
-      dwwmStudent: true,
-    };
+    component.eleve.username = 'Paul';
+    component.eleve.firstName = 'Paul';
+    component.eleve.age = 32;
+    component.eleve.gender = 'masculin';
+    component.eleve.language = 3;
+    component.eleve.techLevel = 2;
+    component.eleve.profil = 'à l’aise';
+    component.eleve.dwwmStudent = true;
+    component.eleve.cdaGroup = 'CDA-1'; // important pour liste
+    component.eleve.formateurUsername = 'Marie'; // important pour association
+
+    //Act
     component.onSubmit();
+
+    //Assert
     const savedUsers = JSON.parse(localStorage.getItem('utilisateurs') || '[]');
     expect(savedUsers.some((u: any) => u.username === 'Paul')).toBeTrue();
     expect(mockRouter.navigate).toHaveBeenCalledWith(['/profil-eleve']);

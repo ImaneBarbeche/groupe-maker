@@ -11,6 +11,7 @@ describe('ConnexionComponent', () => {
   }; //crées un espion sur la méthode navigate qui enregistre chaque appel avec les arguments et te permet de dire : “Cette méthode a-t-elle été appelée avec telle valeur ?”
 
   beforeEach(async () => {
+    localStorage.clear(); // On vide le localStorage avant chaque test pour éviter les interférences entre les tests.
     await TestBed.configureTestingModule({
       imports: [ConnexionComponent],
       providers: [{ provide: Router, useValue: mockRouter }],

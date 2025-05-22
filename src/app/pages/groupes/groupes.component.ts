@@ -21,7 +21,7 @@ export class GroupesComponent {
   mixDWWM: boolean = false;
 
   listes: Liste[] = [];
-  listeSelectionnee!: Liste;
+  listeSelectionnee?: Liste;
   elevesDisponibles: Eleve[] = [];
 
   tirageValide: boolean = false;
@@ -35,8 +35,8 @@ export class GroupesComponent {
   constructor(private localStorageService: LocalStorageService) {}
 
   supprimerGroupe(index: number) {
+    if (index < 0 || index >= this.groupes.length) return; // ✅ garde-fou
     this.groupes.splice(index, 1);
-
     if (this.groupes.length === 0) {
       this.localStorageService.removeGroupes();
     } else {
@@ -152,36 +152,37 @@ export class GroupesComponent {
     );
   }
   validerTirage() {
-    this.tirageValide = true;
+  if (!this.listeSelectionnee) return; // ✅ sécurité obligatoire
 
-    const nouveauTirage: HistoriqueTirages = {
-      date: new Date().toLocaleString(),
-      listeNom: this.listeSelectionnee.nom,
-      groupes: this.groupes.map((groupe) => ({
-        nom: groupe.nom,
-        eleves: groupe.eleves.map((eleve) => ({
-          id: eleve.id,
-          firstName: eleve.firstName,
-        })),
+  this.tirageValide = true;
+
+  const nouveauTirage: HistoriqueTirages = {
+    date: new Date().toLocaleString(),
+    listeNom: this.listeSelectionnee.nom,
+    groupes: this.groupes.map((groupe) => ({
+      nom: groupe.nom,
+      eleves: groupe.eleves.map((eleve) => ({
+        id: eleve.id,
+        firstName: eleve.firstName,
       })),
-    };
+    })),
+  };
 
-    // Met à jour les élèves dans la liste sélectionnée
-    this.groupes.forEach((groupe) => {
-      groupe.eleves.forEach((eleve) => {
-        const eleveDansListe = this.listeSelectionnee.eleves.find(
-          (e) => e.id === eleve.id
-        );
-        if (eleveDansListe) {
-          eleveDansListe.groupe = groupe.nom;
-        }
-      });
+  // Mise à jour des groupes dans la liste sélectionnée
+  this.groupes.forEach((groupe) => {
+    groupe.eleves.forEach((eleve) => {
+      const eleveDansListe = this.listeSelectionnee!.eleves.find(
+        (e) => e.id === eleve.id
+      );
+      if (eleveDansListe) {
+        eleveDansListe.groupe = groupe.nom;
+      }
     });
+  });
 
-    this.historiqueTirages.push(nouveauTirage);
+  this.historiqueTirages.push(nouveauTirage);
+  this.localStorageService.setHistorique(this.historiqueTirages);
+  this.localStorageService.setListes(this.utilisateurActif.username, this.listes);
+}
 
-    this.localStorageService.setHistorique(this.historiqueTirages);
-
-    this.localStorageService.setListes(this.utilisateurActif.username, this.listes);
-  }
 }
