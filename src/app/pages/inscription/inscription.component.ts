@@ -13,36 +13,25 @@ import { LocalStorageService } from '../../services/local-storage.service';
   styleUrls: ['./inscription.component.css'],
 })
 export class InscriptionComponent {
-  @Output() connecte = new EventEmitter<void>();
-  @Output() fermer = new EventEmitter<void>();
+  @Output() connecte = new EventEmitter<void>(); // pour informer le header
+  @Output() fermer = new EventEmitter<void>(); // pour fermer la modale
 
+  // Valeurs des champs select
   genders = ['Féminin', 'Masculin', 'Ne préfère pas répondre'];
-  languages = [
-    '0 - Ne parle pas français',
-    '1 - Faible',
-    '2 - Moyen',
-    '3 - Bon',
-    '4 - Excellent',
-  ];
+  languages = ['0 - Ne parle pas français', '1 - Faible', '2 - Moyen', '3 - Bon', '4 - Excellent'];
   profiles = ['Timide', 'Réservé', "A l'aise", 'Leader'];
-  techLevels = [
-    "0 - N'a jamais codé",
-    '1 - Débutant',
-    '2 - Intermédiaire',
-    '3 - Avancé',
-  ];
+  techLevels = ["0 - N'a jamais codé", '1 - Débutant', '2 - Intermédiaire', '3 - Avancé'];
 
   eleve!: Eleve;
   formateur!: Formateur;
-
   userRole: 'eleve' | 'formateur' | null = null;
   formateurs: Formateur[] = [];
 
-  constructor(
-    private router: Router,
-    private localStorageService: LocalStorageService
-  ) {}
+  constructor(private router: Router, private localStorageService: LocalStorageService) {}
 
+  /**
+   * Initialise les champs de formulaire selon le rôle choisi
+   */
   setRole(role: 'eleve' | 'formateur') {
     this.userRole = role;
 
@@ -61,7 +50,8 @@ export class InscriptionComponent {
         role: 'eleve',
         formateurUsername: '',
       };
-      // 🔽 Charger la liste des formateurs
+
+      // Récupère la liste des formateurs existants pour les associer
       const utilisateurs = this.localStorageService.getUtilisateurs();
       this.formateurs = utilisateurs.filter((u: any) => u.role === 'formateur');
     } else {
@@ -77,69 +67,66 @@ export class InscriptionComponent {
     }
   }
 
+  /**
+   * Valide le formulaire d’inscription et enregistre l’utilisateur
+   */
   onSubmit() {
-    // On récupère les utilisateurs déjà inscrits (ou un tableau vide)
     const utilisateurs = this.localStorageService.getUtilisateurs();
 
-    // On vérifie si le nom d'utilisateur est déjà utilisé
     const user = this.userRole === 'eleve' ? this.eleve : this.formateur;
+
     const existe = utilisateurs.some((u: any) => u.username === user.username);
     if (existe) {
       alert("Ce nom d'utilisateur existe déjà !");
       return;
     }
 
-    user.id = crypto.randomUUID();
-
-    // On ajoute le nouvel utilisateur au tableau
+    user.id = crypto.randomUUID(); // attribue un id unique
     utilisateurs.push(user);
-
-    // Et on ré-enregistre le tableau complet dans le localStorage
     this.localStorageService.setUtilisateurs(utilisateurs);
-
-    // Puis on enregistre cet utilisateur comme étant "actif"
     this.localStorageService.setUtilisateurActif(user);
+
+    // Si l'utilisateur est un élève, l'ajouter à la bonne liste
     if (this.userRole === 'eleve') {
       const key = `listes_${this.eleve.formateurUsername}`;
-      const listes = this.localStorageService.getListes(
-        this.eleve.formateurUsername
-      );
-
+      const listes = this.localStorageService.getListes(this.eleve.formateurUsername);
       const nomListe = this.eleve.cdaGroup;
       let liste = listes.find((l: any) => l.nom === nomListe);
 
-if (!liste) {
-  liste = {
-    id: crypto.randomUUID(),
-    nom: nomListe,
-    eleves: [],
-    tirages: 0,
-    groupes: [],
-    tirageValide: false,
-    formateurUsername: this.eleve.formateurUsername 
-  };
-  listes.push(liste);
-}
-
+      if (!liste) {
+        liste = {
+          id: crypto.randomUUID(),
+          nom: nomListe,
+          eleves: [],
+          tirages: 0,
+          groupes: [],
+          tirageValide: false,
+          formateurUsername: this.eleve.formateurUsername
+        };
+        listes.push(liste);
+      }
 
       liste.eleves.push(this.eleve);
       this.localStorageService.setListes(this.eleve.formateurUsername, listes);
     }
 
-    // Redirection selon le rôle
+    // Redirection après inscription
     if (this.userRole === 'eleve') {
       this.router.navigate(['/profil-eleve']);
-    } else if (this.userRole === 'formateur') {
+    } else {
       this.router.navigate(['/dashboard-formateur']);
     }
-    this.connecte.emit(); // pour mettre à jour le header
-    this.fermer.emit(); // pour fermer la modale
+
+    this.connecte.emit(); // met à jour le header
+    this.fermer.emit(); // ferme la modale
   }
 
-  // Méthode pour annuler l'inscription
+  // Ferme manuellement la modale
   annuler() {
-    this.fermer.emit(); // fermeture manuelle
+    this.fermer.emit();
   }
+
+  // Gestion du repli / dépli des sections de formulaire
   sectionsOuvertes = {
     infosPerso: true,
     profilTech: false,

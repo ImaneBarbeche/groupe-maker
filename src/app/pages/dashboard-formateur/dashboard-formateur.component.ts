@@ -11,95 +11,106 @@ import { Router } from '@angular/router';
   styleUrls: ['./dashboard-formateur.component.css'],
 })
 export class DashboardFormateurComponent implements OnInit {
-  // Données de l’utilisateur actif
-  utilisateurActif: any;
-  mesEleves: Eleve[] = [];
+  
+utilisateurActif: any; // utilisateur actuellement connecté (formateur)
+mesEleves: Eleve[] = []; // liste des élèves associés à ce formateur
 
-  totalEleves: number = 0;
-  moyenneAge: number = 0;
-  statsTechnique: string = '';
+totalEleves: number = 0;
+moyenneAge: number = 0;
+statsTechnique: string = ''; // résumé en pourcentage des niveaux techniques
 
-  totalGroupes: number = 0;
-  criteres: string = '';
-  dernierTirage: string = '';
+mesGroupesValides: {
+  nom: string;
+  eleves: { id: string; firstName: string }[];
+}[] = []; // groupes des anciens tirages validés
 
-  mesGroupesValides: {
-    nom: string;
-    eleves: { id: string; firstName: string }[];
-  }[] = [];
+dernierTirageValide: HistoriqueTirages | null = null;
 
-  dernierTirageValide: HistoriqueTirages | null = null;
 
   constructor(
     private localStorageService: LocalStorageService,
     private router: Router
   ) {}
 
-  ngOnInit() {
-    this.utilisateurActif = this.localStorageService.getUtilisateurActif();
-    const toutesLesListes = this.localStorageService.getListes(
-      this.utilisateurActif?.username
-    );
-   
+ngOnInit() {
+  // Récupération du formateur actif
+  this.utilisateurActif = this.localStorageService.getUtilisateurActif();
 
-    // On extrait les élèves liés à ce formateur
-    const tousLesEleves = toutesLesListes.flatMap(
-      (liste) => liste.eleves || []
-    );
-    this.mesEleves = tousLesEleves.filter(
-      (eleve) => eleve.formateurUsername === this.utilisateurActif?.username
-    );
+  // Récupération de toutes ses listes
+  const toutesLesListes = this.localStorageService.getListes(
+    this.utilisateurActif?.username
+  );
 
-    // Statistiques dynamiques
-    this.totalEleves = this.mesEleves.length;
-    this.moyenneAge = this.calculerMoyenne(this.mesEleves.map((e) => e.age));
-    this.statsTechnique = this.calculerStatsTech(this.mesEleves);
+  // Filtrage de tous les élèves associés aux listes de ce formateur
+  const tousLesEleves = toutesLesListes.flatMap(
+    (liste) => liste.eleves || []
+  );
+  this.mesEleves = tousLesEleves.filter(
+    (eleve) => eleve.formateurUsername === this.utilisateurActif?.username
+  );
 
-    // En fin de ngOnInit()
-    const mesListes = toutesLesListes.filter(
-      (l) =>
-        l.formateurUsername?.toLowerCase().trim() ===
-        this.utilisateurActif?.username.toLowerCase().trim()
-    );
+  // Statistiques calculées dynamiquement
+  this.totalEleves = this.mesEleves.length;
+  this.moyenneAge = this.calculerMoyenne(this.mesEleves.map((e) => e.age));
+  this.statsTechnique = this.calculerStatsTech(this.mesEleves);
 
-    const nomsDeMesListes = mesListes.map((l) => l.nom.toLowerCase());
+  // Filtrage des listes du formateur (comparaison sécurisée)
+  const mesListes = toutesLesListes.filter(
+    (l) =>
+      l.formateurUsername?.toLowerCase().trim() ===
+      this.utilisateurActif?.username.toLowerCase().trim()
+  );
+  const nomsDeMesListes = mesListes.map((l) => l.nom.toLowerCase());
 
-    const historique: HistoriqueTirages[] =
-      this.localStorageService.getHistorique() || [];
-    this.mesGroupesValides = historique
-      .filter((t) => nomsDeMesListes.includes(t.listeNom.toLowerCase()))
-      .flatMap((t) => t.groupes);
- 
+  // Récupération de l'historique des tirages
+  const historique: HistoriqueTirages[] =
+    this.localStorageService.getHistorique() || [];
 
-    const tiragesDuFormateur = historique.filter((t) =>
-      nomsDeMesListes.includes(t.listeNom.toLowerCase())
-    );
+  // Tous les groupes validés du formateur
+  this.mesGroupesValides = historique
+    .filter((t) => nomsDeMesListes.includes(t.listeNom.toLowerCase()))
+    .flatMap((t) => t.groupes);
 
-    this.dernierTirageValide =
-      tiragesDuFormateur.length > 0
-        ? tiragesDuFormateur[tiragesDuFormateur.length - 1]
-        : null;
-  
-  }
+  // Dernier tirage uniquement
+  const tiragesDuFormateur = historique.filter((t) =>
+    nomsDeMesListes.includes(t.listeNom.toLowerCase())
+  );
+  this.dernierTirageValide =
+    tiragesDuFormateur.length > 0
+      ? tiragesDuFormateur[tiragesDuFormateur.length - 1]
+      : null;
+}
 
-  calculerMoyenne(ages: number[]): number {
-    const total = ages.reduce((acc, val) => acc + val, 0);
-    return ages.length ? Math.round(total / ages.length) : 0;
-  }
 
-  calculerStatsTech(eleves: Eleve[]): string {
-    const counts = [0, 0, 0, 0]; // niveaux 1 à 4
-    eleves.forEach((e) => counts[e.techLevel - 1]++);
-    const total = eleves.length;
-    return counts
-      .map((c, i) => `${Math.round((c / total) * 100)}% Niv ${i + 1}`)
-      .join(', ');
-  }
-  supprimerMonCompte() {
-    this.localStorageService.supprimerUtilisateur(this.utilisateurActif.username);
-    localStorage.removeItem('utilisateurActif');
-    this.router.navigate(['/']).then(() => {
-      location.reload(); // force un "vrai" rechargement visuel du header
-    });
-  }
+/**
+ * Calcule la moyenne d'âge des élèves.
+ */
+calculerMoyenne(ages: number[]): number {
+  const total = ages.reduce((acc, val) => acc + val, 0);
+  return ages.length ? Math.round(total / ages.length) : 0;
+}
+
+/**
+ * Calcule la répartition des niveaux techniques en pourcentages.
+ */
+calculerStatsTech(eleves: Eleve[]): string {
+  const counts = [0, 0, 0, 0]; // niveaux 1 à 4
+  eleves.forEach((e) => counts[e.techLevel - 1]++);
+  const total = eleves.length;
+  return counts
+    .map((c, i) => `${Math.round((c / total) * 100)}% Niv ${i + 1}`)
+    .join(', ');
+}
+
+/**
+ * Supprime le compte formateur et recharge l'application à l'état initial.
+ */
+supprimerMonCompte() {
+  this.localStorageService.supprimerUtilisateur(this.utilisateurActif.username);
+  localStorage.removeItem('utilisateurActif');
+  this.router.navigate(['/']).then(() => {
+    location.reload(); // force un vrai rechargement visuel du header
+  });
+}
+
 }

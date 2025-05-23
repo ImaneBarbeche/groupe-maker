@@ -27,6 +27,8 @@ ngOnInit() {
 
 }
 
+// On supprime un tirage de l’historique
+// On utilise l’index du tirage pour le supprimer
 supprimerTirage(index: number) {
   this.historique.splice(index, 1);
   this.localStorageService.setHistorique(this.historique);

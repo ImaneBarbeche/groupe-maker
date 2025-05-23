@@ -15,14 +15,16 @@ import { LocalStorageService } from '../../services/local-storage.service';
   styleUrls: ['./groupes.component.css'],
 })
 export class GroupesComponent {
-  utilisateurActif: any;
-  nombreDeGroupes: number | null = null;
-  mixDWWM = false;
 
-  listes: Liste[] = [];
-  listeSelectionnee?: Liste;
-  elevesDisponibles: Eleve[] = [];
-  historiqueTirages: HistoriqueTirages[] = [];
+utilisateurActif: any; // Utilisateur actuellement connecté (formateur)
+nombreDeGroupes: number | null = null; // Nombre de groupes à générer
+mixDWWM = false; // Option : répartir DWWM et non-DWWM séparément
+
+listes: Liste[] = []; // Toutes les listes du formateur actif
+listeSelectionnee?: Liste; // Liste actuellement sélectionnée
+elevesDisponibles: Eleve[] = []; // Élèves affichés et assignables
+historiqueTirages: HistoriqueTirages[] = []; // Historique global (multi-tirages)
+
 
   get idsGroupes(): string[] {
     return this.listeSelectionnee?.groupes?.map((_, i) => `groupe-${i}`) || [];
@@ -30,21 +32,32 @@ export class GroupesComponent {
 
   constructor(private localStorageService: LocalStorageService) {}
 
-  ngOnInit() {
-    this.utilisateurActif = this.localStorageService.getUtilisateurActif();
-    if (this.utilisateurActif) {
-      this.listes = this.localStorageService.getListes(this.utilisateurActif.username);
-    } else {
-      console.error('Aucun utilisateur actif trouvé dans le localStorage.');
-    }
-    this.historiqueTirages = this.localStorageService.getHistorique();
+ngOnInit() {
+  // Récupération de l'utilisateur actif
+  this.utilisateurActif = this.localStorageService.getUtilisateurActif();
+
+  if (this.utilisateurActif) {
+    // Récupération des listes liées à ce formateur
+    this.listes = this.localStorageService.getListes(this.utilisateurActif.username);
+  } else {
+    console.error('Aucun utilisateur actif trouvé dans le localStorage.');
   }
 
+  // Chargement de l’historique des tirages
+  this.historiqueTirages = this.localStorageService.getHistorique();
+}
+
+
+/**
+ * Lorsqu'une liste est sélectionnée :
+ * - charge les élèves disponibles
+ * - réinitialise la génération précédente
+ * - désactive le tirage validé
+ */
 onListeSelectionnee() {
   if (this.listeSelectionnee) {
     this.elevesDisponibles = [...this.listeSelectionnee.eleves];
 
-    // Réinitialise tout
     this.listeSelectionnee.tirageValide = false;
     this.listeSelectionnee.groupes = [];
     this.nombreDeGroupes = null;
@@ -55,8 +68,9 @@ onListeSelectionnee() {
   }
 }
 
-
-
+ /**
+   * Supprime un groupe à partir de son nom
+   */
   supprimerGroupeParNom(nom: string) {
     const groupes = this.listeSelectionnee?.groupes;
     if (!groupes) return;
@@ -68,6 +82,9 @@ onListeSelectionnee() {
     }
   }
 
+    /**
+   * Génère un ensemble de groupes vides selon le nombre saisi
+   */
   genererGroupesVides() {
     if (!this.nombreDeGroupes || this.nombreDeGroupes < 1 || !this.listeSelectionnee) {
       alert('Veuillez saisir un nombre de groupes valide.');
@@ -85,6 +102,9 @@ onListeSelectionnee() {
     this.localStorageService.setListes(this.utilisateurActif.username, this.listes);
   }
 
+    /**
+   * Génère une répartition aléatoire des élèves en groupes, avec option mix DWWM
+   */
   genererRepartition() {
     if (!this.listeSelectionnee) {
       alert('Aucune liste sélectionnée.');
@@ -133,6 +153,9 @@ onListeSelectionnee() {
 
   }
 
+    /**
+   * Permet de déplacer un élève d'un groupe à un autre avec drag and drop
+   */
   deplacerEleve(event: CdkDragDrop<any[]>) {
     if (event.previousContainer === event.container) return;
     transferArrayItem(
@@ -143,6 +166,9 @@ onListeSelectionnee() {
     );
   }
 
+    /**
+   * Valide un tirage en l'ajoutant à l'historique, et fixe les affectations
+   */
   validerTirage() {
     if (!this.listeSelectionnee || this.listeSelectionnee.tirageValide || !this.listeSelectionnee.groupes?.length) return;
     if (!this.listeSelectionnee || this.listeSelectionnee.tirageValide) return;
@@ -169,6 +195,9 @@ onListeSelectionnee() {
     this.localStorageService.setListes(this.utilisateurActif.username, this.listes);
   }
 
+    /**
+   * Annule le dernier tirage validé en le retirant de l'historique
+   */
   annulerTirage() {
     if (!this.listeSelectionnee || !this.listeSelectionnee.tirageValide) return;
 
