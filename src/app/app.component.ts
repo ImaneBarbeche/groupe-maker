@@ -3,7 +3,6 @@ import { RouterOutlet, RouterLink } from '@angular/router';
 import { ConnexionComponent } from './pages/connexion/connexion.component';
 import { InscriptionComponent } from './pages/inscription/inscription.component';
 
-
 @Component({
   selector: 'app-root',
   standalone: true,
@@ -19,7 +18,6 @@ export class AppComponent {
 
   afficherCGU: boolean = false;
 
-
   ngOnInit() {
     const user = localStorage.getItem('utilisateurActif');
     if (user) {
@@ -31,36 +29,44 @@ export class AppComponent {
     this.afficherModaleConnexion = false;
   }
   fermerModaleInscription() {
-  this.afficherModaleInscription = false;
-}
-  seDeconnecter() {
-    localStorage.removeItem('utilisateurActif');
-    this.utilisateurActif = null;
-    window.location.href = '/'; // ou this.router.navigate(['/']);
+    this.afficherModaleInscription = false;
   }
+  
+ seDeconnecter() {
+  localStorage.removeItem('utilisateurActif');
+  this.utilisateurActif = null;
+
+  // Redirige vers l'accueil puis recharge l'app
+  window.location.href = '/';
+}
+
   onUtilisateurConnecte() {
-  const user = localStorage.getItem('utilisateurActif');
-  if (user) {
-    this.utilisateurActif = JSON.parse(user);
+    const user = localStorage.getItem('utilisateurActif');
+    if (user) {
+      this.utilisateurActif = JSON.parse(user);
+    }
   }
-}
 
-verifierAcceptationCGU() {
-  const cguData = JSON.parse(localStorage.getItem('cguAccepted') || 'null');
+  verifierAcceptationCGU() {
+    const cguData = JSON.parse(localStorage.getItem('cguAccepted') || 'null');
 
-  if (!cguData || Date.now() - cguData.timestamp > 13 * 30 * 24 * 60 * 60 * 1000) {
-    this.afficherCGU = true;
-  } else {
+    if (
+      !cguData ||
+      Date.now() - cguData.timestamp > 13 * 30 * 24 * 60 * 60 * 1000
+    ) {
+      this.afficherCGU = true;
+    } else {
+      this.afficherCGU = false;
+    }
+  }
+
+  accepterCGU() {
+    localStorage.setItem(
+      'cguAccepted',
+      JSON.stringify({
+        timestamp: Date.now(),
+      })
+    );
     this.afficherCGU = false;
   }
-}
-
-accepterCGU() {
-  localStorage.setItem('cguAccepted', JSON.stringify({
-    timestamp: Date.now()
-  }));
-  this.afficherCGU = false;
-}
-
-
 }

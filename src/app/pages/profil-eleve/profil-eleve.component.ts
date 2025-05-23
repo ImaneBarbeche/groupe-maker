@@ -1,7 +1,8 @@
 import { Component, OnInit } from '@angular/core';
 import { Eleve } from '../../models/utilisateur.interface';
 import { FormsModule } from '@angular/forms';
-import { LocalStorageService } from '../../core/local-storage.service';
+import { LocalStorageService } from '../../services/local-storage.service';
+import { Router } from '@angular/router';
 
 @Component({
   selector: 'app-profil-eleve',
@@ -15,8 +16,10 @@ export class ProfilEleveComponent implements OnInit {
   modeEdition: boolean = false;
   groupes: { nom: string; eleves: { id: string; firstName: string }[] }[] = [];
   groupeNom: string | null = null;
-
-  constructor(private localStorageService: LocalStorageService) {}
+  constructor(
+    private localStorageService: LocalStorageService,
+    private router: Router
+  ) {}
 
   ngOnInit() {
     this.user = this.localStorageService.getUtilisateurActif();
@@ -32,5 +35,13 @@ export class ProfilEleveComponent implements OnInit {
   enregistrerModifications() {
     this.localStorageService.setUtilisateurActif(this.user);
     this.modeEdition = false;
+  }
+
+  supprimerMonCompte() {
+    this.localStorageService.supprimerUtilisateur(this.user.username);
+    localStorage.removeItem('utilisateurActif');
+    this.router.navigate(['/']).then(() => {
+      location.reload(); // force un "vrai" rechargement visuel du header
+    });
   }
 }

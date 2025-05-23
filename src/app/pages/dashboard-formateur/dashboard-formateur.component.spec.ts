@@ -1,6 +1,7 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 import { DashboardFormateurComponent } from './dashboard-formateur.component';
 import { ListesService } from '../../services/listes.service';
+import { LocalStorageService } from '../../services/local-storage.service'; 
 
 describe('DashboardFormateurComponent', () => {
   let component: DashboardFormateurComponent;
@@ -43,50 +44,53 @@ describe('DashboardFormateurComponent', () => {
   });
 
   it('should load only the students of the active formateur and compute stats', () => {
-    // ARRANGE
-    const mockListes = [
-      {
-        id: '1',
-        nom: 'CDA-1',
-        eleves: [
-          {
-            id: '1',
-            firstName: 'Luna',
-            age: 20,
-            techLevel: 2,
-            formateurUsername: 'Marie',
-          },
-          {
-            id: '2',
-            firstName: 'Alex',
-            age: 24,
-            techLevel: 3,
-            formateurUsername: 'Marie',
-          },
-          {
-            id: '3',
-            firstName: 'Zara',
-            age: 30,
-            techLevel: 4,
-            formateurUsername: 'Autre',
-          },
-        ],
-      },
-    ];
+  // ARRANGE
+  const mockListes = [
+    {
+      id: '1',
+      nom: 'CDA-1',
+      eleves: [
+        {
+          id: '1',
+          firstName: 'Luna',
+          age: 20,
+          techLevel: 2,
+          formateurUsername: 'Marie',
+        },
+        {
+          id: '2',
+          firstName: 'Alex',
+          age: 24,
+          techLevel: 3,
+          formateurUsername: 'Marie',
+        },
+        {
+          id: '3',
+          firstName: 'Zara',
+          age: 30,
+          techLevel: 4,
+          formateurUsername: 'Autre',
+        },
+      ],
+    },
+  ];
 
-    const listesService = TestBed.inject(ListesService) as any;
-    spyOn(listesService, 'getListes').and.returnValue(mockListes);
+  const localStorageService = TestBed.inject(LocalStorageService) as any;
 
-    // ACT
-    component.ngOnInit(); // recharge les données filtrées et les stats
+  spyOn(localStorageService, 'getUtilisateurActif').and.returnValue({ username: 'Marie' });
+  spyOn(localStorageService, 'getListes').and.returnValue(mockListes);
 
-    // ASSERT
-    expect(component.mesEleves.length).toBe(2); // Luna et Alex
-    expect(component.totalEleves).toBe(2);
-    expect(component.moyenneAge).toBe(22); // (20 + 24) / 2
-    expect(component.statsTechnique).toContain('50% Niv 2');
-    expect(component.statsTechnique).toContain('50% Niv 3');
-  });
+  // ACT
+  component.ngOnInit();
+
+  // ASSERT
+  expect(component.mesEleves.length).toBe(2); // Luna et Alex
+  expect(component.totalEleves).toBe(2);
+  expect(component.moyenneAge).toBe(22); // (20 + 24) / 2
+  expect(component.statsTechnique).toContain('50% Niv 2');
+  expect(component.statsTechnique).toContain('50% Niv 3');
+});
+
 
   it('should handle case where no student is assigned to the formateur', () => {
     // ARRANGE

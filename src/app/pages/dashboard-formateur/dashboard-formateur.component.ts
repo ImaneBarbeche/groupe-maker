@@ -1,8 +1,8 @@
 import { Component, OnInit } from '@angular/core';
-import { ListesService } from '../../services/listes.service';
 import { Eleve } from '../../models/utilisateur.interface';
-import { LocalStorageService } from '../../core/local-storage.service';
+import { LocalStorageService } from '../../services/local-storage.service';
 import { HistoriqueTirages } from '../../models/historique.interface';
+import { Router } from '@angular/router';
 
 @Component({
   selector: 'app-dashboard-formateur',
@@ -31,14 +31,16 @@ export class DashboardFormateurComponent implements OnInit {
   dernierTirageValide: HistoriqueTirages | null = null;
 
   constructor(
-    private listesService: ListesService,
-    private localStorageService: LocalStorageService
+    private localStorageService: LocalStorageService,
+    private router: Router
   ) {}
 
   ngOnInit() {
-    
     this.utilisateurActif = this.localStorageService.getUtilisateurActif();
-    const toutesLesListes = this.listesService.getListes();
+    const toutesLesListes = this.localStorageService.getListes(
+      this.utilisateurActif?.username
+    );
+   
 
     // On extrait les élèves liés à ce formateur
     const tousLesEleves = toutesLesListes.flatMap(
@@ -55,23 +57,29 @@ export class DashboardFormateurComponent implements OnInit {
 
     // En fin de ngOnInit()
     const mesListes = toutesLesListes.filter(
-      (l) => l.formateurUsername === this.utilisateurActif?.username
+      (l) =>
+        l.formateurUsername?.toLowerCase().trim() ===
+        this.utilisateurActif?.username.toLowerCase().trim()
     );
-    const nomsDeMesListes = mesListes.map((l) => l.nom);
+
+    const nomsDeMesListes = mesListes.map((l) => l.nom.toLowerCase());
 
     const historique: HistoriqueTirages[] =
       this.localStorageService.getHistorique() || [];
     this.mesGroupesValides = historique
-      .filter((t) => nomsDeMesListes.includes(t.listeNom))
+      .filter((t) => nomsDeMesListes.includes(t.listeNom.toLowerCase()))
       .flatMap((t) => t.groupes);
+ 
+
     const tiragesDuFormateur = historique.filter((t) =>
-      nomsDeMesListes.includes(t.listeNom)
+      nomsDeMesListes.includes(t.listeNom.toLowerCase())
     );
 
     this.dernierTirageValide =
       tiragesDuFormateur.length > 0
         ? tiragesDuFormateur[tiragesDuFormateur.length - 1]
         : null;
+  
   }
 
   calculerMoyenne(ages: number[]): number {
@@ -87,5 +95,11 @@ export class DashboardFormateurComponent implements OnInit {
       .map((c, i) => `${Math.round((c / total) * 100)}% Niv ${i + 1}`)
       .join(', ');
   }
-  
+  supprimerMonCompte() {
+    this.localStorageService.supprimerUtilisateur(this.utilisateurActif.username);
+    localStorage.removeItem('utilisateurActif');
+    this.router.navigate(['/']).then(() => {
+      location.reload(); // force un "vrai" rechargement visuel du header
+    });
+  }
 }

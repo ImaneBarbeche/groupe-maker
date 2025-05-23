@@ -3,7 +3,7 @@ import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { Liste} from '../../models/utilisateur.interface';
 import { ListesService } from '../../services/listes.service';
-import { LocalStorageService } from '../../core/local-storage.service';
+import { LocalStorageService } from '../../services/local-storage.service';
 @Component({
   selector: 'app-listes',
   imports: [CommonModule, FormsModule],
@@ -13,10 +13,12 @@ import { LocalStorageService } from '../../core/local-storage.service';
 })
 export class ListesComponent {
   listes: Liste[] = []; // liste de toutes les listes existantes
+
   constructor(
     private listesService: ListesService,
     private localStorageService: LocalStorageService
   ) {}
+
   // Quand le composant est affiché :
   // il récupère l'utilisateur actif,
   // il utilise une clé pour charger les listes personnelles, si aucune n'existe, il utilise un tableau vide

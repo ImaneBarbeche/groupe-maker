@@ -5,7 +5,7 @@ import { Liste, Eleve } from '../../models/utilisateur.interface';
 import { DragDropModule } from '@angular/cdk/drag-drop';
 import { CdkDragDrop, transferArrayItem } from '@angular/cdk/drag-drop';
 import { HistoriqueTirages } from '../../models/historique.interface';
-import { LocalStorageService } from '../../core/local-storage.service';
+import { LocalStorageService } from '../../services/local-storage.service';
 
 @Component({
   selector: 'app-groupes',

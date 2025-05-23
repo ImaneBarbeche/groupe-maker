@@ -69,4 +69,19 @@ export class LocalStorageService {
       JSON.stringify({ timestamp: Date.now() })
     );
   }
+
+  supprimerUtilisateur(username: string): void {
+  const utilisateurs = this.getUtilisateurs().filter(u => u.username !== username);
+  this.setUtilisateurs(utilisateurs);
+
+  // Supprimer aussi son statut "connecté" s’il est actif
+  const actif = this.getUtilisateurActif();
+  if (actif?.username === username) {
+    localStorage.removeItem('utilisateurActif');
+  }
+}
+deconnecterUtilisateur(): void {
+  localStorage.removeItem('utilisateurActif');
+}
+
 }

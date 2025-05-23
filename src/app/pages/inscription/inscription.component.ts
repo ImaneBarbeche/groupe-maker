@@ -3,7 +3,7 @@ import { FormsModule } from '@angular/forms';
 import { CommonModule } from '@angular/common';
 import { Router } from '@angular/router';
 import { Eleve, Formateur } from '../../models/utilisateur.interface';
-import { LocalStorageService } from '../../core/local-storage.service';
+import { LocalStorageService } from '../../services/local-storage.service';
 
 @Component({
   selector: 'app-inscription',
@@ -79,8 +79,7 @@ export class InscriptionComponent {
 
   onSubmit() {
     // On récupère les utilisateurs déjà inscrits (ou un tableau vide)
-      const utilisateurs = this.localStorageService.getUtilisateurs();
-
+    const utilisateurs = this.localStorageService.getUtilisateurs();
 
     // On vérifie si le nom d'utilisateur est déjà utilisé
     const user = this.userRole === 'eleve' ? this.eleve : this.formateur;
@@ -102,24 +101,29 @@ export class InscriptionComponent {
     this.localStorageService.setUtilisateurActif(user);
     if (this.userRole === 'eleve') {
       const key = `listes_${this.eleve.formateurUsername}`;
-      const listes = this.localStorageService.getListes(this.eleve.formateurUsername);
+      const listes = this.localStorageService.getListes(
+        this.eleve.formateurUsername
+      );
 
       const nomListe = this.eleve.cdaGroup;
       let liste = listes.find((l: any) => l.nom === nomListe);
 
-      if (!liste) {
-        liste = {
-          id: crypto.randomUUID(),
-          nom: nomListe,
-          eleves: [],
-          tirages: 0,
-        };
-        listes.push(liste);
-      }
+if (!liste) {
+  liste = {
+    id: crypto.randomUUID(),
+    nom: nomListe,
+    eleves: [],
+    tirages: 0,
+    groupes: [],
+    tirageValide: false,
+    formateurUsername: this.eleve.formateurUsername 
+  };
+  listes.push(liste);
+}
+
 
       liste.eleves.push(this.eleve);
       this.localStorageService.setListes(this.eleve.formateurUsername, listes);
-
     }
 
     // Redirection selon le rôle

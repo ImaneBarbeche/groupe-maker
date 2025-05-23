@@ -1,6 +1,6 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 import { ProfilEleveComponent } from './profil-eleve.component';
-import { LocalStorageService } from '../../core/local-storage.service';
+import { LocalStorageService } from '../../services/local-storage.service';
 
 describe('ProfilEleveComponent', () => {
   let component: ProfilEleveComponent;
