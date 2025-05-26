@@ -4,6 +4,10 @@
 
 🌐 [Voir la démo en ligne sur GitHub Pages](https://imanebarbeche.github.io/groupe-maker/)
 
+## Maquette Figma (prototype)
+
+https://www.figma.com/proto/8ZRz5OwIZuMulBD7e1YiBf/Group-Maker?node-id=31-553&p=f&t=7jSTQf92kK8qKgnN-1&scaling=contain&content-scaling=fixed&page-id=31%3A334
+
 ## 📚 Contexte
 
 Projet fil rouge formation CDA chez Simplon.co (2025).  
