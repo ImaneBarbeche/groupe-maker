@@ -14,7 +14,7 @@ import { UtilisateurService } from '../../services/utilisateur.service';
 export class ConnexionComponent {
   @Output() connecte = new EventEmitter<void>(); // Émet un événement quand l'utilisateur est connecté
   @Output() fermer = new EventEmitter<void>(); // Émet un événement pour fermer la modale
-  username = ''; // Nom d'utilisateur saisi dans le formulaire
+  email = ''; // Nom d'utilisateur saisi dans le formulaire
   motDePasse = '';
 
   constructor(
@@ -27,12 +27,14 @@ export class ConnexionComponent {
   }
   onSubmit() {
     const credentials = {
-      username: this.username,
+      email: this.email,
       motDePasse: this.motDePasse,
     };
 
     this.utilisateurService.login(credentials).subscribe({
       next: (utilisateur) => {
+        console.log('✅ Données reçues après login :', utilisateur); // ← ajoute cette ligne !
+
         localStorage.setItem('utilisateurActif', JSON.stringify(utilisateur));
 
         if (utilisateur.role === 'formateur') {

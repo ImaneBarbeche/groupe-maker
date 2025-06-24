@@ -10,6 +10,7 @@ import { Utilisateur } from '../models/utilisateur.interface';
 })
 export class UtilisateurService {
   private baseUrl = 'http://localhost:8080/utilisateurs';
+  private apiUrl = 'http://localhost:8080'; // adapte si besoin
 
   constructor(private http: HttpClient) {}
 
@@ -17,17 +18,18 @@ export class UtilisateurService {
     return this.http.get<(Eleve | Formateur)[]>(this.baseUrl);
   }
 
-  register(user: Eleve | Formateur): Observable<Eleve | Formateur> {
-    return this.http.post<Eleve | Formateur>(this.baseUrl + '/register', user);
+  register(user: any): Observable<any> {
+    return this.http.post('http://localhost:8080/utilisateurs/register', user, {
+      withCredentials: true,
+    });
   }
 
-  login(credentials: { username: string; motDePasse: string }) {
+  login(credentials: { email: string; motDePasse: string }) {
     return this.http.post<any>(
       'http://localhost:8080/utilisateurs/login',
       credentials
     );
   }
-
   getMe(): Observable<Utilisateur> {
     const token = localStorage.getItem('jwt');
     const headers = new HttpHeaders().set('Authorization', `Bearer ${token}`);

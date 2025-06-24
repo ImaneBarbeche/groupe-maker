@@ -63,8 +63,8 @@ export class InscriptionComponent {
         id: '',
         username: '',
         firstName: '',
-        email: '', // 👈 nouveau
-        motDePasse: '', // 👈 nouveau
+        email: '',
+        motDePasse: '', 
         age: 0,
         gender: '',
         language: 0,
@@ -84,8 +84,8 @@ export class InscriptionComponent {
         id: '',
         username: '',
         firstName: '',
-        email: '', // 👈 nouveau
-        motDePasse: '', // 👈 nouveau
+        email: '', 
+        motDePasse: '', 
         age: 0,
         gender: '',
         speciality: '',
@@ -95,31 +95,26 @@ export class InscriptionComponent {
   }
 
   // ─── Soumission du formulaire ────────────────────────────────
-  onSubmit() {
-    const user = this.userRole === 'eleve' ? this.eleve : this.formateur;
+ onSubmit() {
+  const user = this.userRole === 'eleve' ? this.eleve : this.formateur;
+  console.log('Inscription envoyée :', user);
 
-    // Étape 1 : vérifier si l'utilisateur existe déjà
-    this.utilisateurService.getAll().subscribe((utilisateurs) => {
-      const existe = utilisateurs.some((u) => u.username === user.username);
-      if (existe) {
-        alert("Ce nom d'utilisateur existe déjà !");
-        return;
-      }
-      // Étape 2 : enregistrer l'utilisateur
-      this.utilisateurService.register(user).subscribe(() => {
-        // Simulation : stocker l’utilisateur connecté en local
-        localStorage.setItem('utilisateurActif', JSON.stringify(user));
+  this.utilisateurService.register(user).subscribe({
+    next: () => {
+      localStorage.setItem('utilisateurActif', JSON.stringify(user));
+      const redirection = this.userRole === 'eleve' ? '/profil-eleve' : '/dashboard-formateur';
+      this.router.navigate([redirection]);
+      this.connecte.emit();
+      this.fermer.emit();
+    },
+    error: (err) => {
+      console.error('Erreur inscription :', err);
+      alert("L'inscription a échoué.");
+    }
+  });
+}
 
-        // Redirection
-        const redirection =
-          this.userRole === 'eleve' ? '/profil-eleve' : '/dashboard-formateur';
-        this.router.navigate([redirection]);
 
-        this.connecte.emit();
-        this.fermer.emit();
-      });
-    });
-  }
 
   // ─── Gestion UI ──────────────────────────────────────────────
   annuler() {
