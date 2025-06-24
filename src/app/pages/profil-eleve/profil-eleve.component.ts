@@ -1,60 +1,66 @@
 import { Component, OnInit } from '@angular/core';
-import { Eleve } from '../../models/utilisateur.interface';
+import { Eleve } from '../../models/eleve.interface';
 import { FormsModule } from '@angular/forms';
-import { LocalStorageService } from '../../services/local-storage.service';
 import { Router } from '@angular/router';
+import { AccountService } from '../../services/account.service';
+import { GroupesService } from '../../services/groupes.service'; // à créer si nécessaire
+import { CommonModule } from '@angular/common';
+
+interface GroupeTirage {
+  nom: string;
+  eleves: { id: string; firstName: string }[];
+}
 
 @Component({
   selector: 'app-profil-eleve',
   standalone: true,
-  imports: [FormsModule],
+  imports: [FormsModule, CommonModule],
   templateUrl: './profil-eleve.component.html',
   styleUrls: ['./profil-eleve.component.css'],
 })
 export class ProfilEleveComponent implements OnInit {
-  user!: Eleve; // Données de l'élève actuellement connecté
-  modeEdition: boolean = false; // État pour activer l'édition du profil
-
-  // Groupes issus des tirages, utilisés pour trouver le groupe de l'élève
-  groupes: { nom: string; eleves: { id: string; firstName: string }[] }[] = [];
-
-  groupeNom: string | null = null; // Nom du groupe auquel l'élève appartient (si trouvé)
+  user!: Eleve;
+  groupes: GroupeTirage[] = [];
+  groupeNom: string | null = null;
+  modeEdition = false;
 
   constructor(
-    private localStorageService: LocalStorageService,
-    private router: Router
+    private router: Router,
+    private accountService: AccountService,
+    private groupesService: GroupesService
   ) {}
 
-  /**
-   * Initialise les données de l'élève et détermine son groupe si applicable
-   */
   ngOnInit() {
-    this.user = this.localStorageService.getUtilisateurActif();
-    this.groupes = this.localStorageService.getGroupes();
+    this.accountService.getMonProfil().subscribe((profil) => {
+      if (profil.role === 'eleve') {
+        this.user = profil as Eleve;
 
-    const groupeTrouve = this.groupes.find((g) =>
-      g.eleves.some((e) => e.id === this.user.id)
-    );
-
-    this.groupeNom = groupeTrouve?.nom || null;
-  }
-
-  /**
-   * Enregistre les modifications de profil dans le localStorage
-   */
-  enregistrerModifications() {
-    this.localStorageService.setUtilisateurActif(this.user);
-    this.modeEdition = false;
-  }
-
-  /**
-   * Supprime le compte de l'élève, vide la session, et recharge l'application
-   */
-  supprimerMonCompte() {
-    this.localStorageService.supprimerUtilisateur(this.user.username);
-    localStorage.removeItem('utilisateurActif');
-    this.router.navigate(['/']).then(() => {
-      location.reload(); // Recharge complet pour mettre à jour le header
+        this.groupesService
+          .getGroupesAvecEleves()
+          .subscribe((groupes: GroupeTirage[]) => {
+            this.groupes = groupes;
+            const groupeTrouve = groupes.find((g) =>
+              g.eleves.some((e) => e.id === this.user.id)
+            );
+            this.groupeNom = groupeTrouve?.nom || null;
+          });
+      } else {
+        this.router.navigate(['/']);
+      }
     });
+  }
+
+  enregistrerModifications() {
+    this.accountService.updateMonProfil(this.user).subscribe(() => {
+      this.modeEdition = false;
+    });
+  }
+
+  supprimerMonCompte() {
+    this.accountService
+      .supprimerCompteEtReinitialiser(this.user.username)
+      .subscribe(() => {
+        this.router.navigate(['/']);
+      });
   }
 }

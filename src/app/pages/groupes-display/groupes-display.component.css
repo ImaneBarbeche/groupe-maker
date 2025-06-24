@@ -1,0 +1,144 @@
+:host {
+  display: block;
+  width: 100%;
+}
+
+/* Reprise des styles généraux */
+.groupes-grid {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 1rem;
+  justify-content: center;
+}
+
+.groupe-card {
+  background-color: #f7f5ef;
+  padding: 1.5rem;
+  border-radius: 12px;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.04);
+  flex: 1 1 300px;
+  max-width: 400px;
+}
+
+.groupe-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 1rem;
+  margin-bottom: 1rem;
+}
+
+.groupe-nom {
+  flex: 1;
+  font-size: 1.1rem;
+  font-weight: bold;
+  border: 1px solid #ccc;
+  border-radius: 8px;
+  padding: 0.4rem;
+  text-align: center;
+}
+
+.btn-supprimer {
+  background-color: #e57373;
+  color: white;
+  border: none;
+  border-radius: 20%;
+  width: 30px;
+  height: 30px;
+  font-weight: bold;
+  cursor: pointer;
+  line-height: 1;
+}
+
+.btn-supprimer:hover {
+  background-color: #c62828;
+}
+
+/* Drop zone */
+.drop-zone {
+  min-height: 100px;
+  border: 2px dashed #bfae98;
+  border-radius: 12px;
+  padding: 0.5rem;
+  background-color: #fdfaf5;
+}
+
+.eleve-item {
+  background: #fff;
+  margin: 4px 0;
+  padding: 0.5rem;
+  border-radius: 6px;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
+  cursor: move;
+  transition: background-color 0.2s;
+}
+
+.eleve-item:hover {
+  background-color: #f2e9dc;
+}
+
+/* Actions en bas */
+.groupes-actions {
+  display: flex;
+  justify-content: center;
+  gap: 1rem;
+  margin-top: 2rem;
+}
+
+.bouton-valider {
+  background-color: #4caf50;
+  color: white;
+  font-weight: 600;
+  border: none;
+  padding: 0.5rem 1.2rem;
+  border-radius: 8px;
+  cursor: pointer;
+  transition: background-color 0.2s ease;
+}
+
+.bouton-valider:hover {
+  background-color: #388e3c;
+}
+
+.btn-annuler {
+  background-color: #ffa726;
+  color: white;
+  font-weight: 600;
+  border: none;
+  padding: 0.5rem 1.2rem;
+  border-radius: 8px;
+  cursor: pointer;
+  transition: background-color 0.2s ease;
+}
+
+.btn-annuler:hover {
+  background-color: #fb8c00;
+}
+
+@media screen and (max-width: 600px) {
+  .groupes-grid {
+    flex-direction: column;
+    align-items: center;
+  }
+
+  .groupe-card {
+    width: 90%;
+  }
+
+  .groupe-header input {
+    font-size: 1rem;
+  }
+
+  .btn-supprimer {
+    font-size: 1.2rem;
+  }
+
+  .groupes-actions {
+    flex-direction: column;
+    align-items: stretch;
+  }
+
+  .groupes-actions button {
+    width: 100%;
+  }
+}

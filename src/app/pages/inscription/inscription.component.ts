@@ -2,8 +2,9 @@ import { Component, EventEmitter, Output } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 import { CommonModule } from '@angular/common';
 import { Router } from '@angular/router';
-import { Eleve, Formateur } from '../../models/utilisateur.interface';
-import { LocalStorageService } from '../../services/local-storage.service';
+import { Eleve } from '../../models/eleve.interface';
+import { Formateur } from '../../models/formateur.interface';
+import { UtilisateurService } from '../../services/utilisateur.service';
 
 @Component({
   selector: 'app-inscription',
@@ -13,25 +14,47 @@ import { LocalStorageService } from '../../services/local-storage.service';
   styleUrls: ['./inscription.component.css'],
 })
 export class InscriptionComponent {
-  @Output() connecte = new EventEmitter<void>(); // pour informer le header
-  @Output() fermer = new EventEmitter<void>(); // pour fermer la modale
+  // ─── Événements vers le parent ───────────────────────────────
+  @Output() connecte = new EventEmitter<void>();
+  @Output() fermer = new EventEmitter<void>();
 
-  // Valeurs des champs select
-  genders = ['Féminin', 'Masculin', 'Ne préfère pas répondre'];
-  languages = ['0 - Ne parle pas français', '1 - Faible', '2 - Moyen', '3 - Bon', '4 - Excellent'];
-  profiles = ['Timide', 'Réservé', "A l'aise", 'Leader'];
-  techLevels = ["0 - N'a jamais codé", '1 - Débutant', '2 - Intermédiaire', '3 - Avancé'];
-
+  // ─── Données du formulaire ───────────────────────────────────
+  userRole: 'eleve' | 'formateur' | null = null;
   eleve!: Eleve;
   formateur!: Formateur;
-  userRole: 'eleve' | 'formateur' | null = null;
+
   formateurs: Formateur[] = [];
 
-  constructor(private router: Router, private localStorageService: LocalStorageService) {}
+  // ─── Listes déroulantes ──────────────────────────────────────
+  genders = ['Féminin', 'Masculin', 'Ne préfère pas répondre'];
+  languages = [
+    '0 - Ne parle pas français',
+    '1 - Faible',
+    '2 - Moyen',
+    '3 - Bon',
+    '4 - Excellent',
+  ];
+  profiles = ['Timide', 'Réservé', "A l'aise", 'Leader'];
+  techLevels = [
+    "0 - N'a jamais codé",
+    '1 - Débutant',
+    '2 - Intermédiaire',
+    '3 - Avancé',
+  ];
 
-  /**
-   * Initialise les champs de formulaire selon le rôle choisi
-   */
+  // ─── État des sections (accordéons) ──────────────────────────
+  sectionsOuvertes = {
+    infosPerso: true,
+    profilTech: false,
+    formateur: false,
+  };
+
+  constructor(
+    private router: Router,
+    private utilisateurService: UtilisateurService
+  ) {}
+
+  // ─── Gestion des rôles ───────────────────────────────────────
   setRole(role: 'eleve' | 'formateur') {
     this.userRole = role;
 
@@ -40,6 +63,8 @@ export class InscriptionComponent {
         id: '',
         username: '',
         firstName: '',
+        email: '', // 👈 nouveau
+        motDePasse: '', // 👈 nouveau
         age: 0,
         gender: '',
         language: 0,
@@ -51,14 +76,16 @@ export class InscriptionComponent {
         formateurUsername: '',
       };
 
-      // Récupère la liste des formateurs existants pour les associer
-      const utilisateurs = this.localStorageService.getUtilisateurs();
-      this.formateurs = utilisateurs.filter((u: any) => u.role === 'formateur');
+      this.utilisateurService.getAll().subscribe((utilisateurs) => {
+        this.formateurs = utilisateurs.filter((u) => u.role === 'formateur');
+      });
     } else {
       this.formateur = {
         id: '',
         username: '',
         firstName: '',
+        email: '', // 👈 nouveau
+        motDePasse: '', // 👈 nouveau
         age: 0,
         gender: '',
         speciality: '',
@@ -67,71 +94,37 @@ export class InscriptionComponent {
     }
   }
 
-  /**
-   * Valide le formulaire d’inscription et enregistre l’utilisateur
-   */
+  // ─── Soumission du formulaire ────────────────────────────────
   onSubmit() {
-    const utilisateurs = this.localStorageService.getUtilisateurs();
-
     const user = this.userRole === 'eleve' ? this.eleve : this.formateur;
 
-    const existe = utilisateurs.some((u: any) => u.username === user.username);
-    if (existe) {
-      alert("Ce nom d'utilisateur existe déjà !");
-      return;
-    }
-
-    user.id = crypto.randomUUID(); // attribue un id unique
-    utilisateurs.push(user);
-    this.localStorageService.setUtilisateurs(utilisateurs);
-    this.localStorageService.setUtilisateurActif(user);
-
-    // Si l'utilisateur est un élève, l'ajouter à la bonne liste
-    if (this.userRole === 'eleve') {
-      const key = `listes_${this.eleve.formateurUsername}`;
-      const listes = this.localStorageService.getListes(this.eleve.formateurUsername);
-      const nomListe = this.eleve.cdaGroup;
-      let liste = listes.find((l: any) => l.nom === nomListe);
-
-      if (!liste) {
-        liste = {
-          id: crypto.randomUUID(),
-          nom: nomListe,
-          eleves: [],
-          tirages: 0,
-          groupes: [],
-          tirageValide: false,
-          formateurUsername: this.eleve.formateurUsername
-        };
-        listes.push(liste);
+    // Étape 1 : vérifier si l'utilisateur existe déjà
+    this.utilisateurService.getAll().subscribe((utilisateurs) => {
+      const existe = utilisateurs.some((u) => u.username === user.username);
+      if (existe) {
+        alert("Ce nom d'utilisateur existe déjà !");
+        return;
       }
+      // Étape 2 : enregistrer l'utilisateur
+      this.utilisateurService.register(user).subscribe(() => {
+        // Simulation : stocker l’utilisateur connecté en local
+        localStorage.setItem('utilisateurActif', JSON.stringify(user));
 
-      liste.eleves.push(this.eleve);
-      this.localStorageService.setListes(this.eleve.formateurUsername, listes);
-    }
+        // Redirection
+        const redirection =
+          this.userRole === 'eleve' ? '/profil-eleve' : '/dashboard-formateur';
+        this.router.navigate([redirection]);
 
-    // Redirection après inscription
-    if (this.userRole === 'eleve') {
-      this.router.navigate(['/profil-eleve']);
-    } else {
-      this.router.navigate(['/dashboard-formateur']);
-    }
-
-    this.connecte.emit(); // met à jour le header
-    this.fermer.emit(); // ferme la modale
+        this.connecte.emit();
+        this.fermer.emit();
+      });
+    });
   }
 
-  // Ferme manuellement la modale
+  // ─── Gestion UI ──────────────────────────────────────────────
   annuler() {
     this.fermer.emit();
   }
-
-  // Gestion du repli / dépli des sections de formulaire
-  sectionsOuvertes = {
-    infosPerso: true,
-    profilTech: false,
-    formateur: false,
-  };
 
   toggleSection(section: keyof typeof this.sectionsOuvertes) {
     this.sectionsOuvertes[section] = !this.sectionsOuvertes[section];

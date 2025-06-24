@@ -1,0 +1,23 @@
+<section class="dernier-tirage">
+  <h3>📌 Dernier tirage validé</h3>
+
+  @if (dernierTirageValide) {
+    <p><strong>Liste :</strong> {{ dernierTirageValide.listeNom }}</p>
+    <p><strong>Date :</strong> {{ dernierTirageValide.date }}</p>
+
+    <div class="groupes-grid">
+      @for (groupe of dernierTirageValide.groupes; track groupe.nom) {
+        <div class="groupe-card">
+          <h4>{{ groupe.nom }}</h4>
+          <ul>
+            @for (eleve of groupe.eleves; track eleve.id) {
+              <li>{{ eleve.firstName }}</li>
+            }
+          </ul>
+        </div>
+      }
+    </div>
+  } @else {
+    <p>Aucun tirage validé pour le moment.</p>
+  }
+</section>

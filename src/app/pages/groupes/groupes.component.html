@@ -1,86 +1,34 @@
 <h2>Gestion des groupes</h2>
 
-<section class="groupes-config">
-  <label for="liste-select">Liste d'élèves :</label>
-  <select
-    id="liste-select"
-    [(ngModel)]="listeSelectionnee"
-    (change)="onListeSelectionnee()"
-  >
-    <option [ngValue]="null">-- Sélectionner une liste --</option>
-    @for (liste of listes; track liste.id) {
-      <option [ngValue]="liste">{{ liste.nom }}</option>
-    }
-  </select>
-
-  <label for="nb-groupes">Nombre de groupes :</label>
-  <input
-    id="nb-groupes"
-    type="number"
-    [(ngModel)]="nombreDeGroupes"
-    min="1"
-  />
-
-  <button (click)="genererGroupesVides()">Générer les groupes</button>
-  <button (click)="genererRepartition()">Répartition aléatoire</button>
+<section class="groupes-config-section">
+  <app-groupes-config
+    [listes]="listes"
+    [listeSelectionnee]="listeSelectionnee ?? null"
+    [nombreDeGroupes]="configGeneration.nombreDeGroupes"
+    [equilibrerFrancais]="configGeneration.equilibrerFrancais"
+    [equilibrerTechnique]="configGeneration.equilibrerTechnique"
+    [mixDWWM]="configGeneration.mixDWWM"
+    [equilibrerProfil]="configGeneration.equilibrerProfil"
+    (listeChange)="onListeChange($event)"
+    (configChange)="onConfigChange($event)"
+    (lancerGeneration)="lancerGeneration()"
+  ></app-groupes-config>
 </section>
 
-<div class="criteres-generation">
-  <label>
-    <input type="checkbox" [(ngModel)]="mixDWWM" />
-    Mixer les anciens DWWM
-  </label>
-</div>
+<section class="groupes-grid-section">
+  <h3>Groupes générés</h3>
 
-<h2>Groupes générés</h2>
-
-<div class="groupes-grid">
-  @if ((listeSelectionnee?.groupes ?? []).length > 0) {
-    @for (groupe of listeSelectionnee?.groupes ?? []; track groupe.nom) {
-      @let i = (listeSelectionnee?.groupes ?? []).indexOf(groupe);
-
-      <div class="groupe-card">
-        <div class="groupe-header">
-          <input
-            [(ngModel)]="groupe.nom"
-            class="groupe-nom"
-            placeholder="Nom du groupe"
-          />
-          <button class="btn-supprimer" (click)="supprimerGroupeParNom(groupe.nom)">✖</button>
-        </div>
-
-        @if (!listeSelectionnee?.tirageValide && (listeSelectionnee?.groupes ?? []).length > 0) {
-          <button (click)="validerTirage()">✅ Valider le tirage</button>
-        } @else {
-          <button (click)="annulerTirage()">❌ Annuler le tirage</button>
-        }
-
-        @if (listeSelectionnee?.tirageValide) {
-          <p class="message-valide">✅ Tirage validé pour cette liste.</p>
-        }
-
-        <div
-          cdkDropList
-          [cdkDropListDisabled]="listeSelectionnee?.tirageValide"
-          [cdkDropListData]="groupe.eleves"
-          [cdkDropListConnectedTo]="idsGroupes"
-          [id]="'groupe-' + i"
-          class="drop-zone"
-          (cdkDropListDropped)="deplacerEleve($event)"
-        >
-          @for (eleve of groupe?.eleves ?? []; track eleve.id) {
-            <div
-              class="eleve-item"
-              cdkDrag
-              [cdkDragDisabled]="listeSelectionnee?.tirageValide"
-            >
-              {{ eleve.firstName }} ({{ eleve.age }} ans)
-            </div>
-          }
-        </div>
-      </div>
-    }
-  } @else {
-    <p>Aucun groupe généré pour le moment.</p>
+  @if (listeSelectionnee && !listeSelectionnee.groupes?.length) {
+  <p class="message-vide">Aucun groupe généré pour cette liste.</p>
+  } @if (listeSelectionnee?.groupes?.length) {
+  <app-groupes-display
+    [groupes]="listeSelectionnee?.groupes ?? []"
+    [tirageValide]="listeSelectionnee?.tirageValide ?? false"
+    [listeSelectionnee]="listeSelectionnee ?? null"
+    (supprimerGroupe)="supprimerGroupeParNom($event)"
+    (valider)="validerTirage()"
+    (annuler)="annulerTirage()"
+    (dragDrop)="deplacerEleve($event)"
+  ></app-groupes-display>
   }
-</div>
+</section>

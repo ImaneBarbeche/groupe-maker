@@ -1,150 +1,134 @@
 <div class="role-choice">
-  <button
-    type="button"
-    (click)="setRole('eleve')"
-    [class.selected]="userRole === 'eleve'"
-  >
+  <button type="button" (click)="setRole('eleve')" [class.selected]="userRole === 'eleve'">
     Je suis élève
   </button>
 
-  <button
-    type="button"
-    (click)="setRole('formateur')"
-    [class.selected]="userRole === 'formateur'"
-  >
+  <button type="button" (click)="setRole('formateur')" [class.selected]="userRole === 'formateur'">
     Je suis formateur
   </button>
 </div>
 
 <form (ngSubmit)="onSubmit()">
   @if (!userRole) {
-  <p style="text-align: center">
-    Veuillez choisir un rôle pour commencer l'inscription.
-  </p>
-  } @if (userRole === 'eleve') {
+    <p style="text-align: center">
+      Veuillez choisir un rôle pour commencer l'inscription.
+    </p>
+  }
 
-  <!-- Afficher les champs de l'élève -->
-  <h3 (click)="toggleSection('infosPerso')">
-  ➤ Informations personnelles
-</h3>
-@if (sectionsOuvertes.infosPerso) {
-  <label>Prénom :</label>
-  <input type="text" [(ngModel)]="eleve.firstName" name="firstName" required />
+  @if (userRole === 'eleve') {
+    <!-- Section : Informations personnelles -->
+    <h3 (click)="toggleSection('infosPerso')">➤ Informations personnelles</h3>
+    @if (sectionsOuvertes.infosPerso) {
+      <label>Prénom :</label>
+      <input type="text" [(ngModel)]="eleve.firstName" name="firstName" required />
 
-  <label>Nom d'utilisateur :</label>
-  <input type="text" [(ngModel)]="eleve.username" name="username" required />
+      <label>Nom d'utilisateur :</label>
+      <input type="text" [(ngModel)]="eleve.username" name="username" required />
 
-  <label>Âge :</label>
-  <input type="number" [(ngModel)]="eleve.age" name="age" required />
+      <label>Adresse email :</label>
+      <input type="email" [(ngModel)]="eleve.email" name="email" required />
 
-  <label>Genre :</label>
-  <select [(ngModel)]="eleve.gender" name="gender" required>
-    @for (g of genders; track g) {
-      <option [value]="g">{{ g }}</option>
+      <label>Mot de passe :</label>
+      <input type="password" [(ngModel)]="eleve.motDePasse" name="motDePasse" required />
+
+      <label>Âge :</label>
+      <input type="number" [(ngModel)]="eleve.age" name="age" required />
+
+      <label>Genre :</label>
+      <select [(ngModel)]="eleve.gender" name="gender" required>
+        @for (g of genders; track g) {
+          <option [value]="g">{{ g }}</option>
+        }
+      </select>
     }
-  </select>
-}
 
- <h3 (click)="toggleSection('profilTech')">
-  ➤ Profil technique
-</h3>
-@if (sectionsOuvertes.profilTech) {
-  <label>Aisance en français :</label>
-  <select [(ngModel)]="eleve.language" name="language" required>
-    @for (l of languages; track l) {
-      <option [value]="l.split(' - ')[0]">{{ l }}</option>
+    <!-- Section : Profil technique -->
+    <h3 (click)="toggleSection('profilTech')">➤ Profil technique</h3>
+    @if (sectionsOuvertes.profilTech) {
+      <label>Aisance en français :</label>
+      <select [(ngModel)]="eleve.language" name="language" required>
+        @for (l of languages; track l) {
+          <option [value]="l.split(' - ')[0]">{{ l }}</option>
+        }
+      </select>
+
+      <label>Niveau technique :</label>
+      <select [(ngModel)]="eleve.techLevel" name="techLevel" required>
+        @for (t of techLevels; track t) {
+          <option [value]="t.split(' - ')[0]">{{ t }}</option>
+        }
+      </select>
+
+      <label>Profil :</label>
+      <select [(ngModel)]="eleve.profil" name="profil" required>
+        @for (p of profiles; track p) {
+          <option [value]="p">{{ p }}</option>
+        }
+      </select>
+
+      <label>
+        <input type="checkbox" [(ngModel)]="eleve.dwwmStudent" name="dwwmStudent" />
+        Ancien·ne étudiant·e DWWM
+      </label>
     }
-  </select>
 
-  <label>Niveau technique :</label>
-  <select [(ngModel)]="eleve.techLevel" name="techLevel" required>
-    @for (t of techLevels; track t) {
-      <option [value]="t.split(' - ')[0]">{{ t }}</option>
+    <!-- Section : Références -->
+    <h3 (click)="toggleSection('formateur')">➤ Références</h3>
+    @if (sectionsOuvertes.formateur) {
+      <label>Groupe CDA :</label>
+      <select [(ngModel)]="eleve.cdaGroup" name="cdaGroup" required>
+        <option value="">-- Choisir un groupe --</option>
+        <option value="CDA Java">CDA Java</option>
+        <option value="CDA PHP">CDA PHP</option>
+      </select>
+
+      <label>Formateur référent :</label>
+      <select [(ngModel)]="eleve.formateurUsername" name="formateurUsername" required>
+        <option value="">-- Sélectionner un formateur --</option>
+        @for (formateur of formateurs; track formateur.id) {
+          <option [value]="formateur.username">
+            {{ formateur.firstName }} ({{ formateur.username }})
+          </option>
+        }
+      </select>
     }
-  </select>
 
-  <label>Profil :</label>
-  <select [(ngModel)]="eleve.profil" name="profil" required>
-    @for (p of profiles; track p) {
-      <option [value]="p">{{ p }}</option>
-    }
-  </select>
+    <button type="submit">S'inscrire</button>
+  }
 
-  <label>
-    <input type="checkbox" [(ngModel)]="eleve.dwwmStudent" name="dwwmStudent" />
-    Ancien·ne étudiant·e DWWM
-  </label>
-}
+  @else if (userRole === 'formateur') {
+    <h3>Informations personnelles</h3>
 
-  <h3 (click)="toggleSection('formateur')">
-  ➤ Références
-</h3>
-@if (sectionsOuvertes.formateur) {
-  <label>Groupe CDA :</label>
-  <select [(ngModel)]="eleve.cdaGroup" name="cdaGroup" required>
-    <option value="">-- Choisir un groupe --</option>
-    <option value="CDA Java">CDA Java</option>
-    <option value="CDA PHP">CDA PHP</option>
-  </select>
+    <label>Prénom :</label>
+    <input type="text" [(ngModel)]="formateur.firstName" name="firstName" required />
 
-  <label>Formateur référent :</label>
-  <select [(ngModel)]="eleve.formateurUsername" name="formateurUsername" required>
-    <option value="">-- Sélectionner un formateur --</option>
-    @for (formateur of formateurs; track formateur.id) {
-      <option [value]="formateur.username">{{ formateur.firstName }} ({{ formateur.username }})</option>
-    }
-  </select>
-}
+    <label>Nom d'utilisateur :</label>
+    <input type="text" [(ngModel)]="formateur.username" name="username" required />
 
+    <label>Adresse email :</label>
+    <input type="email" [(ngModel)]="formateur.email" name="email" required />
 
+    <label>Mot de passe :</label>
+    <input type="password" [(ngModel)]="formateur.motDePasse" name="motDePasse" required />
 
-  <!-- Bouton d'inscription -->
-  <button type="submit">S'inscrire</button>
+    <label>Âge :</label>
+    <input type="number" [(ngModel)]="formateur.age" name="age" required />
 
-  } @else if (userRole === 'formateur') {
-    
-  <!-- Afficher les champs du formateur -->
-  <label>Prénom :</label>
-  <input
-    type="text"
-    [(ngModel)]="formateur.firstName"
-    name="firstName"
-    required
-  />
+    <label>Spécialité :</label>
+    <input type="text" [(ngModel)]="formateur.speciality" name="speciality" required />
 
-  <!-- Champ nom d'utilisateur -->
-  <label>Nom d'utilisateur :</label>
-  <input
-    type="text"
-    [(ngModel)]="formateur.username"
-    name="username"
-    required
-  />
+    <label>Genre :</label>
+    <select [(ngModel)]="formateur.gender" name="gender" required>
+      @for (gender of genders; track gender) {
+        <option [value]="gender">{{ gender }}</option>
+      }
+    </select>
 
-  <!-- Champ âge -->
-  <label>Âge :</label>
-  <input type="number" [(ngModel)]="formateur.age" name="age" required />
-
-  <label>Spécialité :</label>
-  <input
-    type="text"
-    [(ngModel)]="formateur.speciality"
-    name="speciality"
-    required
-  />
-
-  <!-- Champ genre -->
-  <label>Genre :</label>
-  <select [(ngModel)]="formateur.gender" name="gender" required>
-    @for (gender of genders; track gender) {
-    <option [value]="gender">{{ gender }}</option>
-    }
-  </select>
-  <!-- Bouton d'inscription -->
-  <button type="submit">S'inscrire</button>
+    <button type="submit">S'inscrire</button>
   }
 </form>
 
+<!-- Pied de formulaire -->
 <div class="form-footer">
   <button type="button" (click)="annuler()">Annuler</button>
 </div>

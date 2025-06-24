@@ -1,0 +1,26 @@
+.statistiques-container {
+  border: 1px solid #ccc;
+  border-radius: 12px;
+  padding: 1rem;
+  margin: 1rem 0;
+  background-color: #f9f9f9;
+}
+
+.statistiques-container h2 {
+  margin-bottom: 1rem;
+  font-size: 1.3rem;
+}
+
+.statistique-item {
+  display: flex;
+  justify-content: space-between;
+  margin-bottom: 0.5rem;
+}
+
+.label {
+  font-weight: bold;
+}
+
+.valeur {
+  font-style: italic;
+}

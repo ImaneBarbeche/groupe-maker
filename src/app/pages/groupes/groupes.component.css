@@ -7,7 +7,7 @@
   background-color: #fffef6;
 }
 
-/* TITRE */
+/* TITRES */
 h2 {
   text-align: center;
   font-size: 2rem;
@@ -15,16 +15,30 @@ h2 {
   margin-bottom: 2rem;
 }
 
+h3 {
+  text-align: center;
+  font-size: 1.5rem;
+  color: #3a2f2f;
+  margin: 1.5rem 0 1rem;
+}
+
+/* SECTIONS */
+section {
+  margin-bottom: 2.5rem;
+}
+
 /* CONFIGURATION */
+.groupes-config-section {
+  background-color: #fdfaf3;
+  padding: 1rem 2rem;
+  border-radius: 12px;
+}
+
 .groupes-config {
   display: flex;
   flex-wrap: wrap;
   justify-content: center;
   gap: 1rem;
-  background-color: #fdfaf3;
-  padding: 1rem 2rem;
-  border-radius: 12px;
-  margin-bottom: 2rem;
 }
 
 .groupes-config label {
@@ -37,6 +51,9 @@ h2 {
   border: 1px solid #ccc;
   border-radius: 8px;
   min-width: 200px;
+  width: 100%;
+  max-width: 300px;
+  box-sizing: border-box;
 }
 
 .groupes-config button {
@@ -46,10 +63,20 @@ h2 {
   padding: 0.5rem 1rem;
   border-radius: 8px;
   cursor: pointer;
+  transition: background-color 0.2s ease, transform 0.1s ease;
 }
 
 .groupes-config button:hover {
   background-color: #a45e3c;
+}
+
+.groupes-config button:active {
+  transform: scale(0.97);
+}
+
+button:focus {
+  outline: 2px solid #b77b57;
+  outline-offset: 2px;
 }
 
 /* GROUPES GÉNÉRÉS */
@@ -108,14 +135,10 @@ h2 {
   background-color: #c62828;
 }
 
-button:focus {
-  outline: 2px solid #b77b57;
-  outline-offset: 2px;
-}
-
+/* BOUTON VALIDER */
 .bouton-valider {
   margin-top: 1rem;
-  background-color: #4caf50; /* vert */
+  background-color: #4caf50;
   color: white;
   font-weight: 600;
   border: none;
@@ -129,6 +152,7 @@ button:focus {
   background-color: #388e3c;
 }
 
+/* DROP ZONE */
 .drop-zone {
   min-height: 100px;
   border: 2px dashed #bfae98;
@@ -152,6 +176,7 @@ button:focus {
   background-color: #f2e9dc;
 }
 
+/* MESSAGE */
 .message-validation {
   margin-top: 1rem;
   font-weight: 600;
@@ -163,7 +188,14 @@ button:focus {
   display: inline-block;
 }
 
+.message-vide {
+  text-align: center;
+  color: #999;
+  font-style: italic;
+  margin: 2rem 0;
+}
 
+/* RESPONSIVE */
 @media screen and (max-width: 600px) {
   .groupes-grid {
     flex-direction: column;
@@ -181,6 +213,7 @@ button:focus {
   .btn-supprimer {
     font-size: 1.2rem;
   }
+
   .groupes-config {
     flex-direction: column;
     align-items: stretch;

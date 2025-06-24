@@ -1,0 +1,48 @@
+<section class="groupes-grid">
+  @if (groupes.length === 0) {
+    <p class="message-vide">Aucun groupe généré pour cette liste.</p>
+  }
+
+  @for (groupe of groupes; track groupe.nom) {
+    <div class="groupe-card">
+      <div class="groupe-header">
+        <input
+          type="text"
+          [(ngModel)]="groupe.nom"
+          class="groupe-nom"
+          placeholder="Nom du groupe"
+        />
+        <button
+          class="btn-supprimer"
+          (click)="supprimerGroupe.emit(groupe.nom)"
+          aria-label="Supprimer le groupe"
+        >
+          ✕
+        </button>
+      </div>
+
+      <div
+        cdkDropList
+        [cdkDropListData]="groupe.eleves"
+        (cdkDropListDropped)="dragDrop.emit($event)"
+        class="drop-zone"
+      >
+        @for (eleve of groupe.eleves; track eleve.id) {
+          <div cdkDrag class="eleve-item">
+            {{ eleve.firstName }}
+          </div>
+        }
+      </div>
+    </div>
+  }
+</section>
+
+<!-- Boutons centralisés -->
+<div class="groupes-actions">
+  <button class="bouton-valider" (click)="valider.emit()" [disabled]="tirageValide">
+    ✅ Valider le tirage
+  </button>
+  <button class="btn-annuler" (click)="annuler.emit()" [disabled]="!tirageValide">
+    🔁 Annuler le tirage
+  </button>
+</div>

@@ -1,0 +1,43 @@
+<section class="groupes-config">
+  <label for="liste-select">Liste d'élèves :</label>
+  <select
+    id="liste-select"
+    [ngModel]="listeSelectionnee"
+    (ngModelChange)="onListeChange($event)"
+  >
+    <option [ngValue]="null">-- Sélectionner une liste --</option>
+    @for (liste of listes; track liste.id) {
+      <option [ngValue]="liste">{{ liste.nom }}</option>
+    }
+  </select>
+
+  <label for="nb-groupes">Nombre de groupes :</label>
+  <input
+    id="nb-groupes"
+    type="number"
+    [(ngModel)]="nombreDeGroupes"
+    min="1"
+    (ngModelChange)="onConfigChange()"
+  />
+
+  <div class="criteres-generation">
+    <label>
+      <input type="checkbox" [(ngModel)]="equilibrerFrancais" (change)="onConfigChange()" />
+      Équilibrer Français
+    </label>
+    <label>
+      <input type="checkbox" [(ngModel)]="equilibrerTechnique" (change)="onConfigChange()" />
+      Équilibrer Technique
+    </label>
+    <label>
+      <input type="checkbox" [(ngModel)]="mixDWWM" (change)="onConfigChange()" />
+      Équilibrer DWWM
+    </label>
+    <label>
+      <input type="checkbox" [(ngModel)]="equilibrerProfil" (change)="onConfigChange()" />
+      Équilibrer Profil
+    </label>
+  </div>
+
+  <button (click)="onLancer()">Lancer la génération</button>
+</section>
