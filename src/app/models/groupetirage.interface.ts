@@ -1,4 +1,4 @@
 export interface GroupeTirage {
   nom: string;
-  eleves: { id: string; firstName: string }[];
+  personnes: { id: string; prenom: string }[];
 }

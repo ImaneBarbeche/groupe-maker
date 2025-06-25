@@ -22,16 +22,18 @@ export class AppComponent {
   constructor(private accountService: AccountService) {}
 
   ngOnInit() {
-    this.accountService.getMonProfil().subscribe({
-      next: (user) => {
-        this.utilisateurActif = user;
-      },
-      error: () => {
-        this.utilisateurActif = null;
-      },
-    });
-
+    this.refresherUtilisateurActif();
     this.verifierAcceptationCGU();
+  }
+
+  onUtilisateurConnecte() {
+    this.refresherUtilisateurActif();
+  }
+  refresherUtilisateurActif() {
+    this.accountService.getMonProfil().subscribe({
+      next: (user) => (this.utilisateurActif = user),
+      error: () => (this.utilisateurActif = null),
+    });
   }
 
   fermerModale() {
@@ -43,29 +45,16 @@ export class AppComponent {
   }
 
   seDeconnecter() {
-  this.accountService.logout().subscribe({
-    next: () => {
-      this.utilisateurActif = null;
-      window.location.href = '/';
-    },
-    error: (err) => {
-      console.error("Échec de la déconnexion :", err);
-    }
-  });
-}
-
-onUtilisateurConnecte() {
-  this.accountService.getMonProfil().subscribe({
-    next: (user) => {
-      this.utilisateurActif = user;
-    },
-    error: () => {
-      this.utilisateurActif = null;
-    }
-  });
-}
-
-
+    this.accountService.logout().subscribe({
+      next: () => {
+        this.utilisateurActif = null;
+        window.location.href = '/';
+      },
+      error: (err) => {
+        console.error('Échec de la déconnexion :', err);
+      },
+    });
+  }
   verifierAcceptationCGU() {
     const cguData = JSON.parse(localStorage.getItem('cguAccepted') || 'null');
     const expirationDelay = 13 * 30 * 24 * 60 * 60 * 1000; // 13 mois

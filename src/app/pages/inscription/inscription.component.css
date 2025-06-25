@@ -8,38 +8,6 @@
   box-shadow: 0 8px 20px rgba(0, 0, 0, 0.06);
   font-family: 'Segoe UI', sans-serif;
 }
-
-/* Choix du rôle */
-.role-choice {
-  display: flex;
-  justify-content: center;
-  gap: 1.5rem;
-  margin-bottom: 2rem;
-}
-
-.role-choice button {
-  padding: 1rem 2rem;
-  border-radius: 10px;
-  font-size: 1rem;
-  border: 2px solid #cbb7a2;
-  background-color: #f8f6f1;
-  cursor: pointer;
-  transition: all 0.3s ease;
-}
-
-.role-choice button:hover {
-  background-color: #f1e8dd;
-  border-color: #b77b57;
-}
-
-.role-choice button.selected {
-  background-color: #b77b57;
-  color: white;
-  border-color: #b77b57;
-  font-weight: bold;
-  box-shadow: 0 0 10px rgba(183, 123, 87, 0.4);
-}
-
 /* Sections repliables */
 h3 {
   cursor: pointer;
@@ -74,27 +42,6 @@ form {
   font-weight: 600;
   color: #3a2f2f;
 }
-
-form input[type="text"],
-form input[type="number"],
-form select {
-  width: 100%;
-  padding: 0.65rem 1rem;
-  border-radius: 10px;
-  border: 1.5px solid #d4cfc2;
-  background-color: #fdfdf9;
-  font-size: 1rem;
-  transition: border-color 0.2s ease;
-  margin-top: 0.3rem;
-}
-
-form input:focus,
-form select:focus {
-  border-color: #b77b57;
-  outline: none;
-  background-color: #fefdf7;
-}
-
 /* Case à cocher */
 input[type="checkbox"] {
   margin-right: 0.5rem;

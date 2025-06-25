@@ -162,7 +162,7 @@ button:focus {
   margin-top: 1rem;
 }
 
-.eleve-item {
+.personne-item {
   background: #fff;
   margin: 4px 0;
   padding: 0.5rem;
@@ -172,7 +172,7 @@ button:focus {
   transition: background-color 0.2s;
 }
 
-.eleve-item:hover {
+.personne-item:hover {
   background-color: #f2e9dc;
 }
 

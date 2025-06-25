@@ -13,12 +13,12 @@
         <button class="btn-supprimer" (click)="confirmDelete(liste.id)">Supprimer</button>
       </div>
 
-      <p class="stat-line">👥 Élèves : {{ liste.eleves.length }}</p>
+      <p class="stat-line">👥 Personnes : {{ liste.personnes }}</p>
       <p class="stat-line">🎲 Tirages effectués : {{ liste.tirages }}</p>
 
       <ul>
-        @for (eleve of liste.eleves; track eleve.id) {
-          <li>{{ eleve.prenom }} ({{ eleve.age }} ans)</li>
+        @for (personne of liste.personnes; track personne.id) {
+          <li>{{ personne.prenom }} ({{ personne.age }} ans)</li>
         }
       </ul>
     </article>

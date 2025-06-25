@@ -1,11 +1,15 @@
-import { Eleve } from "./eleve.interface";
+import { Personne } from './personne.interface';
+import { Utilisateur } from './utilisateur.interface';
 
 export interface Liste {
   id: string;
   nom: string;
-  eleves: Eleve[];
   tirages: number;
-  tirageValide?: boolean; 
-  groupes?: { nom: string; eleves: Eleve[] }[];
-  formateurUsername?: string; 
+  tirageValide?: boolean;
+  personnes?: Personne[];
+  utilisateur?: Utilisateur;
+  groupes?: {
+    nom: string;
+    personnes: Personne[];
+  }[];
 }

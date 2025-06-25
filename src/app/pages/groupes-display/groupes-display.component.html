@@ -23,13 +23,13 @@
 
       <div
         cdkDropList
-        [cdkDropListData]="groupe.eleves"
+        [cdkDropListData]="groupe.personnes"
         (cdkDropListDropped)="dragDrop.emit($event)"
         class="drop-zone"
       >
-        @for (eleve of groupe.eleves; track eleve.id) {
-          <div cdkDrag class="eleve-item">
-            {{ eleve.prenom }}
+        @for (personne of groupe.personnes; track personne.id) {
+          <div cdkDrag class="personne-item">
+            {{ personne.prenom }}
           </div>
         }
       </div>

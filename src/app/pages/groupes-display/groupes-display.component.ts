@@ -16,7 +16,7 @@ import { NgModule } from '@angular/core';
 })
 export class GroupesDisplayComponent {
   /** Liste complète des groupes générés */
-  @Input() groupes: { nom: string; eleves: any[] }[] = [];
+  @Input() groupes: { nom: string; personnes: any[] }[] = [];
 
   /** Le tirage est-il validé ? */
   @Input() tirageValide: boolean = false;

@@ -1,6 +1,6 @@
 # 🎓 Group-Maker
 
-> Une application pédagogique pour créer des groupes d'élèves équilibrés et dynamiques.
+> Une application pédagogique pour créer des groupes équilibrés et dynamiques.
 
 🌐 [Voir la démo en ligne sur GitHub Pages](https://imanebarbeche.github.io/groupe-maker/)
 
@@ -11,7 +11,7 @@ https://www.figma.com/proto/8ZRz5OwIZuMulBD7e1YiBf/Group-Maker?node-id=31-553&p=
 ## 📚 Contexte
 
 Projet fil rouge formation CDA chez Simplon.co (2025).  
-Objectif : gérer les inscriptions élèves & formateurs, et générer des groupes équilibrés à partir de critères personnalisés.
+Objectif : gérer les inscriptions utilisateurs, et générer des groupes équilibrés à partir de critères personnalisés.
 
 ## ⚙️ Stack technique
 
@@ -23,11 +23,10 @@ Objectif : gérer les inscriptions élèves & formateurs, et générer des group
 
 ## 🚀 Fonctionnalités principales
 
-- ✅ Inscription et connexion multi-utilisateur (élève / formateur)
-- ✅ Création automatique de liste lors de l’inscription d’un élève
+- ✅ Inscription et connexion
 - ✅ Génération de groupes par répartition aléatoire (avec ou sans mix DWWM)
 - ✅ Validation, annulation et historique des tirages
-- ✅ Dashboard formateur avec statistiques dynamiques (âge, niveau technique)
+- ✅ Dashboard avec statistiques dynamiques (âge, niveau technique)
 - ✅ Suppression de compte & déconnexion propre
 - ✅ Affichage dynamique conditionné par le rôle
 - ✅ Design doux, épuré, responsive

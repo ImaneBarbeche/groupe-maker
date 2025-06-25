@@ -1,5 +1,4 @@
 import { GroupesComponent } from './groupes.component';
-import { Eleve} from '../../models/eleve.interface';
 import { Liste } from '../../models/liste.interface';
 import { CdkDragDrop } from '@angular/cdk/drag-drop';
 

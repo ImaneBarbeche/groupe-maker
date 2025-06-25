@@ -11,8 +11,8 @@
           <div class="groupe-box">
             <h4>{{ groupe.nom }}</h4>
             <ul>
-              @for (eleve of groupe.eleves; track eleve.id) {
-                <li>{{ eleve.prenom }}</li>
+              @for (personne of groupe.personnes; track personne.id) {
+                <li>{{ personne.prenom }}</li>
               }
             </ul>
           </div>

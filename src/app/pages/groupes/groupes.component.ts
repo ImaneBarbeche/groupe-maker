@@ -1,16 +1,18 @@
 import { CommonModule } from '@angular/common';
-import { FormsModule } from '@angular/forms';
 import { Component, OnInit } from '@angular/core';
+import { FormsModule } from '@angular/forms';
+import { DragDropModule, CdkDragDrop, transferArrayItem } from '@angular/cdk/drag-drop';
+
 import { Liste } from '../../models/liste.interface';
-import { Eleve } from '../../models/eleve.interface';
-import { CdkDragDrop,DragDropModule,transferArrayItem } from '@angular/cdk/drag-drop';
+import { Personne } from '../../models/personne.interface';
 import { HistoriqueTirages } from '../../models/historique.interface';
-import { GroupesService } from '../../services/groupes.service';
+
 import { GroupesDisplayComponent } from '../groupes-display/groupes-display.component';
 import { GroupesConfigComponent } from '../groupes-config/groupes-config.component';
+
 import { ListesService } from '../../services/listes.service';
-import { ElevesService } from '../../services/eleves.service';
 import { HistoriqueService } from '../../services/historique.service';
+import { GroupesService } from '../../services/groupes.service';
 
 interface ConfigGeneration {
   nombreDeGroupes: number;
@@ -36,7 +38,7 @@ interface ConfigGeneration {
 export class GroupesComponent implements OnInit {
   listes: Liste[] = [];
   listeSelectionnee?: Liste;
-  elevesDisponibles: Eleve[] = [];
+  personnesDisponibles: Personne[] = [];
   historiqueTirages: HistoriqueTirages[] = [];
 
   configGeneration: ConfigGeneration = {
@@ -53,18 +55,13 @@ export class GroupesComponent implements OnInit {
 
   constructor(
     private listesService: ListesService,
-    private elevesService: ElevesService,
     private groupesService: GroupesService,
     private historiqueService: HistoriqueService
   ) {}
 
   ngOnInit() {
-    this.listesService
-      .getListes()
-      .subscribe((listes) => (this.listes = listes));
-    this.historiqueService
-      .getHistorique()
-      .subscribe((hist) => (this.historiqueTirages = hist));
+    this.listesService.getListes().subscribe((listes) => this.listes = listes);
+    this.historiqueService.getHistorique().subscribe((hist) => this.historiqueTirages = hist);
   }
 
   onListeChange(liste: Liste) {
@@ -74,13 +71,13 @@ export class GroupesComponent implements OnInit {
 
   onListeSelectionnee() {
     if (this.listeSelectionnee) {
-      this.elevesDisponibles = [...this.listeSelectionnee.eleves];
+      this.personnesDisponibles = [...(this.listeSelectionnee.personnes || [])];
       this.listeSelectionnee.tirageValide = false;
       this.listeSelectionnee.groupes = [];
       this.configGeneration.nombreDeGroupes = 0;
       this.listesService.updateListe(this.listeSelectionnee).subscribe();
     } else {
-      this.elevesDisponibles = [];
+      this.personnesDisponibles = [];
     }
   }
 
@@ -89,31 +86,21 @@ export class GroupesComponent implements OnInit {
   }
 
   lancerGeneration() {
-    if (
-      !this.listeSelectionnee?.id ||
-      this.configGeneration.nombreDeGroupes < 1
-    ) {
+    if (!this.listeSelectionnee || this.configGeneration.nombreDeGroupes < 1) {
       alert('Sélectionnez une liste et un nombre de groupes valide.');
       return;
     }
 
-    const idListe = Number(this.listeSelectionnee?.id);
-    if (!idListe) {
-      alert('ID de liste invalide.');
-      return;
-    }
+    const groupes = this.groupesService.genererGroupes(
+      this.personnesDisponibles,
+      this.configGeneration
+    );
 
-    this.elevesService.getElevesParListe(idListe).subscribe({
-      next: (eleves) => {
-        // suite logique inchangée
-      },
-      error: (err) => {
-        console.error('Erreur chargement élèves :', err);
-      },
-    });
+    this.listeSelectionnee.groupes = groupes;
+    this.listesService.updateListe(this.listeSelectionnee).subscribe();
   }
 
-  deplacerEleve(event: CdkDragDrop<any[]>) {
+  deplacerPersonne(event: CdkDragDrop<any[]>) {
     if (event.previousContainer !== event.container) {
       transferArrayItem(
         event.previousContainer.data,
@@ -123,7 +110,6 @@ export class GroupesComponent implements OnInit {
       );
     }
   }
-
   validerTirage() {
     if (
       !this.listeSelectionnee ||
@@ -133,10 +119,9 @@ export class GroupesComponent implements OnInit {
       return;
     }
 
-    const nouveauTirage = this.groupesService.validerTirage(
-      this.listeSelectionnee
-    );
+    const nouveauTirage = this.groupesService.validerTirage(this.listeSelectionnee, this.listeSelectionnee.groupes);
     this.historiqueTirages.push(nouveauTirage);
+
     this.historiqueService.save(nouveauTirage).subscribe();
     this.listesService.updateListe(this.listeSelectionnee).subscribe();
   }
@@ -149,7 +134,7 @@ export class GroupesComponent implements OnInit {
       this.historiqueTirages
     );
 
-    this.historiqueService.saveAll(this.historiqueTirages).subscribe(); // méthode fictive
+    this.historiqueService.saveAll(this.historiqueTirages).subscribe();
     this.listesService.updateListe(this.listeSelectionnee).subscribe();
   }
 

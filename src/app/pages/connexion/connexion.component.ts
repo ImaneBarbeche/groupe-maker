@@ -2,7 +2,7 @@ import { CommonModule } from '@angular/common';
 import { Component, EventEmitter, Output } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 import { Router } from '@angular/router';
-import { UtilisateurService } from '../../services/utilisateur.service';
+import { AccountService } from '../../services/account.service';
 import { LoginResponse } from '../../models/login-response.interface';
 
 @Component({
@@ -18,10 +18,7 @@ export class ConnexionComponent {
   email = ''; // Nom d'utilisateur saisi dans le formulaire
   motDePasse = '';
 
-  constructor(
-    private router: Router,
-    private utilisateurService: UtilisateurService
-  ) {}
+  constructor(private router: Router, private accountService: AccountService) {}
 
   annulerConnexion() {
     this.fermer.emit(); // Ferme la modale sans se connecter
@@ -32,22 +29,14 @@ export class ConnexionComponent {
       motDePasse: this.motDePasse,
     };
 
-    this.utilisateurService.login(credentials).subscribe({
+    this.accountService.login(credentials).subscribe({
       next: (response: LoginResponse) => {
         console.log('✅ Données reçues après login :', response);
 
-        const token = response.token;
         const utilisateur = response.utilisateur;
-
-        localStorage.setItem('jwt', token);
         localStorage.setItem('utilisateurActif', JSON.stringify(utilisateur));
 
-        const redirection =
-          utilisateur.role === 'formateur'
-            ? '/dashboard-formateur'
-            : '/profil-eleve';
-
-        this.router.navigate([redirection]);
+        this.router.navigate(['/dashboard']);
         this.connecte.emit();
         this.fermer.emit();
       },

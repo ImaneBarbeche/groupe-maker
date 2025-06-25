@@ -7,27 +7,20 @@
       <button (click)="afficherModaleInscription = true">S'inscrire</button>
     </div>
   } @else {
-    @if (utilisateurActif.role === 'formateur') {
-      <nav class="header-buttons">
-        <a routerLink="/dashboard-formateur">Dashboard</a>
-        <a routerLink="/listes">Listes</a>
-        <a routerLink="/historique">Historique</a>
-        <a routerLink="/groupes">Groupes</a>
-        <button (click)="seDeconnecter()">Déconnexion</button>
-      </nav>
-    } @else {
-      <nav class="header-buttons">
-        <a routerLink="/profil-eleve">Mon profil</a>
-        <button (click)="seDeconnecter()">Déconnexion</button>
-      </nav>
-    }
+    <nav class="header-buttons">
+      <a routerLink="/listes">Listes</a>
+      <a routerLink="/groupes">Groupes</a>
+      <a routerLink="/historique">Historique</a>
+      <a routerLink="/profil">Mon profil</a>
+      <button (click)="seDeconnecter()">Déconnexion</button>
+    </nav>
   }
 </header>
 
-  @if (afficherModaleConnexion) {
+@if (afficherModaleConnexion) {
   <div class="modale-backdrop" (click)="fermerModale()">
     <div class="modale" (click)="$event.stopPropagation()">
-       <app-connexion
+      <app-connexion
         (fermer)="fermerModale()"
         (connecte)="onUtilisateurConnecte()">
       </app-connexion>
@@ -38,7 +31,7 @@
 @if (afficherModaleInscription) {
   <div class="modale-backdrop" (click)="fermerModaleInscription()">
     <div class="modale" (click)="$event.stopPropagation()">
-       <app-inscription
+      <app-inscription
         (fermer)="fermerModaleInscription()"
         (connecte)="onUtilisateurConnecte()">
       </app-inscription>

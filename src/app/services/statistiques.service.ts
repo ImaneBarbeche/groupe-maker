@@ -1,5 +1,6 @@
+// src/app/services/statistiques.service.ts
 import { Injectable } from '@angular/core';
-import { Eleve } from '../models/eleve.interface';
+import { Personne } from '../models/personne.interface';
 
 @Injectable({
   providedIn: 'root'
@@ -7,7 +8,7 @@ import { Eleve } from '../models/eleve.interface';
 export class StatistiquesService {
 
   /**
-   * Calcule la moyenne d'âge des élèves.
+   * Calcule la moyenne d'âge des personnes.
    */
   calculerMoyenne(ages: number[]): number {
     const total = ages.reduce((acc, val) => acc + val, 0);
@@ -17,10 +18,10 @@ export class StatistiquesService {
   /**
    * Calcule la répartition des niveaux techniques en pourcentages.
    */
-  calculerStatsTech(eleves: Eleve[]): string {
+  calculerStatsTech(personnes: Personne[]): string {
     const counts = [0, 0, 0, 0]; // niveaux 1 à 4
-    eleves.forEach((e) => counts[e.techLevel - 1]++);
-    const total = eleves.length;
+    personnes.forEach((p) => counts[p.techLevel - 1]++);
+    const total = personnes.length;
     return counts
       .map((c, i) => `${Math.round((c / total) * 100)}% Niv ${i + 1}`)
       .join(', ');

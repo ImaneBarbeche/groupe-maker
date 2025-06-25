@@ -1,11 +1,11 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
-import { DashboardFormateurComponent } from './dashboard-formateur.component';
+import { DashboardComponent } from './dashboard.component';
 import { ListesService } from '../../services/listes.service';
 import { LocalStorageService } from '../../services/local-storage.service'; 
 
 describe('DashboardFormateurComponent', () => {
-  let component: DashboardFormateurComponent;
-  let fixture: ComponentFixture<DashboardFormateurComponent>;
+  let component: DashboardComponent;
+  let fixture: ComponentFixture<DashboardComponent>;
 
   const mockListesService = {
     getListes: () => [], // Valeur par défaut
@@ -25,11 +25,11 @@ describe('DashboardFormateurComponent', () => {
       })
     );
     await TestBed.configureTestingModule({
-      imports: [DashboardFormateurComponent],
+      imports: [DashboardComponent],
       providers: [{ provide: ListesService, useValue: mockListesService }],
     }).compileComponents();
 
-    fixture = TestBed.createComponent(DashboardFormateurComponent);
+    fixture = TestBed.createComponent(DashboardComponent);
     component = fixture.componentInstance;
     fixture.detectChanges();
   });
