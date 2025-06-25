@@ -53,18 +53,17 @@ export class InscriptionComponent {
     private router: Router,
     private utilisateurService: UtilisateurService
   ) {}
-
   // ─── Gestion des rôles ───────────────────────────────────────
   setRole(role: 'eleve' | 'formateur') {
     this.userRole = role;
-
     if (role === 'eleve') {
       this.eleve = {
         id: '',
         username: '',
-        firstName: '',
+        prenom: '',
+        nom: '',
         email: '',
-        motDePasse: '', 
+        motDePasse: '',
         age: 0,
         gender: '',
         language: 0,
@@ -75,17 +74,18 @@ export class InscriptionComponent {
         role: 'eleve',
         formateurUsername: '',
       };
-
-      this.utilisateurService.getAll().subscribe((utilisateurs) => {
+      this.utilisateurService.getTousLesUtilisateurs().subscribe((utilisateurs) => {
         this.formateurs = utilisateurs.filter((u) => u.role === 'formateur');
+        console.log('Formateurs récupérés :', this.formateurs);
       });
     } else {
       this.formateur = {
         id: '',
         username: '',
-        firstName: '',
-        email: '', 
-        motDePasse: '', 
+        prenom: '',
+        nom: '',
+        email: '',
+        motDePasse: '',
         age: 0,
         gender: '',
         speciality: '',
@@ -93,29 +93,26 @@ export class InscriptionComponent {
       };
     }
   }
-
   // ─── Soumission du formulaire ────────────────────────────────
- onSubmit() {
-  const user = this.userRole === 'eleve' ? this.eleve : this.formateur;
-  console.log('Inscription envoyée :', user);
+  onSubmit() {
+    const user = this.userRole === 'eleve' ? this.eleve : this.formateur;
+    console.log('Inscription envoyée :', user);
 
-  this.utilisateurService.register(user).subscribe({
-    next: () => {
-      localStorage.setItem('utilisateurActif', JSON.stringify(user));
-      const redirection = this.userRole === 'eleve' ? '/profil-eleve' : '/dashboard-formateur';
-      this.router.navigate([redirection]);
-      this.connecte.emit();
-      this.fermer.emit();
-    },
-    error: (err) => {
-      console.error('Erreur inscription :', err);
-      alert("L'inscription a échoué.");
-    }
-  });
-}
-
-
-
+    this.utilisateurService.register(user).subscribe({
+      next: () => {
+        localStorage.setItem('utilisateurActif', JSON.stringify(user));
+        const redirection =
+          this.userRole === 'eleve' ? '/profil-eleve' : '/dashboard-formateur';
+        this.router.navigate([redirection]);
+        this.connecte.emit();
+        this.fermer.emit();
+      },
+      error: (err) => {
+        console.error('Erreur inscription :', err);
+        alert("L'inscription a échoué.");
+      },
+    });
+  }
   // ─── Gestion UI ──────────────────────────────────────────────
   annuler() {
     this.fermer.emit();

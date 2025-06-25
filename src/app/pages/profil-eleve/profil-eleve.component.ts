@@ -8,7 +8,7 @@ import { CommonModule } from '@angular/common';
 
 interface GroupeTirage {
   nom: string;
-  eleves: { id: string; firstName: string }[];
+  eleves: { id: string; prenom: string }[];
 }
 
 @Component({
@@ -34,6 +34,7 @@ export class ProfilEleveComponent implements OnInit {
     this.accountService.getMonProfil().subscribe((profil) => {
       if (profil.role === 'eleve') {
         this.user = profil as Eleve;
+        console.log('📦 Profil élève reçu :', this.user);
 
         this.groupesService
           .getGroupesAvecEleves()

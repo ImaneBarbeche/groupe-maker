@@ -16,16 +16,12 @@ private _userIsLoggedIn: boolean = false;
 
 private _currentUser: { id: number; username: string; role: string } | null = null;
 
+ constructor() { }
+ 
 login (utilisateur: { id: number; username: string; role: string }) {
   this._userIsLoggedIn = true;
   this._currentUser = utilisateur;
 }
-
-logout() {
-  this._userIsLoggedIn = false;
-  this._currentUser = null;
-}
-
 
 get isLoggedIn() {
   return this._userIsLoggedIn;
@@ -39,7 +35,9 @@ get userRole() {
   return this._currentUser?.role;
 }
 
-  constructor() { }
+getToken(): string | null {
+  return localStorage.getItem('jwt');
+}
 
 
 }

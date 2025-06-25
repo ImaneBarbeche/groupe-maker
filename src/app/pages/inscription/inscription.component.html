@@ -20,10 +20,10 @@
     <h3 (click)="toggleSection('infosPerso')">➤ Informations personnelles</h3>
     @if (sectionsOuvertes.infosPerso) {
       <label>Prénom :</label>
-      <input type="text" [(ngModel)]="eleve.firstName" name="firstName" required />
+      <input type="text" [(ngModel)]="eleve.prenom" name="prenom" required />
 
       <label>Nom d'utilisateur :</label>
-      <input type="text" [(ngModel)]="eleve.username" name="username" required />
+      <input type="text" [(ngModel)]="eleve.nom" name="nom" required />
 
       <label>Adresse email :</label>
       <input type="email" [(ngModel)]="eleve.email" name="email" required />
@@ -86,8 +86,8 @@
       <select [(ngModel)]="eleve.formateurUsername" name="formateurUsername" required>
         <option value="">-- Sélectionner un formateur --</option>
         @for (formateur of formateurs; track formateur.id) {
-          <option [value]="formateur.username">
-            {{ formateur.firstName }} ({{ formateur.username }})
+          <option [value]="formateur.email">
+            {{ formateur.prenom }} ({{ formateur.nom }})
           </option>
         }
       </select>
@@ -100,10 +100,10 @@
     <h3>Informations personnelles</h3>
 
     <label>Prénom :</label>
-    <input type="text" [(ngModel)]="formateur.firstName" name="firstName" required />
+    <input type="text" [(ngModel)]="formateur.prenom" name="prenom" required />
 
     <label>Nom d'utilisateur :</label>
-    <input type="text" [(ngModel)]="formateur.username" name="username" required />
+    <input type="text" [(ngModel)]="formateur.nom" name="nom" required />
 
     <label>Adresse email :</label>
     <input type="email" [(ngModel)]="formateur.email" name="email" required />

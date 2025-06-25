@@ -1,45 +1,49 @@
-<h1>Bienvenue {{ user.firstName }} !</h1>
+@if (user) {
+<h1>Bienvenue {{ user.prenom }} !</h1>
+}
 <h2>Ton profil</h2>
 
 <div class="profil-details">
-
   @if (!modeEdition) {
-    <p class="profil-info"><strong>👤 Nom d'utilisateur :</strong> {{ user.username }}</p>
+  <p class="profil-info">
+    <strong>👤 Nom d'utilisateur :</strong> {{ user.username }}
+  </p>
   } @else {
-    <div class="form-group">
-      <label for="username">👤 Nom d'utilisateur :</label>
-      <input id="username" type="text" [(ngModel)]="user.username" />
-    </div>
-  }
-
-  @if (!modeEdition) {
-    <p class="profil-info"><strong>🎂 Âge :</strong> {{ user.age }} ans</p>
+  <div class="form-group">
+    <label for="username">👤 Nom d'utilisateur :</label>
+    <input id="username" type="text" [(ngModel)]="user.username" />
+  </div>
+  } @if (!modeEdition) {
+  <p class="profil-info"><strong>🎂 Âge :</strong> {{ user.age }} ans</p>
   } @else {
-    <div class="form-group">
-      <label for="age">🎂 Âge :</label>
-      <input id="age" type="number" [(ngModel)]="user.age" min="0" />
-    </div>
-  }
-
-  @if (!modeEdition) {
-    <p class="profil-info"><strong>⚧ Genre :</strong> {{ user.gender }}</p>
+  <div class="form-group">
+    <label for="age">🎂 Âge :</label>
+    <input id="age" type="number" [(ngModel)]="user.age" min="0" />
+  </div>
+  } @if (!modeEdition) {
+  <p class="profil-info"><strong>⚧ Genre :</strong> {{ user.gender }}</p>
   } @else {
-    <div class="form-group">
-      <label for="gender">⚧ Genre :</label>
-      <select id="gender" [(ngModel)]="user.gender">
-        <option value="Masculin">Masculin</option>
-        <option value="Féminin">Féminin</option>
-        <option value="Autre">Autre</option>
-      </select>
-    </div>
+  <div class="form-group">
+    <label for="gender">⚧ Genre :</label>
+    <select id="gender" [(ngModel)]="user.gender">
+      <option value="Masculin">Masculin</option>
+      <option value="Féminin">Féminin</option>
+      <option value="Autre">Autre</option>
+    </select>
+  </div>
   }
 
   <p class="profil-info"><strong>🗣 Langue :</strong> {{ user.language }}</p>
-  <p class="profil-info"><strong>💻 Niveau technique :</strong> {{ user.techLevel }}</p>
+  <p class="profil-info">
+    <strong>💻 Niveau technique :</strong> {{ user.techLevel }}
+  </p>
   <p class="profil-info"><strong>😶 Profil :</strong> {{ user.profil }}</p>
-  <p class="profil-info"><strong>🎓 Étudiant·e DWWM :</strong> {{ user.dwwmStudent ? 'Oui' : 'Non' }}</p>
-  <p class="profil-info"><strong>👥 Groupe CDA :</strong> {{ user.cdaGroup }}</p>
-
+  <p class="profil-info">
+    <strong>🎓 Étudiant·e DWWM :</strong> {{ user.dwwmStudent ? "Oui" : "Non" }}
+  </p>
+  <p class="profil-info">
+    <strong>👥 Groupe CDA :</strong> {{ user.cdaGroup }}
+  </p>
 </div>
 
 <!-- 🔁 Groupe de l’élève -->
@@ -47,20 +51,23 @@
   <div class="box">
     <h3>Mon groupe</h3>
     @if (groupeNom) {
-      <p>Tu fais partie du groupe : <strong>{{ groupeNom }}</strong></p>
+    <p>
+      Tu fais partie du groupe : <strong>{{ groupeNom }}</strong>
+    </p>
     } @else {
-      <p>Tu ne fais partie d'aucun groupe pour l'instant.</p>
+    <p>Tu ne fais partie d'aucun groupe pour l'instant.</p>
     }
   </div>
 
   @if (!modeEdition) {
-    <button (click)="modeEdition = true">✏️ Modifier mes infos</button>
+  <button (click)="modeEdition = true">✏️ Modifier mes infos</button>
   } @else {
-    <div class="edition-actions">
-      <button (click)="enregistrerModifications()">✅ Enregistrer</button>
-      <button (click)="modeEdition = false">❌ Annuler</button>
-    </div>
+  <div class="edition-actions">
+    <button (click)="enregistrerModifications()">✅ Enregistrer</button>
+    <button (click)="modeEdition = false">❌ Annuler</button>
+  </div>
   }
-<button class="btn-danger" (click)="supprimerMonCompte()">🗑️ Supprimer mon compte</button>
-
+  <button class="btn-danger" (click)="supprimerMonCompte()">
+    🗑️ Supprimer mon compte
+  </button>
 </div>

@@ -2,13 +2,13 @@
 
 <form (ngSubmit)="onSubmit()" #form="ngForm">
   <div class="form-group">
-    <label for="username">Nom d'utilisateur</label>
+    <label for="email">Email</label>
     <input
-      id="username"
+      id="email"
       type="text"
       [(ngModel)]="email"
-      name="username"
-      placeholder="Nom d'utilisateur"
+      name="email"
+      placeholder="Adresse email"
       required
     />
   </div>

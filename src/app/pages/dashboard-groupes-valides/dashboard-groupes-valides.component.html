@@ -11,7 +11,7 @@
           <h4>{{ groupe.nom }}</h4>
           <ul>
             @for (eleve of groupe.eleves; track eleve.id) {
-              <li>{{ eleve.firstName }}</li>
+              <li>{{ eleve.prenom }}</li>
             }
           </ul>
         </div>

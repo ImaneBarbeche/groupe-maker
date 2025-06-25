@@ -2,6 +2,8 @@ import { Component } from '@angular/core';
 import { RouterOutlet, RouterLink } from '@angular/router';
 import { ConnexionComponent } from './pages/connexion/connexion.component';
 import { InscriptionComponent } from './pages/inscription/inscription.component';
+import { Utilisateur } from './models/utilisateur.interface';
+import { AccountService } from './services/account.service';
 
 @Component({
   selector: 'app-root',
@@ -12,48 +14,63 @@ import { InscriptionComponent } from './pages/inscription/inscription.component'
 })
 export class AppComponent {
   title = 'groupe-maker';
-  utilisateurActif: any = null;
+  utilisateurActif: Utilisateur | null = null;
   afficherModaleConnexion = false;
   afficherModaleInscription = false;
-
   afficherCGU: boolean = false;
 
+  constructor(private accountService: AccountService) {}
+
   ngOnInit() {
-    const user = localStorage.getItem('utilisateurActif');
-    if (user) {
-      this.utilisateurActif = JSON.parse(user);
-    }
+    this.accountService.getMonProfil().subscribe({
+      next: (user) => {
+        this.utilisateurActif = user;
+      },
+      error: () => {
+        this.utilisateurActif = null;
+      },
+    });
+
     this.verifierAcceptationCGU();
   }
+
   fermerModale() {
     this.afficherModaleConnexion = false;
   }
+
   fermerModaleInscription() {
     this.afficherModaleInscription = false;
   }
-  
- seDeconnecter() {
-  localStorage.removeItem('utilisateurActif');
-  this.utilisateurActif = null;
 
-  // Redirige vers l'accueil puis recharge l'app
-  window.location.href = '/';
+  seDeconnecter() {
+  this.accountService.logout().subscribe({
+    next: () => {
+      this.utilisateurActif = null;
+      window.location.href = '/';
+    },
+    error: (err) => {
+      console.error("Échec de la déconnexion :", err);
+    }
+  });
 }
 
-  onUtilisateurConnecte() {
-    const user = localStorage.getItem('utilisateurActif');
-    if (user) {
-      this.utilisateurActif = JSON.parse(user);
+onUtilisateurConnecte() {
+  this.accountService.getMonProfil().subscribe({
+    next: (user) => {
+      this.utilisateurActif = user;
+    },
+    error: () => {
+      this.utilisateurActif = null;
     }
-  }
+  });
+}
+
 
   verifierAcceptationCGU() {
     const cguData = JSON.parse(localStorage.getItem('cguAccepted') || 'null');
+    const expirationDelay = 13 * 30 * 24 * 60 * 60 * 1000; // 13 mois
 
-    if (
-      !cguData ||
-      Date.now() - cguData.timestamp > 13 * 30 * 24 * 60 * 60 * 1000
-    ) {
+    if (!cguData || Date.now() - cguData.timestamp > expirationDelay) {
       this.afficherCGU = true;
     } else {
       this.afficherCGU = false;

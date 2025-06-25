@@ -8,6 +8,7 @@ import { DashboardStatistiquesComponent } from '../dashboard-statistiques/dashbo
 import { DashboardGroupesValidesComponent } from '../dashboard-groupes-valides/dashboard-groupes-valides.component';
 import { ListesService } from '../../services/listes.service';
 import { HistoriqueService } from '../../services/historique.service';
+import { Utilisateur } from '../../models/utilisateur.interface';
 
 @Component({
   selector: 'app-dashboard-formateur',
@@ -17,7 +18,7 @@ import { HistoriqueService } from '../../services/historique.service';
   styleUrls: ['./dashboard-formateur.component.css'],
 })
 export class DashboardFormateurComponent implements OnInit {
-  utilisateurActif: { username: string } | null = null;
+  utilisateurActif: Utilisateur | null = null;
   mesEleves: Eleve[] = [];
 
   totalEleves = 0;
@@ -26,7 +27,7 @@ export class DashboardFormateurComponent implements OnInit {
 
   mesGroupesValides: {
     nom: string;
-    eleves: { id: string; firstName: string }[];
+    eleves: { id: string; prenom: string }[];
   }[] = [];
 
   dernierTirageValide: HistoriqueTirages | null = null;
@@ -39,46 +40,55 @@ export class DashboardFormateurComponent implements OnInit {
     private historiqueService: HistoriqueService
   ) {}
 
-  ngOnInit(): void {
-    this.utilisateurActif = this.accountService.getUtilisateurActif();
-    if (!this.utilisateurActif) return;
+ ngOnInit(): void {
+  this.accountService.getMonProfil().subscribe({
+    next: (user) => {
+      this.utilisateurActif = user;
 
-    this.listesService.getListes().subscribe((toutesLesListes) => {
-      this.historiqueService.getHistorique().subscribe((historique) => {
-        const mesListes = toutesLesListes.filter(
-          (l) =>
-            l.formateurUsername?.toLowerCase().trim() ===
-            this.utilisateurActif!.username.toLowerCase().trim()
-        );
+      this.listesService.getListes().subscribe((toutesLesListes) => {
+        this.historiqueService.getHistorique().subscribe((historique) => {
+          const mesListes = toutesLesListes.filter(
+            (l) =>
+              l.formateurUsername?.toLowerCase().trim() ===
+              this.utilisateurActif!.username.toLowerCase().trim()
+          );
 
-        const nomsDeMesListes = mesListes.map((l) => l.nom.toLowerCase());
+          const nomsDeMesListes = mesListes.map((l) => l.nom.toLowerCase());
 
-        this.mesEleves = mesListes.flatMap((liste) => liste.eleves || []);
-        this.totalEleves = this.mesEleves.length;
-        this.moyenneAge = this.statsService.calculerMoyenne(
-          this.mesEleves.map((e) => e.age)
-        );
-        this.statsTechnique = this.statsService.calculerStatsTech(
-          this.mesEleves
-        );
+          this.mesEleves = mesListes.flatMap((liste) => liste.eleves || []);
+          this.totalEleves = this.mesEleves.length;
+          this.moyenneAge = this.statsService.calculerMoyenne(
+            this.mesEleves.map((e) => e.age)
+          );
+          this.statsTechnique = this.statsService.calculerStatsTech(this.mesEleves);
 
-        const tiragesDuFormateur = historique.filter((t) =>
-          nomsDeMesListes.includes(t.listeNom.toLowerCase())
-        );
-        this.mesGroupesValides = tiragesDuFormateur.flatMap((t) => t.groupes);
-        this.dernierTirageValide =
-          tiragesDuFormateur.length > 0
-            ? tiragesDuFormateur.at(-1) || null
-            : null;
+          const tiragesDuFormateur = historique.filter((t) =>
+            nomsDeMesListes.includes(t.listeNom.toLowerCase())
+          );
+
+          this.mesGroupesValides = tiragesDuFormateur.flatMap((t) =>
+            t.groupes.map((groupe) => ({
+              nom: groupe.nom,
+              eleves: groupe.eleves.map((e) => ({
+                id: e.id,
+                prenom: e.prenom,
+              })),
+            }))
+          );
+
+          this.dernierTirageValide =
+            tiragesDuFormateur.length > 0 ? tiragesDuFormateur.at(-1) || null : null;
+        });
       });
-    });
-  }
-
+    },
+    error: () => {
+      this.router.navigate(['/connexion']);
+    }
+  });
+}
   supprimerMonCompte(): void {
     if (this.utilisateurActif) {
-      this.accountService.supprimerCompteEtReinitialiser(
-        this.utilisateurActif.username
-      );
+      this.accountService.supprimerCompteEtReinitialiser(this.utilisateurActif.username);
     }
   }
 }

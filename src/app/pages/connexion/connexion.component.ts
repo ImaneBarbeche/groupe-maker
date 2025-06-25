@@ -3,6 +3,7 @@ import { Component, EventEmitter, Output } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 import { Router } from '@angular/router';
 import { UtilisateurService } from '../../services/utilisateur.service';
+import { LoginResponse } from '../../models/login-response.interface';
 
 @Component({
   selector: 'app-connexion',
@@ -32,21 +33,26 @@ export class ConnexionComponent {
     };
 
     this.utilisateurService.login(credentials).subscribe({
-      next: (utilisateur) => {
-        console.log('✅ Données reçues après login :', utilisateur); // ← ajoute cette ligne !
+      next: (response: LoginResponse) => {
+        console.log('✅ Données reçues après login :', response);
 
+        const token = response.token;
+        const utilisateur = response.utilisateur;
+
+        localStorage.setItem('jwt', token);
         localStorage.setItem('utilisateurActif', JSON.stringify(utilisateur));
 
-        if (utilisateur.role === 'formateur') {
-          this.router.navigate(['/dashboard-formateur']);
-        } else {
-          this.router.navigate(['/profil-eleve']);
-        }
+        const redirection =
+          utilisateur.role === 'formateur'
+            ? '/dashboard-formateur'
+            : '/profil-eleve';
 
+        this.router.navigate([redirection]);
         this.connecte.emit();
         this.fermer.emit();
       },
-      error: () => {
+      error: (error) => {
+        console.error('❌ Erreur lors de la connexion :', error);
         alert("Nom d'utilisateur ou mot de passe incorrect.");
       },
     });

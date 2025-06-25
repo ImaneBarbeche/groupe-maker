@@ -3,6 +3,6 @@ export interface HistoriqueTirages {
   listeNom: string;
   groupes: {
     nom: string;
-    eleves: { id: string; firstName: string }[];
+    eleves: { id: string; prenom: string }[];
   }[];
 }

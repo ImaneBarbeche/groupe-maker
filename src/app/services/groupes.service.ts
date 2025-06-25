@@ -71,7 +71,7 @@ export class GroupesService {
         nom: groupe.nom,
         eleves: groupe.eleves.map((e) => ({
           id: e.id,
-          firstName: e.firstName,
+          prenom : e.prenom,
         })),
       })),
     };
