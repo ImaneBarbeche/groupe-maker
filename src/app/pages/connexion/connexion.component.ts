@@ -41,8 +41,12 @@ export class ConnexionComponent {
         this.fermer.emit();
       },
       error: (error) => {
+        if (error.status === 401) {
+          alert("Nom d'utilisateur ou mot de passe incorrect.");
+        } else {
+          alert('Une erreur est survenue. Veuillez réessayer plus tard.');
+        }
         console.error('❌ Erreur lors de la connexion :', error);
-        alert("Nom d'utilisateur ou mot de passe incorrect.");
       },
     });
   }

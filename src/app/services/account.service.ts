@@ -11,44 +11,51 @@ import { LoginResponse } from '../models/login-response.interface';
 export class AccountService {
   constructor(private http: HttpClient) {}
 
+  private apiUrl = 'http://localhost:8080/utilisateurs';
+
   getMonProfil(): Observable<Utilisateur> {
-    return this.http.get<Utilisateur>('http://localhost:8080/utilisateurs/me', {
+    return this.http.get<Utilisateur>(`${this.apiUrl}/me`, {
       withCredentials: true,
     });
   }
 
   updateMonProfil(utilisateur: Utilisateur): Observable<Utilisateur> {
     return this.http.put<Utilisateur>(
-      `http://localhost:8080/utilisateurs/${utilisateur.id}`,
+      `${this.apiUrl}/${utilisateur.id}`,
       utilisateur,
       { withCredentials: true }
     );
   }
 
   supprimerCompteEtReinitialiser(id: string): Observable<any> {
-  return this.http.delete(`http://localhost:8080/utilisateurs/${id}`, {
+  return this.http.delete(`${this.apiUrl}/${id}`, {
     withCredentials: true,
   });
 }
 
   login(credentials: { email: string; motDePasse: string }) {
-    console.log('Envoi des credentials :', credentials); // ← ici aussi
-    return this.http.post<LoginResponse>(
-      'http://localhost:8080/utilisateurs/login',
-      credentials,
-      { withCredentials: true }
-    );
-  }
+  console.log('Envoi des credentials :', credentials);
+  return this.http.post<LoginResponse>(
+    `${this.apiUrl}/login`,
+    credentials,
+    { 
+      withCredentials: true,
+      headers: new HttpHeaders({
+        'Content-Type': 'application/json'
+      })
+    }
+  );
+}
 
   register(user: any): Observable<any> {
-    return this.http.post('http://localhost:8080/utilisateurs/register', user, {
+    return this.http.post(`${this.apiUrl}/register`, user, {
       withCredentials: true,
     });
   }
 
   logout(): Observable<void> {
     return this.http.post<void>(
-      'http://localhost:8080/utilisateurs/logout',
+      `${this.apiUrl}/logout`,
       {},
       { withCredentials: true }
     );

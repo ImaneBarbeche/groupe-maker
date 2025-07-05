@@ -16,7 +16,7 @@
       <p class="stat-line">👥 Personnes : {{ liste.personnes }}</p>
       <p class="stat-line">🎲 Tirages effectués : {{ liste.tirages }}</p>
 
-      <ul>
+      <ul>ul
         @for (personne of liste.personnes; track personne.id) {
           <li>{{ personne.prenom }} ({{ personne.age }} ans)</li>
         }
