@@ -34,7 +34,7 @@ export class AccountService {
   login(credentials: { email: string; motDePasse: string }) {
     console.log('Envoi des credentials :', credentials); // ← ici aussi
     return this.http.post<LoginResponse>(
-      'http://localhost:8080/api/auth/login',
+      'http://localhost:8080/utilisateurs/login',
       credentials,
       { withCredentials: true }
     );
@@ -48,7 +48,7 @@ export class AccountService {
 
   logout(): Observable<void> {
     return this.http.post<void>(
-      'http://localhost:8080/api/auth/logout',
+      'http://localhost:8080/utilisateurs/logout',
       {},
       { withCredentials: true }
     );
