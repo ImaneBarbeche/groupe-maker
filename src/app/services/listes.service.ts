@@ -7,6 +7,12 @@ import { HttpClient } from '@angular/common/http';
   providedIn: 'root'
 })
 export class ListesService {
+  addList(newList: Liste) {
+    throw new Error('Method not implemented.');
+  }
+  getNewListId(): string {
+    throw new Error('Method not implemented.');
+  }
   constructor(private http: HttpClient) {}
 
 getListes(): Observable<Liste[]> {

@@ -1,8 +1,7 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 import { ListesComponent } from './listes.component';
 import { LocalStorageService } from '../../services/local-storage.service'; 
-import { Liste } from '../../models/utilisateur.interface';
-
+import { Liste } from '../../models/liste.interface';
 describe('ListesComponent', () => {
   let component: ListesComponent;
   let fixture: ComponentFixture<ListesComponent>;

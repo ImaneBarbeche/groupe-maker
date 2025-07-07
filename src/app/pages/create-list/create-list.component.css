@@ -1,0 +1,166 @@
+.message-vide {
+  color: #999;
+  font-style: italic;
+}
+
+.listes-container {
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+}
+
+.liste-card {
+  border: 1px solid #ccc;
+  border-radius: 8px;
+  padding: 1rem;
+  background-color: #f9f9f9;
+  transition: box-shadow 0.3s;
+}
+
+.liste-card:hover {
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+}
+
+.liste-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.btn-supprimer {
+  background-color: #ff4d4d;
+  color: white;
+  border: none;
+  border-radius: 4px;
+  padding: 0.5rem 1rem;
+  cursor: pointer;
+}
+
+.btn-supprimer:hover {
+  background-color: #ff1a1a;
+}
+
+.stat-line {
+  margin: 0.5rem 0;
+}
+
+/* Style général pour le formulaire */
+form {
+  max-width: 600px;
+  margin: 0 auto;
+  padding: 1.5rem;
+  border: 1px solid #ccc;
+  border-radius: 8px;
+  background-color: #f9f9f9;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+}
+
+/* Style des champs de formulaire */
+form div {
+  margin-bottom: 1rem;
+}
+
+label {
+  display: block;
+  font-weight: bold;
+  margin-bottom: 0.5rem;
+}
+
+input {
+  width: 100%;
+  padding: 0.5rem;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+  font-size: 1rem;
+}
+
+input:focus {
+  border-color: #4caf50;
+  outline: none;
+  box-shadow: 0 0 5px rgba(76, 175, 80, 0.5);
+}
+
+/* Bouton pour ajouter une personne */
+button[type="button"] {
+  background-color: #4caf50;
+  color: white;
+  border: none;
+  border-radius: 4px;
+  padding: 0.5rem 1rem;
+  font-size: 1rem;
+  cursor: pointer;
+  margin-top: 1rem;
+}
+
+button[type="button"]:hover {
+  background-color: #45a049;
+}
+
+/* Liste des personnes ajoutées */
+h3 {
+  margin-top: 2rem;
+  font-size: 1.2rem;
+  color: #333;
+}
+
+ul {
+  list-style-type: none;
+  padding: 0;
+}
+
+ul li {
+  background-color: #e8f5e9;
+  border: 1px solid #4caf50;
+  border-radius: 4px;
+  padding: 0.5rem;
+  margin-bottom: 0.5rem;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+ul li:hover {
+  background-color: #c8e6c9;
+}
+
+/* Bouton pour supprimer une personne (optionnel) */
+ul li button {
+  background-color: #ff4d4d;
+  color: white;
+  border: none;
+  border-radius: 4px;
+  padding: 0.3rem 0.6rem;
+  cursor: pointer;
+}
+
+ul li button:hover {
+  background-color: #ff1a1a;
+}
+
+/* Bouton pour soumettre le formulaire */
+button[type="submit"] {
+  background-color: #007bff;
+  color: white;
+  border: none;
+  border-radius: 4px;
+  padding: 0.5rem 1rem;
+  font-size: 1rem;
+  cursor: pointer;
+  margin-top: 1rem;
+}
+
+button[type="submit"]:hover {
+  background-color: #0056b3;
+}
+
+button[type="submit"]:disabled {
+  background-color: #ccc;
+  cursor: not-allowed;
+}
+
+/* Messages d'erreur */
+.error {
+  color: red;
+  font-size: 0.9rem;
+  margin-top: 0.3rem;
+}

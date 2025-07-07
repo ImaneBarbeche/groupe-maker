@@ -1,0 +1,61 @@
+<h2>Créer une nouvelle liste</h2>
+
+<form [formGroup]="createListForm" (ngSubmit)="submit()">
+  <!-- Nom de la liste -->
+  <div>
+    <label for="listName">Nom de la liste:</label>
+    <input
+      type="text"
+      id="listName"
+      formControlName="listName"
+      placeholder="Entrez le nom de la liste"
+    />
+    <div *ngIf="createListForm.get('listName')?.invalid && createListForm.get('listName')?.touched">
+      <p class="error">Le nom de la liste est requis.</p>
+    </div>
+  </div>
+
+  <!-- Nom de la personne -->
+  <div>
+    <label for="personName">Nom de la personne:</label>
+    <input
+      type="text"
+      id="personName"
+      formControlName="personName"
+      placeholder="Entrez le nom de la personne"
+    />
+    <div *ngIf="createListForm.get('personName')?.invalid && createListForm.get('personName')?.touched">
+      <p class="error">Le nom de la personne est requis.</p>
+    </div>
+  </div>
+
+  <!-- Âge de la personne -->
+  <div>
+    <label for="personAge">Âge de la personne:</label>
+    <input
+      type="number"
+      id="personAge"
+      formControlName="personAge"
+      placeholder="Entrez l'âge de la personne"
+    />
+    <div *ngIf="createListForm.get('personAge')?.invalid && createListForm.get('personAge')?.touched">
+      <p class="error">L'âge est requis et doit être un nombre positif.</p>
+    </div>
+  </div>
+
+  <!-- Ajouter une personne -->
+  <button type="button" (click)="addPerson()">Ajouter une personne</button>
+
+  <!-- Liste des personnes ajoutées -->
+  <h3>Personnes ajoutées:</h3>
+  <ul>
+    <li *ngFor="let person of people">
+      {{ person.prenom }} ({{ person.age }} ans)
+    </li>
+  </ul>
+
+  <!-- Soumettre la liste -->
+  <button type="submit" [disabled]="createListForm.invalid || people.length === 0">
+    Créer la liste
+  </button>
+</form>

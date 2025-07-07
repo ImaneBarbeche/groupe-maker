@@ -80,3 +80,21 @@ h2 {
 .liste-card:hover {
   transform: translateY(-4px);
 }
+
+.actions {
+  margin-bottom: 20px;
+}
+
+.btn-ajouter {
+  background-color: #4caf50;
+  color: white;
+  border: none;
+  padding: 10px 15px;
+  font-size: 16px;
+  cursor: pointer;
+  border-radius: 5px;
+}
+
+.btn-ajouter:hover {
+  background-color: #45a049;
+}

@@ -3,6 +3,7 @@ import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { Liste} from '../../models/liste.interface';
 import { ListesService } from '../../services/listes.service';
+import { Router } from '@angular/router';
 @Component({
   selector: 'app-listes',
   imports: [CommonModule, FormsModule],
@@ -15,6 +16,7 @@ export class ListesComponent {
 
   constructor(
     private listesService: ListesService,
+        private router: Router // Injection du service Router
   ) {}
 
   /**
@@ -41,4 +43,9 @@ confirmDelete(id: string) {
     this.supprimerListe(id);
   }
 }
+
+// Méthode pour naviguer vers la page de création de liste
+  goToCreateList() {
+    this.router.navigate(['/create-list']);
+  }
 }

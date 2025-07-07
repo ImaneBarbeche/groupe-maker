@@ -1,5 +1,9 @@
 <h2>Mes listes</h2>
 
+<!-- Bouton pour ajouter une nouvelle liste -->
+<div class="actions">
+  <button class="btn-ajouter" (click)="goToCreateList()">Ajouter une nouvelle liste</button>
+</div>
 
 @if (listes.length === 0) {
   <p class="message-vide">Aucune liste pour le moment.</p>
