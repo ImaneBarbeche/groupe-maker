@@ -26,19 +26,17 @@ export class CreateListComponent {
 
   addPerson() {
     const person: Personne = {
-      id: (this.people.length + 1).toString(), // Génère un ID unique basé sur la longueur
-      prenom: this.createListForm.value.personName,
-      nom: '', // Ajoutez un champ vide pour `nom` si nécessaire
-      language: 0, // Valeur par défaut
-      techLevel: 0, // Valeur par défaut
-      profil: '', // Valeur par défaut
-      dwwmStudent: false, // Valeur par défaut
-      gender: '', // Valeur par défaut
+      id: (this.people.length + 1).toString(),
+      nom: this.createListForm.value.personName,
+      genre: 'ne se prononce pas', // Valeur par défaut, à adapter avec un select
+      aisanceFrancais: 1, // Valeur par défaut, à adapter avec un select
+      ancienDWWM: false, // Valeur par défaut, à adapter avec une checkbox
+      niveauTechnique: 1, // Valeur par défaut, à adapter avec un select
+      profil: 'réservé', // Valeur par défaut, à adapter avec un select
       age: this.createListForm.value.personAge,
-      groupe: '', // Valeur par défaut
     };
     this.people.push(person);
-    this.createListForm.patchValue({ personName: '', personAge: '' }); // Réinitialise les champs de la personne
+    this.createListForm.patchValue({ personName: '', personAge: '' });
   }
 
   submit() {

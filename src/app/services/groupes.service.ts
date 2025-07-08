@@ -30,16 +30,16 @@ export class GroupesService {
   let melange = [...personnes];
 
   if (options.equilibrerFrancais) {
-    melange.sort((a, b) => b.language - a.language);
+    melange.sort((a, b) => b.aisanceFrancais - a.aisanceFrancais);
   }
 
   if (options.equilibrerTechnique) {
-    melange.sort((a, b) => b.techLevel - a.techLevel);
+    melange.sort((a, b) => b.niveauTechnique - a.niveauTechnique);
   }
 
   if (options.mixDWWM) {
-    const anciens = melange.filter((p) => p.dwwmStudent);
-    const autres = melange.filter((p) => !p.dwwmStudent);
+    const anciens = melange.filter((p) => p.ancienDWWM);
+    const autres = melange.filter((p) => !p.ancienDWWM);
     melange = [...anciens, ...autres];
   }
 
@@ -73,7 +73,7 @@ export class GroupesService {
         nom: g.nom,
         personnes: g.personnes.map(p => ({
           id: p.id,
-          prenom: p.prenom
+          prenom: p.nom // Changé de p.prenom à p.nom
         }))
       })),
     };

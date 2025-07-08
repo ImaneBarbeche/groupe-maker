@@ -1,13 +1,12 @@
 
 export interface Personne {
   id: string;
-  prenom: string;
-  nom: string;
-  language: number;
-  techLevel: number;
-  profil: string;
-  dwwmStudent: boolean;
-  gender: string;
-  age: number;
-  groupe: string; // nom du groupe actuel
+  nom: string; // 3-50 caractères, not null
+  genre: 'masculin' | 'féminin' | 'ne se prononce pas'; // String, liste déroulante, not null
+  aisanceFrancais: number; // 1-4, not null
+  ancienDWWM: boolean; // Boolean, not null
+  niveauTechnique: number; // 1-4, not null
+  profil: 'timide' | 'réservé' | 'à l\'aise'; // String, liste déroulante, not null
+  age: number; // 0-100, not null
+  groupe?: string; // nom du groupe actuel (optionnel)
 }
