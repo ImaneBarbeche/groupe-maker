@@ -1,11 +1,11 @@
 export interface HistoriqueTirages {
-  date: string;
+  date: string; // Correspond à `dateTirage` dans le backend
   listeNom: string;
   groupes: {
     nom: string;
     personnes: {
       id: string;
-      nom: string; // Changé de "prenom" à "nom"
+      nom: string; // Aligné avec le backend
     }[];
   }[];
 }

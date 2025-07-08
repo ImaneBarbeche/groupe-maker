@@ -4,7 +4,8 @@ import { Utilisateur } from './utilisateur.interface';
 export interface Liste {
   id: string;
   nom: string;
-  tirages: number;
+  description?: string; // Aligné avec le backend
+  tirages?: number;
   tirageValide?: boolean;
   personnes?: Personne[];
   utilisateur?: Utilisateur;

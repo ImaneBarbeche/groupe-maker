@@ -1,7 +1,19 @@
+export interface Personne {
+  id: string;
+  nom: string;
+  prenom: string;
+  genre: 'masculin' | 'feminin' | 'autre';
+  dateNaissance: Date;
+  niveauTechnique: string;
+  ancienEtudiant: boolean;
+  aisanceFrancais: boolean;
+  profil: string;
+}
+
 export interface Groupe {
   id: string;
   nom: string;
-  personnes: string[]; // IDs des personnes dans le groupe
+  personnes: Personne[]; // Aligner avec le backend qui utilise des objets Personne
 }
 
 export interface Tirage {
