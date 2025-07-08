@@ -27,7 +27,7 @@ export class DashboardComponent implements OnInit {
 
   mesGroupesValides: {
     nom: string;
-    personnes: { id: string; prenom: string }[];
+    personnes: { id: string; nom: string }[]; // Changé de "prenom" à "nom"
   }[] = [];
 
   dernierTirageValide: HistoriqueTirages | null = null;
@@ -70,7 +70,7 @@ export class DashboardComponent implements OnInit {
                 nom: groupe.nom,
                 personnes: groupe.personnes.map((p) => ({
                   id: p.id,
-                  prenom: p.prenom,
+                  nom: p.nom, // Changé de "prenom: p.prenom" à "nom: p.nom"
                 })),
               }))
             );

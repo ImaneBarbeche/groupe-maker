@@ -1,8 +1,8 @@
 export interface Utilisateur {
   id: string;
-  prenom: string;
-  nom: string;
+  nom: string; // Nom de famille
+  prenom: string; // Prénom
   email: string;
-  motDePasse: string;
+  motDePasse?: string; // Optionnel pour la sécurité côté client
 }
 

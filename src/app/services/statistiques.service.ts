@@ -20,7 +20,7 @@ export class StatistiquesService {
    */
   calculerStatsTech(personnes: Personne[]): string {
     const counts = [0, 0, 0, 0]; // niveaux 1 à 4
-    personnes.forEach((p) => counts[p.techLevel - 1]++);
+    personnes.forEach((p) => counts[p.niveauTechnique - 1]++);
     const total = personnes.length;
     return counts
       .map((c, i) => `${Math.round((c / total) * 100)}% Niv ${i + 1}`)

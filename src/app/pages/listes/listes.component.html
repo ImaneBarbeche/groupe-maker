@@ -17,14 +17,18 @@
         <button class="btn-supprimer" (click)="confirmDelete(liste.id)">Supprimer</button>
       </div>
 
-      <p class="stat-line">👥 Personnes : {{ liste.personnes }}</p>
+      <p class="stat-line">👥 Personnes : {{ liste.personnes?.length || 0 }}</p>
       <p class="stat-line">🎲 Tirages effectués : {{ liste.tirages }}</p>
 
-      <ul>ul
-        @for (personne of liste.personnes; track personne.id) {
-          <li>{{ personne.prenom }} ({{ personne.age }} ans)</li>
-        }
-      </ul>
+      @if (liste.personnes && liste.personnes.length > 0) {
+        <ul>
+          <li *ngFor="let personne of liste.personnes">
+            {{ personne.nom }} ({{ personne.age }} ans)
+          </li>
+        </ul>
+      } @else {
+        <p class="message-vide">Aucune personne dans cette liste.</p>
+      }
     </article>
   }
 </section>

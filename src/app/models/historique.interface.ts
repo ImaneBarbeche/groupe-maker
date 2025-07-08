@@ -5,7 +5,7 @@ export interface HistoriqueTirages {
     nom: string;
     personnes: {
       id: string;
-      prenom: string;
+      nom: string; // Changé de "prenom" à "nom"
     }[];
   }[];
 }

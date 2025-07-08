@@ -73,7 +73,7 @@ export class GroupesService {
         nom: g.nom,
         personnes: g.personnes.map(p => ({
           id: p.id,
-          prenom: p.nom // Changé de p.prenom à p.nom
+          nom: p.nom // Correct: utilise p.nom directement
         }))
       })),
     };

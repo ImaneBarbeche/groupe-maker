@@ -12,7 +12,7 @@
             <h4>{{ groupe.nom }}</h4>
             <ul>
               @for (personne of groupe.personnes; track personne.id) {
-                <li>{{ personne.prenom }}</li>
+                <li>{{ personne.nom }}</li>
               }
             </ul>
           </div>
