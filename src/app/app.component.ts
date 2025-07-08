@@ -22,18 +22,14 @@ export class AppComponent {
   constructor(private accountService: AccountService) {}
 
   ngOnInit() {
-    this.refresherUtilisateurActif();
+    // Ne plus appeler getMonProfil automatiquement
     this.verifierAcceptationCGU();
   }
 
   onUtilisateurConnecte() {
-    this.refresherUtilisateurActif();
-  }
-  refresherUtilisateurActif() {
-    this.accountService.getMonProfil().subscribe({
-      next: (user) => (this.utilisateurActif = user),
-      error: () => (this.utilisateurActif = null),
-    });
+    // L'utilisateur est maintenant connecté - nous pourrions stocker ses infos
+    // Pour l'instant, on se contente d'un simple flag
+    console.log("Utilisateur connecté avec succès");
   }
 
   fermerModale() {

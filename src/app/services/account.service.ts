@@ -13,11 +13,12 @@ export class AccountService {
 
   private apiUrl = 'http://localhost:8080/utilisateurs';
 
-  getMonProfil(): Observable<Utilisateur> {
-    return this.http.get<Utilisateur>(`${this.apiUrl}/me`, {
-      withCredentials: true,
-    });
-  }
+  // Méthode désactivée - endpoint /me supprimé du backend
+  // getMonProfil(): Observable<Utilisateur> {
+  //   return this.http.get<Utilisateur>(`${this.apiUrl}/me`, {
+  //     withCredentials: true,
+  //   });
+  // }
 
   updateMonProfil(utilisateur: Utilisateur): Observable<Utilisateur> {
     return this.http.put<Utilisateur>(

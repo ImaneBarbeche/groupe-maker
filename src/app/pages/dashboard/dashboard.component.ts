@@ -41,48 +41,45 @@ export class DashboardComponent implements OnInit {
   ) {}
 
   ngOnInit(): void {
-    this.accountService.getMonProfil().subscribe({
-      next: (user) => {
-        this.utilisateurActif = user;
+    // Simplification : charger directement toutes les listes et historiques
+    // sans filtrer par utilisateur pour l'instant
+    this.chargerDonneesDashboard();
+  }
 
-        this.listesService.getListes().subscribe((toutesLesListes) => {
-          this.historiqueService.getHistorique().subscribe((historique) => {
-            const mesListes = toutesLesListes.filter(
-              (l) =>
-                l.utilisateur?.id === this.utilisateurActif?.id
-            );
-
-            const nomsDeMesListes = mesListes.map((l) => l.nom.toLowerCase());
-
-            this.mesPersonnes = mesListes.flatMap((liste) => liste.personnes || []);
+  chargerDonneesDashboard(): void {
+    this.listesService.getListes().subscribe({
+      next: (toutesLesListes) => {
+        this.historiqueService.getHistorique().subscribe({
+          next: (historique) => {
+            // Pour l'instant, utiliser toutes les listes (simplification)
+            // TODO: Implémenter un filtrage par session utilisateur si nécessaire
+            this.mesPersonnes = toutesLesListes.flatMap((liste) => liste.personnes || []);
             this.totalPersonnes = this.mesPersonnes.length;
             this.moyenneAge = this.statsService.calculerMoyenne(
               this.mesPersonnes.map((p) => p.age)
             );
             this.statsTechnique = this.statsService.calculerStatsTech(this.mesPersonnes);
 
-            const tiragesDeLutilisateur = historique.filter((t) =>
-              nomsDeMesListes.includes(t.listeNom.toLowerCase())
-            );
-
-            this.mesGroupesValides = tiragesDeLutilisateur.flatMap((t) =>
+            this.mesGroupesValides = historique.flatMap((t) =>
               t.groupes.map((groupe) => ({
                 nom: groupe.nom,
                 personnes: groupe.personnes.map((p) => ({
                   id: p.id,
-                  nom: p.nom, // Changé de "prenom: p.prenom" à "nom: p.nom"
+                  nom: p.nom,
                 })),
               }))
             );
 
-            this.dernierTirageValide =
-              tiragesDeLutilisateur.length > 0 ? tiragesDeLutilisateur.at(-1) || null : null;
-          });
+            this.dernierTirageValide = historique.length > 0 ? historique.at(-1) || null : null;
+          },
+          error: (err) => {
+            console.error('Erreur lors du chargement de l\'historique:', err);
+          }
         });
       },
-      error: () => {
-        this.router.navigate(['/connexion']);
-      },
+      error: (err) => {
+        console.error('Erreur lors du chargement des listes:', err);
+      }
     });
   }
 

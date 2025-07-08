@@ -27,31 +27,24 @@ export class InscriptionComponent {
   constructor(private router: Router, private accountService: AccountService) {}
 
   onSubmit() {
-  console.log("Inscription envoyée :", this.utilisateur);
+    console.log("Inscription envoyée :", this.utilisateur);
 
-  this.accountService.register(this.utilisateur).subscribe({
-    next: () => {
-      // ✅ Attendre un peu avant d'appeler /me
-      setTimeout(() => {
-        this.accountService.getMonProfil().subscribe({
-          next: (user) => {
-            localStorage.setItem('utilisateurActif', JSON.stringify(user));
-            this.router.navigate(['/dashboard']); // ← redirection profil
-            this.connecte.emit();
-            this.fermer.emit();
-          },
-          error: (err) => {
-            console.error('❌ Erreur getMonProfil après inscription', err);
-          },
-        });
-      }, 100); // attendre 100ms suffit en général
-    },
-    error: (err) => {
-      console.error('Erreur inscription :', err);
-      alert("L'inscription a échoué.");
-    },
-  });
-}
+    this.accountService.register(this.utilisateur).subscribe({
+      next: (response) => {
+        console.log("✅ Inscription réussie :", response);
+        
+        // Afficher un message de succès à l'utilisateur
+        alert("Inscription réussie ! Vous pouvez maintenant vous connecter.");
+        
+        // Fermer le modal d'inscription
+        this.fermer.emit();
+      },
+      error: (err) => {
+        console.error('❌ Erreur inscription :', err);
+        alert("L'inscription a échoué. Vérifiez vos données et réessayez.");
+      },
+    });
+  }
 
 
   annuler() {
