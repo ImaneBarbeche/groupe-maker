@@ -7,19 +7,23 @@ import { HttpClient } from '@angular/common/http';
   providedIn: 'root'
 })
 export class ListesService {
-  addList(newList: Liste) {
-    throw new Error('Method not implemented.');
-  }
-  getNewListId(): string {
-    throw new Error('Method not implemented.');
-  }
   constructor(private http: HttpClient) {}
 
-getListes(): Observable<Liste[]> {
-  return this.http.get<Liste[]>('http://localhost:8080/listes', {
-    withCredentials: true
-  });
-}
+  getListes(): Observable<Liste[]> {
+    return this.http.get<Liste[]>('http://localhost:8080/listes', {
+      withCredentials: true
+    });
+  }
+
+  addList(newList: Liste): Observable<Liste> {
+    return this.http.post<Liste>('http://localhost:8080/listes', newList, {
+      withCredentials: true
+    });
+  }
+
+  getNewListId(): string {
+    return Date.now().toString(); // Simple ID basé sur timestamp
+  }
 
 updateListe(liste: Liste): Observable<Liste> {
   return this.http.put<Liste>(`http://localhost:8080/listes/${liste.id}`, liste);
