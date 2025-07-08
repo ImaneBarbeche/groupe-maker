@@ -16,7 +16,7 @@ export class ListesService {
   constructor(private http: HttpClient) {}
 
 getListes(): Observable<Liste[]> {
-  return this.http.get<Liste[]>('http://localhost:8080/listes/mine', {
+  return this.http.get<Liste[]>('http://localhost:8080/listes', {
     withCredentials: true
   });
 }
