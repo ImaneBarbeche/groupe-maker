@@ -29,7 +29,7 @@ export class CreateListComponent {
       id: (this.people.length + 1).toString(),
       nom: this.createListForm.value.personName,
       genre: 'ne se prononce pas', // Valeur par défaut, à adapter avec un select
-      aisanceFrancais: 1, // Valeur par défaut, à adapter avec un select
+      aisanceFr: 1, // Valeur par défaut, à adapter avec un select
       ancienDWWM: false, // Valeur par défaut, à adapter avec une checkbox
       niveauTechnique: 1, // Valeur par défaut, à adapter avec un select
       profil: 'réservé', // Valeur par défaut, à adapter avec un select

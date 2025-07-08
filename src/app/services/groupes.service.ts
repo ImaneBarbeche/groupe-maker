@@ -30,7 +30,7 @@ export class GroupesService {
   let melange = [...personnes];
 
   if (options.equilibrerFrancais) {
-    melange.sort((a, b) => b.aisanceFrancais - a.aisanceFrancais);
+    melange.sort((a, b) => b.aisanceFr - a.aisanceFr);
   }
 
   if (options.equilibrerTechnique) {
